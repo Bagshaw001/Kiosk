@@ -1,0 +1,151 @@
+DATABASE=>localhost/kiosk/index.php/database/
+
+====================================================
+default response structure
+
+{
+	"response": {},
+	"status":100/200
+}
+
+=====================================================
+
+#create account
+action = create_account
+parameters
+	- user_name
+	- password
+	- store_name
+	- email
+	- store_country
+	- phone_number
+
+response
+	- data : {user_id}
+
+
+
+#Invite a store manager
+action=invite_manager
+parameters
+	- store_id
+response
+	- data : {token}
+
+
+#Accept store manager invite
+action=accept_manager_invite
+parameters
+	- user_name
+	- email
+	- phone_number
+	- password
+	- token
+
+
+#Log in to account
+action=login
+parameters
+	- email
+	- password
+
+response
+	- data : {user_id,store_id/null} # store id is null returned if user is an admin
+
+#generates a password reset token
+action=generate_forgot_password_token
+parameters
+	- email
+
+# Changes the password of the account associated with the token
+action=reset_password
+parameters
+	- token
+	- password
+
+# Lets the user subscribe to two factor authentication
+action=subscribe_f2a
+parameters
+	- user_id
+
+
+# Uploads a product to a store's inventory
+action=upload_product
+parameters
+	- store_id
+	- product_name
+	- product_description
+	- product variations : json {price, currency detail_json} -- Images not implemented
+
+
+response
+	- msg
+	- data : {product_id,
+				variation_id => status(success/failed)}
+
+
+#Adds a variation to a product
+action=add_product_variation
+parameters
+	- product_id
+	- currency
+	- price
+	- details_json
+
+
+# Saves the api credentials for a user's social media account
+action=store_credential
+parameters
+	- platform (whatsapp,instagram)
+	- bearer_token
+	- store_id
+	- api key
+
+# returns the social media credentials for the store's platform
+action=get_social_media_key
+parameters
+	- platform (whatsapp,instagram)
+	- store_id
+
+response
+	- data: {api_key,token}
+
+#Adds mobile money from which users can withdraw money
+action=add_store_wallet
+parameters
+	- store_id
+	- network (AirtelTigo,MTN,Vodafone)
+	- wallet_number
+	- wallet_name
+
+# Retrieves all the wallets associated with the store
+action=get_store_wallets
+parameters
+	- store_id
+
+response
+	- {wallets}
+
+
+
+#records transactions made for particular orders
+#NB: Automatically adds a customer for each order.
+# Process; checks if customer number exists for the store. if yes the customer id
+# is retrieved, else the customer is added to db by their phone number
+action=add_order_transaction
+parameters
+	- user_id #customer making the orders
+	- variation_id
+	- transaction_id
+	- transaction_amount
+
+
+#Records a store's withdrawal request
+action=process_withdrawal
+parameters
+	- user_id
+	- amount
+	- currency
+	- store_id
+	- wallet_number
+	- date
