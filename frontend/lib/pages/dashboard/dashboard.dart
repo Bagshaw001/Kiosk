@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kiosk/pages/dashboard/widgets/dash_order_list.dart';
 import 'package:kiosk/widgets/metrics_card.dart';
 import 'package:kiosk/pages/dashboard/widgets/primary_card.dart';
 import 'package:kiosk/pages/dashboard/widgets/info_card.dart';
@@ -26,16 +27,30 @@ class __DashboardLargeState extends State<_DashboardLarge> {
     return Padding(
       padding: EdgeInsets.all(16),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
 
           //Left columns
           _DashColumn(
-            first: Text("Good morning, Omeibi Bagshaw"),
+            headline: Text("Good morning, Omeibi Bagshaw",
+            style: Theme.of(context).textTheme.headlineMedium!
+                .copyWith(fontWeight: FontWeight.w400)
+            ),
+            subheadline: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Dashboard",
+                  style: Theme.of(context).textTheme.headlineSmall,),
+                const Padding(
+                  padding: EdgeInsets.only(bottom: 8.0),
+                  child: Text("Preview your account summary"),
+                ),
+              ],
+            ),
             second: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Dashboard"),
-                Text("Preview your account summary"),
+
                 Row(
                   children: [
                     InfoCard(
@@ -59,8 +74,9 @@ class __DashboardLargeState extends State<_DashboardLarge> {
                 )
               ],
             ),
-            third: Row(
-              children: [],
+            third: SizedBox(
+              width: MediaQuery.of(context).size.width*0.51,
+              child: DashOrderList(),
             ),
             fourth: MetricsCard(),
           ),
@@ -71,18 +87,14 @@ class __DashboardLargeState extends State<_DashboardLarge> {
             width: MediaQuery.of(context).size.width *0.2,
             child: _DashColumn(
               rightColumn: true,
-              first: Column(
-                children: [
-                  ActionCard(
-                    icon: Icons.access_time_outlined,
-                    label: "20 Sep 2022 - 20 Sep 2022",
-                    filled: false
-                  ),
-                  ActionCard(
-                    icon: Icons.help_outline,
-                    label: "Help and Feedback"
-                  )
-                ],
+              headline: ActionCard(
+                  icon: Icons.help_outline,
+                  label: "Help and Feedback ",
+                  filled: false
+              ),
+              subheadline: ActionCard(
+                icon: Icons.access_time_outlined,
+                label: "20 Sep 2022 - 20 Nov 2022",
               ),
               second: InfoCard(
                 label: "Taxes",
@@ -99,6 +111,16 @@ class __DashboardLargeState extends State<_DashboardLarge> {
               third: TodoCard(),
               fourth: CardList(
                 label: "Messages",
+                listBuilder: (context,index) => Row(
+                  children: [
+                    Text("Aaron Andon"),
+                    const Spacer(),
+                    Text("12/14/22"),
+                    const Spacer(),
+                    Icon(Icons.chat,color: Colors.black,),
+                    Icon(Icons.chat,color: Colors.black,),
+                  ],
+                )
               ),
             ),
           )
@@ -110,13 +132,16 @@ class __DashboardLargeState extends State<_DashboardLarge> {
 
 class _DashColumn extends StatelessWidget {
   final bool rightColumn;
-  final Widget first;
+  final Widget subheadline;
+  final Widget headline;
   final Widget second;
   final Widget third;
   final Widget fourth;
   const _DashColumn(
-      {required this.first,
+      {
       required this.second,
+        required this.subheadline,
+        required this.headline,
         this.rightColumn = false,
       required this.third,
       required this.fourth,
@@ -125,15 +150,11 @@ class _DashColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Column(
       crossAxisAlignment: rightColumn ? CrossAxisAlignment.end : CrossAxisAlignment.start,
       children: [
-        SizedBox(
-          height: size.height * 0.11,
-          width: size.width * ( rightColumn ? 0.1 : 0.55),
-          child: first,
-        ),
+        headline,
+        subheadline,
         Expanded(
           child: second,
         ),

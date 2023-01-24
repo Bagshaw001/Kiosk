@@ -29,8 +29,8 @@ class InfoCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(12),
         width: size.width *0.25,
-        height:  size.height *0.2,
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(label,

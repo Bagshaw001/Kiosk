@@ -18,6 +18,7 @@ class _LargeTransactions extends StatefulWidget {
 }
 
 class __LargeTransactionsState extends State<_LargeTransactions> {
+  int selectedTab = 0;
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -34,25 +35,30 @@ class __LargeTransactionsState extends State<_LargeTransactions> {
           Text("Transactions"),
           Text("All transactions"),
           PageList(
+            selectedTab: selectedTab,
             tabs: [
               PageListTab(
                 label: "All Sales",
                 count: 20,
+                  selected:  0 == selectedTab
               ),
               PageListTab(
                 label: "Delivered",
                 count: 15,
+                  selected:  1 == selectedTab,
                 color: Colors.green
               ),
               PageListTab(
                 label: "Confirmed",
                 color: Colors.blue,
                 count: 5,
+                  selected:  2 == selectedTab
               ),
               PageListTab(
                 label: "Approved",
                 count: 3,
                 color: Colors.orange,
+                  selected:  3 == selectedTab
               ),
             ],
             actions: Row(

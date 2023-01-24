@@ -29,5 +29,12 @@ MaterialColor createMaterialColor(Color color) {
   }
   return MaterialColor(color.value, swatch);
 }
-
 // End of code reference
+
+ enum OrderStatus{
+  completed,
+  inProgress,
+  cancelled
+}
+
+

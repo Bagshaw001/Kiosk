@@ -26,10 +26,12 @@ class _LargeInventory extends StatefulWidget {
 }
 
 class __LargeInventoryState extends State<_LargeInventory> {
-  String selected = "GHS";
+  String selectedCurrency = "GHS";
+  int selectedTab = 0;
   @override
   Widget build(BuildContext context) {
-    return Expanded(
+    return Container(
+      padding: const EdgeInsets.all(20),
       child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -42,13 +44,16 @@ class __LargeInventoryState extends State<_LargeInventory> {
               )
           ),
 
-          Text("Inventory"),
+          Text("Inventory",
+          style: Theme.of(context).textTheme.headlineMedium!
+            .copyWith(fontWeight: FontWeight.bold),),
           Text("All inventory available in your stores"),
           PageList(
+            selectedTab: selectedTab,
             tabs: [
-              PageListTab(label: "All Items", count: 20),
-              PageListTab(label: "Active", count: 15, color: Colors.blue,),
-              PageListTab(label: "Inactive", count: 5, color: Colors.blue,),
+              PageListTab(label: "All Items", count: 20, selected:  0 == selectedTab,),
+              PageListTab(label: "Active", count: 15, selected:  1 == selectedTab ),
+              PageListTab(label: "Inactive", count: 5, selected:  2 == selectedTab),
             ],
             actions: CustomButton(
             label: "Add Item",
@@ -66,20 +71,20 @@ class __LargeInventoryState extends State<_LargeInventory> {
                     Text("Product Media"),
 
                     DropdownButton(
-                      value: selected,
-                        items: [
+                      value: selectedCurrency,
+                        items: const [
                           DropdownMenuItem(
+                              value: "GHS",
                               child: Text("GHS"),
-                            value: "GHS",
                           ),
                           DropdownMenuItem(
+                              value: "USD",
                               child: Text("USD"),
-                            value: "USD",
                           ),
                         ],
                         onChanged: (option){
                         setState(() {
-                          selected = option!;
+                          selectedCurrency = option!;
                         });
                     }),
 

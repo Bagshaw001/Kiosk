@@ -1,29 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:kiosk/utils/constants.dart';
 
 class PageListTab extends StatelessWidget {
   final String label;
-  final Color color;
   final int count;
-  final bool selected;
-  const PageListTab({
+  late bool selected;
+  final Color? color;
+   PageListTab({
+     this.color,
     required this.label,
     required this.count,
-    this.color = Colors.white,
-    this.selected = false,
+     required this.selected,
     Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(12),
-      margin: EdgeInsets.symmetric(horizontal: 2),
+      padding: const EdgeInsets.all(12),
+      margin: const EdgeInsets.symmetric(horizontal: 2),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.5),
+        color: selected ? Colors.white : (color ?? Colors.blue).withOpacity(0.5),
           border: Border.all(
               color: Colors.black,
-              width: 1
+              width: 0.5
           ),
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(12),
               topRight: Radius.circular(12)
           )
@@ -32,10 +33,13 @@ class PageListTab extends StatelessWidget {
         children: [
           Text(label),
           Container(
+            margin: const EdgeInsets.symmetric(horizontal: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 8),
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16)
+                borderRadius: BorderRadius.circular(16),
+              color: (selected ? blue : Colors.white)
             ),
-            child: Text("$count"),
+            child: Text("$count",style: TextStyle(color: selected ? Colors.white : Colors.black),),
           )
         ],
       ),

@@ -5,8 +5,10 @@ class CardList extends StatelessWidget {
   final double? width;
   final double? height;
   final String label;
+  final Widget Function(BuildContext,int) listBuilder;
   const CardList({
     required this.label,
+    required this.listBuilder,
     this.width,
     this.height,
     Key? key}) : super(key: key);
@@ -27,13 +29,13 @@ class CardList extends StatelessWidget {
                 Column(
                   children: [
                     Text("Date"),
-                    Text("12-12202"),
+                    Text("12-12-2202"),
                   ],
                 )
               ],
             ),
             Divider(),
-            Expanded(child: ListView.builder(itemBuilder: (context,index) => Text("test")))
+            Expanded(child: ListView.builder(itemBuilder: listBuilder))
           ],
         ),
       ),
