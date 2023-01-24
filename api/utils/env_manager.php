@@ -77,4 +77,18 @@ function slack_webhook_withdrawals(){
 function paybox_token(){
 	return getenv("PAYBOX_BEARER_TOKEN");
 }
+
+function facebook_app_id(){
+	return getenv("FACEBOOK_APP_ID");
+}
+
+
+function facebook_redirect_url(){
+	return getenv("FACEBOOK_REDIRECT_URL");
+}
+
+
+function facebook_app_secret(){
+	return getenv("FACEBOOK_APP_SECRET");
+}
 ?>
