@@ -3,7 +3,9 @@
 	require_once(__DIR__."/env_manager.php");
 
 //start session
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 //for header redirection
 ob_start();
