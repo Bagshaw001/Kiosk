@@ -18,47 +18,60 @@ class _LargeTransactions extends StatefulWidget {
 }
 
 class __LargeTransactionsState extends State<_LargeTransactions> {
-  int selectedTab = 0;
+  int _selectedTab = 0;
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Positioned(
-              right: 0,
-              child: ActionCard(
+          Row(
+            children: [
+              const Spacer(),
+
+              ActionCard(
                 filled: false,
                 icon: Icons.help_outline,
                 label: "Help and Feedback",
-              )),
-          Text("Transactions"),
-          Text("All transactions"),
+              )
+            ]
+          ),
+          Text("Transactions",
+          style: Theme.of(context).textTheme.headlineMedium!
+            .copyWith(fontWeight: FontWeight.bold)
+
+          ),
+
+          Padding(
+            padding: EdgeInsets.only(bottom: 12),
+            child: Text("All transactions",
+          style: Theme.of(context).textTheme.titleLarge),
+            ),
           PageList(
-            selectedTab: selectedTab,
+            selectedTab: _selectedTab,
             tabs: [
               PageListTab(
                 label: "All Sales",
                 count: 20,
-                  selected:  0 == selectedTab
+                  selected:  0 == _selectedTab
               ),
               PageListTab(
                 label: "Delivered",
                 count: 15,
-                  selected:  1 == selectedTab,
+                  selected:  1 == _selectedTab,
                 color: Colors.green
               ),
               PageListTab(
                 label: "Confirmed",
                 color: Colors.blue,
                 count: 5,
-                  selected:  2 == selectedTab
+                  selected:  2 == _selectedTab
               ),
               PageListTab(
                 label: "Approved",
                 count: 3,
                 color: Colors.orange,
-                  selected:  3 == selectedTab
+                  selected:  3 == _selectedTab
               ),
             ],
             actions: Row(

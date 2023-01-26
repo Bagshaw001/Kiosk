@@ -1,33 +1,27 @@
-
 import 'package:flutter/material.dart';
 
-class User{
+class User {
   String userId;
   String username;
 
-  User({
-    required this.userId,
-  required this.username
-  });
+  User({required this.userId, required this.username});
 }
 
-class AppState extends ChangeNotifier{
-  User? user;
+class AppState extends ChangeNotifier {
+  User? _user;
 
-  void loginUser(usere){
-    user = usere;
-    print("Login");
+  Future<bool> loginUser(
+      {required String email, required String password}) async {
+    _user = User(userId: "userId", username: "username");
+    notifyListeners();
+    return true;
+  }
+
+  void logout() {
+    _user = null;
     notifyListeners();
   }
 
-
-  void logout(){
-    user = null;
-    notifyListeners();
-  }
-
-
-  bool get isLoggedIn => user != null;
-
-
+  bool get isLoggedIn => _user != null;
+  User? get user => _user;
 }

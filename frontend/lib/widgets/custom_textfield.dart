@@ -5,29 +5,22 @@ class CustomTextField extends StatelessWidget {
   final double? width;
   final double? height;
   final String? label;
+  final bool? obscure;
   final TextEditingController? controller;
-  const CustomTextField({
-    this.width,
-    this.height,
-    this.label,
-    this.controller,
-    super.key
-    });
+  const CustomTextField(
+      {this.width,this.obscure, this.height, this.label, this.controller, super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: width,
-      height: height,
-      child: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(label ?? ""),
-        TextFormField(
-          controller: controller,
-        )
-      ],
-    )
+    Size size = MediaQuery.of(context).size;
+    return SizedBox(
+      width: width ?? size.width * 0.3,
+      height: height ?? 90,
+      child: TextFormField(
+        obscureText: obscure ?? false,
+        decoration: InputDecoration(label: Text(label ?? "")),
+        controller: controller,
+      ),
     );
   }
 }
