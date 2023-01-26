@@ -1,16 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:kiosk/pages/authentication_page/authentication_page.dart';
 import 'package:kiosk/pages/dashboard/dashboard.dart';
 import 'package:kiosk/pages/inventory/inventory.dart';
 import 'package:kiosk/pages/login_page.dart';
 import 'package:kiosk/pages/statistics/statistics.dart';
 import 'package:kiosk/pages/transactions/transactions.dart';
+import 'package:kiosk/utils/app_state.dart';
 import 'package:kiosk/utils/constants.dart';
 import 'package:kiosk/utils/theme.dart';
 import 'package:kiosk/utils/webpage.dart';
 import 'package:kiosk/widgets/custom_scaffold.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp( const MyApp());
+  // runApp( const MyApp());
+  runApp(
+    ChangeNotifierProvider<AppState>(
+      create: (context)=> AppState(),
+      child:  MyApp(),
+    )
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -23,7 +32,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: mainTheme,
-      home:  HomePage(),
+      home:  context.watch<AppState>().isLoggedIn ? HomePage() : AuthenticationPage(),
     );
   }
 }
