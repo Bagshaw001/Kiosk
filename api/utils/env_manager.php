@@ -77,4 +77,32 @@ function slack_webhook_withdrawals(){
 function paybox_token(){
 	return getenv("PAYBOX_BEARER_TOKEN");
 }
-?>
+
+/**Returns the Facebook version */
+function facebook_version(){
+	return getenv("FB_GRAPH_VERSION");
+}
+
+/**Returns the Redirect url */
+function redirect_url(){
+	return getenv("REDIRECT_URL");
+}
+
+/**Return the Facebook state */
+function facebook_state(){
+	return getenv("FB_APP_STATE");
+}
+
+/**
+ * Returns the Facebook graph domain
+ */
+function facebook_graph_domain(){
+	return getenv("FB_GRAPH_DOMAIN");
+}
+
+/**
+ * Returns the Facebook main domain
+ */
+function facebook_main_domain(){
+	return getenv("FB_MAIN_DOMAIN");
+}
