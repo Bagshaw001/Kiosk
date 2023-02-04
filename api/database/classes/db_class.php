@@ -60,9 +60,9 @@
 		}
 
 
-		function store_credential($api_key,$store_id,$platform,$bearer_token){
+		function store_credential($api_key,$store_id,$platform,$bearer_token,$expiry_time){
 			$sql = "INSERT INTO `social_media_credentials`
-			VALUE('$api_key', '$store_id','$platform','$bearer_token')";
+			VALUE('$api_key', '$store_id','$platform','$bearer_token','$expiry_time')";
 			return $this->db_query($sql);
 		}
 

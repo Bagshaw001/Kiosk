@@ -37,9 +37,9 @@
 		return $db->create_manager_invite($store_id,$token);
 	}
 
-	function store_credential($api_key,$store_id,$platform,$bearer_token){
+	function store_credential($api_key,$store_id,$platform,$bearer_token,$expiry_time){
 		$db = new db_class();
-		return $db->store_credential($api_key,$store_id,$platform,$bearer_token);
+		return $db->store_credential($api_key,$store_id,$platform,$bearer_token,$expiry_time);
 	}
 
 	function get_store_by_token($token){
