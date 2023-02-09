@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:kiosk/utils/app_state.dart';
 import 'package:kiosk/utils/constants.dart';
+import 'package:provider/provider.dart';
 
 class LargeNav extends StatelessWidget {
   final Function(int)? onNavClick;
@@ -13,7 +15,7 @@ class LargeNav extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(8),
+      padding: const EdgeInsets.all(8),
       color: blue,
       child: Column(
         children: [
@@ -24,13 +26,28 @@ class LargeNav extends StatelessWidget {
                 fallbackHeight: 50,
                   fallbackWidth: 50,
               ),
-              Spacer(),
-              Icon(Icons.account_circle_rounded),
-              Icon(Icons.notifications),
+
+              const Spacer(),
+              IconButton(
+                icon:const Icon(Icons.account_circle_rounded),
+                onPressed: (){
+
+                },
+              ),
+
+
+              IconButton(
+                icon:const Icon(Icons.notifications),
+                onPressed: (){
+
+                },
+              ),
             ],
           ),
 
-          Text("omeibibagshaw@gmail.com"),
+          Text(Provider.of<AppState>(context).user.email,
+          style: Theme.of(context).textTheme.bodyMedium!
+            .copyWith(color: Colors.white),),
 
           _NavTile(
             label: "Dashboard",
@@ -110,7 +127,7 @@ class _NavTileState extends State<_NavTile> {
   Widget build(BuildContext context) {
     return ListTile(
 
-      leading: Icon(Icons.dashboard_outlined),
+      leading: const Icon(Icons.dashboard_outlined),
       title: Text(widget.label),
       onTap: widget.onPressed,
 
@@ -127,7 +144,7 @@ class _NavTileState extends State<_NavTile> {
 
 
 ThemeData selectedTheme = ThemeData(
-  iconTheme: IconThemeData(
+  iconTheme: const IconThemeData(
     color: Colors.red
   )
 );

@@ -15,7 +15,7 @@ void main() {
   // runApp( const MyApp());
   runApp(ChangeNotifierProvider<AppState>(
     create: (context) => AppState(),
-    child: MyApp(),
+    child: const MyApp(),
   ));
 }
 

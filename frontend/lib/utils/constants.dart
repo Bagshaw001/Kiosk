@@ -38,3 +38,9 @@ MaterialColor createMaterialColor(Color color) {
 }
 
 
+enum Currency{
+  ghs,
+  usd
+}
+
+

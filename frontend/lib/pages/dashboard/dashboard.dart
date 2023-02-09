@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:kiosk/pages/dashboard/widgets/dash_order_list.dart';
 import 'package:kiosk/utils/app_state.dart';
+import 'package:kiosk/utils/user.dart';
 import 'package:kiosk/widgets/metrics_card.dart';
 import 'package:kiosk/pages/dashboard/widgets/primary_card.dart';
 import 'package:kiosk/pages/dashboard/widgets/info_card.dart';
 import 'package:kiosk/pages/dashboard/widgets/todo_card.dart';
-import 'package:kiosk/utils/constants.dart';
 import 'package:kiosk/utils/webpage.dart';
 import 'package:kiosk/widgets/action_card.dart';
 import 'package:kiosk/widgets/card_list.dart';
@@ -24,15 +24,23 @@ class _DashboardLarge extends StatefulWidget {
 }
 
 class __DashboardLargeState extends State<_DashboardLarge> {
-  late User user;
+  // late User user;
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    user = Provider.of<AppState>(context).user!;
+    // user = Provider.of<AppState>(context).user!;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    // user ??= Provider.of<AppState>(context).user!;
   }
 
   @override
   Widget build(BuildContext context) {
+
     return Padding(
       padding: EdgeInsets.all(16),
       child: Row(
@@ -40,7 +48,7 @@ class __DashboardLargeState extends State<_DashboardLarge> {
         children: [
           //Left columns
           _DashColumn(
-            headline: Text("Good morning, ${user.username}",
+            headline: Text("Good morning, ${Provider.of<AppState>(context).user!.username}",
                 style: Theme.of(context)
                     .textTheme
                     .headlineMedium!

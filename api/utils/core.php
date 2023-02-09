@@ -70,7 +70,7 @@ ob_start();
 	function send_json($data, $response = 200){
 		echo json_encode(array(
 			"response" => $data,
-			"status"=> $response)
+			"statusCode"=> $response)
 		);
 	}
 ?>
