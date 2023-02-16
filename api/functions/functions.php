@@ -15,7 +15,7 @@ function convertSecToDay($seconds)
  */
 function expiryTime($days)
 {
-    echo ($days);
+    // echo ($days);
     $exp_date = date('Y-m-d', strtotime('+' . $days));
 
 

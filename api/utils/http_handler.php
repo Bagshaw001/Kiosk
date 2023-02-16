@@ -34,6 +34,7 @@
 
 			//execute request
 			$response = curl_exec($curl);
+			print("response $response");
 			curl_close($curl);
 
 			return $response;
@@ -48,6 +49,3 @@
 			return $this->http_request($url,"POST", body: $body, header: $header);
 		}
 	}
-
-
-?>
