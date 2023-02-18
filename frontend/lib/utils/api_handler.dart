@@ -106,6 +106,45 @@ class ApiHandler {
     return _BaseHandler.post(endpoint: "database", body: body);
   }
 
+  static Future<http.Response> requestEmailVerification({
+    required String userId
+  }) async {
+    return _BaseHandler.post(endpoint: "database", body: {
+      "action" : "request_email_verification",
+      "user_id" : userId
+    });
+  }
+
+  static Future<http.Response> requestPhoneVerification({
+    required String userId
+  }) async {
+    http.Response response = await _BaseHandler.post(
+        endpoint: "database",
+        body: {
+      "action" : "request_phone_verification",
+      "user_id" : userId
+    });
+    return response;
+  }
+
+  static Future<http.Response> verifyEmailToken({required String token}) async {
+    return _BaseHandler.post(
+        endpoint: "database",
+        body: {
+          "token" : token,
+          "action": "verify_email"
+        }
+    );
+  }
+  static Future<http.Response> verifyPhoneToken({required String token}) async {
+    return _BaseHandler.post(
+        endpoint: "database",
+        body: {
+          "token" : token,
+          "action" : "verify_phone"
+        }
+    );
+  }
 //    End of database endpoints
 //=======================================================================================
 }
@@ -113,7 +152,6 @@ class ApiHandler {
 class _BaseHandler {
   // static String base = "http://127.0.0.1/.../.../";
   static String base = "http://137.184.228.209/kiosk/api/index.php";
-  // static String base = "http://localhost/kiosk/api/index.php/";
 
   static String _genUrl(String endpoint) {
     // return base;

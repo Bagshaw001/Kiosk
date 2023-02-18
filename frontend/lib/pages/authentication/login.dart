@@ -101,16 +101,32 @@ class _LoginPageState extends State<LoginPage> {
                       label: "Login",
                       onPressed: () {
                         ApiHandler.login(context: context,email: email.text, password: password.text).then((result){
+    // ApiHandler.login(context: context,email: email.text, password: password.text).then((result){
                           if (result != null){
                             Provider.of<AppState>(context,listen: false).loginUser(result);
                           }else {
 
                           }
                         });
-
-
-
                       },
+                    ),
+
+
+
+
+
+                    Text("Forgot Password",
+                        style: Theme.of(context).textTheme.headlineMedium),
+                    const Text("Email taken from login form"),
+
+                    CustomButton(
+                      label: "Request password reset",
+                      onPressed: (){
+                        ApiHandler.generatePasswordToken(email.text).then((response){
+                          print(response.body);
+                        });
+                      },
+
                     )
                   ],
                 ),

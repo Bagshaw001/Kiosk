@@ -44,7 +44,7 @@
 
 
 		function create_manager_invite($store_id,$token){
-			$sql = "INSERT INTO `store_manager_invite` (`store_id`, `invite_token`)
+			$sql = "INSERT INTO `store_manager_invite` VALUE (`store_id`, `invite_token`)
 			VALUE ('$store_id', '$token')";
 			return $this->db_query($sql);
 		}
@@ -63,6 +63,16 @@
 		function store_credential($api_key,$store_id,$platform,$bearer_token){
 			$sql = "INSERT INTO `social_media_credentials`
 			VALUE('$api_key', '$store_id','$platform','$bearer_token')";
+			return $this->db_query($sql);
+		}
+
+		function store_email_verification_token($user_id,$token){
+			$sql = "INSERT INTO `email_verification` VALUE ('$user_id', '$token')";
+			return $this->db_query($sql);
+		}
+
+		function store_phone_verification_token($user_id,$token){
+			$sql = "INSERT INTO `phone_verification` VALUE ('$user_id', '$token')";
 			return $this->db_query($sql);
 		}
 
@@ -169,9 +179,42 @@
 			return $this->db_fetch_one($sql);
 		}
 
+		function get_email_verification_token($user_id){
+			$sql = "SELECT `token` FROM `email_verification` WHERE `user_id` = '$user_id'";
+			return $this->db_fetch_one($sql);
+		}
+
+		function get_phone_verification_token($user_id){
+			$sql = "SELECT `token` FROM `phone_verification` WHERE `user_id` = '$user_id'";
+			return $this->db_fetch_one($sql);
+		}
+
+		function get_user_by_email_verification_token($token){
+			$sql = "SELECT * FROM `email_verification` WHERE `token`= '$token'";
+			return $this->db_fetch_one($sql);
+		}
+
+		function get_user_by_phone_verification_token($token){
+			$sql = "SELECT * FROM `phone_verification` WHERE `token`= '$token'";
+			return $this->db_fetch_one($sql);
+		}
+
 		//================================UPDATE ===============================================
 		function reset_user_password($user_id,$new_p){
 			$sql = "UPDATE `users` SET `password`='$new_p' WHERE `user_id` = '$user_id'";
+			return $this->db_query($sql);
+		}
+
+		function update_email_verification($user_id, $verified = true){
+			$val = $verified ? 1 : 0;
+			$sql = "UPDATE `users` SET `email_verified` = $val WHERE `user_id`='$user_id'";
+			return $this->db_query($sql);
+		}
+
+
+		function update_phone_verification($user_id, $verified = true){
+			$val = $verified ? 1 : 0;
+			$sql = "UPDATE `users` SET `number_verified` = $val WHERE `user_id`='$user_id'";
 			return $this->db_query($sql);
 		}
 
@@ -184,8 +227,19 @@
 		}
 
 
+		function remove_email_token($user_id, $token){
+			$sql = "DELETE FROM `email_verification` WHERE `user_id` = '$user_id' AND `token` = '$token'";
+			return $this->db_query($sql);
+		}
+
+		function remove_phone_token($user_id, $token){
+			$sql = "DELETE FROM `phone_verification` WHERE `user_id` = '$user_id' AND `token` = '$token'";
+			return $this->db_query($sql);
+		}
+
+
 		function remove_password_token($token, $user_id){
-			$sql = "DELETE FROM `password_tokens` WHERE `user_id`='$user_id' AND `token`='$user_id'";
+			$sql = "DELETE FROM `password_tokens` WHERE `user_id`='$user_id' AND `token`='$token'";
 			return $this->db_query($sql);
 		}
 

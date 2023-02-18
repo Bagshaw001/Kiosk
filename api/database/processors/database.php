@@ -2,9 +2,9 @@
 
 	require_once(__DIR__."/../../utils/core.php");
 	require_once(__DIR__."/../controllers/db_controller.php");
-	ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+// 	ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
+// error_reporting(E_ALL);
 
 	function database(){
 		$request = $_SERVER["REQUEST_METHOD"];
@@ -137,9 +137,7 @@ error_reporting(E_ALL);
 
 						//Return existing password token for user else generate a new one
 						$token = get_user_password_token($user_id);
-						if ($token){
-
-						}else {
+						if (!$token){
 							$token = generate_id();
 							store_forgot_password_token($user_id,$token);
 						}
@@ -320,8 +318,51 @@ error_reporting(E_ALL);
 					}
 
 					die();
+				case "request_email_verification":
+					$user_id = $_POST["user_id"];
+
+					$token = get_email_verification_token($user_id);
+					if(!$token){ // if the user hasn't requested a new token, generate a new one
+						$token = substr(generate_id(), -6);
+						//store new token
+						store_email_verification_token($user_id,$token);
+						//send them their token;
+					}
+					send_json(array("msg" => "Token has been sent to your email"));
+					die();
+				case "request_phone_verification":
+					$user_id = $_POST["user_id"];
+
+					$token = get_phone_verification_token($user_id);
+					if(!$token){ // if the user hasn't requested a new token, generate a new one
+						$token = substr(generate_id(), -6);
+						//store new token
+						store_phone_verification_token($user_id,$token);
+						//send them their token;
+					}
+					send_json(array("msg" => "Token has been sent to your Phone number"));
+					die();
+					case "verify_email":
+						$token = $_POST["token"];
+						if (is_email_token_valid($token)){
+							confirm_email_verification($token);
+							send_json(array("msg" => "Your email has been verified"));
+						}else {
+							send_json(array("msg"=> "This token is not valid. Check your email and try again"), 100);
+						}
+						die();
+					case "verify_phone":
+						$token = $_POST["token"];
+						if (is_phone_token_valid($token)){
+							confirm_phone_verification($token);
+							send_json(array("msg" => "Your phone has been verified"));
+						}else {
+							send_json(array("msg"=> "This token is not valid. Check your phone and try again"),100);
+						}
+						die();
 				default:
-					echo "No implementation for <". $_POST["action"] .">";
+					// echo "No implementation for <". $_POST["action"] .">";
+					send_json(array("msg" => "No implementation for <". $_POST["action"] .">"));
 					}
 					die();
 

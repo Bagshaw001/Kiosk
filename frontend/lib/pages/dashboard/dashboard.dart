@@ -24,12 +24,6 @@ class _DashboardLarge extends StatefulWidget {
 }
 
 class __DashboardLargeState extends State<_DashboardLarge> {
-  // late User user;
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // user = Provider.of<AppState>(context).user!;
-  }
 
   @override
   void initState() {
@@ -42,13 +36,13 @@ class __DashboardLargeState extends State<_DashboardLarge> {
   Widget build(BuildContext context) {
 
     return Padding(
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           //Left columns
           _DashColumn(
-            headline: Text("Good morning, ${Provider.of<AppState>(context).user!.username}",
+            headline: Text("Good morning, ${ context.read<AppState>().user.username}",
                 style: Theme.of(context)
                     .textTheme
                     .headlineMedium!

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kiosk/pages/account_settings/account_settings.dart';
 import 'package:kiosk/utils/app_state.dart';
 import 'package:kiosk/utils/constants.dart';
 import 'package:provider/provider.dart';
@@ -31,6 +32,10 @@ class LargeNav extends StatelessWidget {
               IconButton(
                 icon:const Icon(Icons.account_circle_rounded),
                 onPressed: (){
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context)=> AccountSettings().large
+                      )
+                  );
 
                 },
               ),

@@ -42,6 +42,16 @@
 		return $db->store_credential($api_key,$store_id,$platform,$bearer_token);
 	}
 
+	function store_email_verification_token($user_id,$token){
+		$db = new db_class();
+		return $db->store_email_verification_token($user_id,$token);
+	}
+
+	function store_phone_verification_token($user_id,$token){
+		$db = new db_class();
+		return $db->store_phone_verification_token($user_id,$token);
+	}
+
 	function get_store_by_token($token){
 		$db = new db_class();
 		return $db->get_store_by_token($token);
@@ -103,6 +113,16 @@
 		} else {
 			return false;
 		}
+	}
+
+	function get_email_verification_token($user_id){
+		$db = new db_class();
+		return $db->get_email_verification_token($user_id);
+	}
+
+	function get_phone_verification_token($user_id){
+		$db = new db_class();
+		return $db->get_phone_verification_token($user_id);
 	}
 
 	function get_store_wallets($store_id){
@@ -171,7 +191,41 @@
 	function is_user_a_collaborator($store_id,$user_id){
 		$db = new db_class();
 		return $db->get_store_by_user_id($user_id)["store_id"] == $store_id;
+	}
 
+	function is_email_token_valid($token){
+		$db = new db_class();
+		if ($db->get_user_by_email_verification_token($token)) {
+			return true;
+		}
+		return false;
+	}
+
+	function is_phone_token_valid($token){
+		$db = new db_class();
+		if ($db->get_user_by_phone_verification_token($token)) {
+			return true;
+		}
+		return false;
+	}
+
+	function confirm_email_verification($token){
+		$db = new db_class();
+
+		$user_id = $db->get_user_by_email_verification_token($token)["user_id"];
+
+		$db->update_email_verification($user_id);
+		$db->remove_email_token($user_id,$token);
+	}
+
+	function confirm_phone_verification($token){
+		$db = new db_class();
+
+		$user_id = $db->get_user_by_phone_verification_token($token)["user_id"];
+
+		$db->update_phone_verification($user_id);
+		$db->remove_phone_token($user_id,$token);
+		return true;
 	}
 
 	function link_transaction_order($transaction_id,$order_id){

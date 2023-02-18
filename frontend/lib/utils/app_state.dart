@@ -9,7 +9,6 @@ class AppState extends ChangeNotifier {
 
   void loginUser(User newUser){
     _user = newUser;
-    print("User logged in ${_user!.storeId}, ${_user!.userId}, ${_user!.userId}");
     notifyListeners();
   }
 

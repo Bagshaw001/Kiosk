@@ -25,4 +25,9 @@ class User {
       profileImage: map["store_image"]
     );
   }
+
+  Map<String,dynamic> toJson() => {
+    "userId" : userId,
+    "userName" : username
+  };
 }
