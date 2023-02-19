@@ -18,6 +18,5 @@ function expiryTime($days)
     // echo ($days);
     $exp_date = date('Y-m-d', strtotime('+' . $days));
 
-
     return $exp_date;
 }
