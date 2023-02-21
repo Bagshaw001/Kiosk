@@ -18,17 +18,12 @@
 			return $this->db_query($sql);
 		}
 
-		function create_product($product_id,$store_id,$product_name,$product_description){
-			$sql = "INSERT INTO `products`(`product_id`,`store_id`, `product_name`,`product_description`)
-			VALUE ('$product_id','$store_id','$product_name', '$product_description')";
+		function create_product($product_id,$store_id,$product_name,$product_description, $quantity, $currency, $price){
+			$sql = "INSERT INTO `products`(`product_id`,`store_id`, `product_name`,`product_description`,`quantity`,`currency`,`price`)
+			VALUE ('$product_id','$store_id','$product_name', '$product_description', '$quantity', '$currency', '$price')";
 			return $this->db_query($sql);
 		}
 
-		function add_product_variation($product_id,$variation_id,$price, $currency){
-			$sql = "INSERT INTO `product_variations` (`product_id`, `variation_id`, `price`, `currency`)
-			VALUE ('$product_id', '$variation_id', '$price', '$currency')";
-			return $this->db_query($sql);
-		}
 
 		function add_store_manager($user_id, $store_id){
 			$sql = "INSERT INTO `store_managers`(`user_id`, `store_id`)
@@ -82,9 +77,9 @@
 			return $this->db_query($sql);
 		}
 
-		function add_order($order_id,$customer_id,$variation_id){
+		function add_order($order_id,$customer_id,$product_id){
 			$sql = "INSERT INTO `orders`
-			VALUE('$order_id', '$customer_id','$variation_id')";
+			VALUE('$order_id', '$customer_id','$product_id')";
 			return $this->db_query($sql);
 		}
 
@@ -199,6 +194,11 @@
 			return $this->db_fetch_one($sql);
 		}
 
+		function get_products($store_id){
+			$sql = "SELECT * FROM products where `store_id` = '$store_id'";
+			return $this->db_fetch_all($sql);
+		}
+
 		//================================UPDATE ===============================================
 		function reset_user_password($user_id,$new_p){
 			$sql = "UPDATE `users` SET `password`='$new_p' WHERE `user_id` = '$user_id'";
@@ -216,6 +216,15 @@
 			$val = $verified ? 1 : 0;
 			$sql = "UPDATE `users` SET `number_verified` = $val WHERE `user_id`='$user_id'";
 			return $this->db_query($sql);
+		}
+
+		function update_product($product_id,$product_name,$product_description, $quantity, $currency, $price){
+			$sql = "UPDATE `products` SET
+			`product_name`='$product_name', `product_description` = '$product_description',
+			`quantity` = '$quantity', `currency` = '$currency'
+			`price`='$price'
+			 WHERE `product_id` = '$product_id'";
+			 return $this->db_fetch_all($sql);
 		}
 
 

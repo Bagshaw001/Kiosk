@@ -175,37 +175,20 @@
 					$product_name = $_POST["product_name"];
 					$product_description = $_POST["product_description"];
 					$store_id = $_POST["store_id"];
-					$variations = $_POST["product_variations"];
+					$price = $_POST["price"];
+					$quantity = $_POST["quantity"];
+					$currency = strtoupper($_POST["currency"]);
+					// $variations = json_encode($_POST["product_variations"],true);
 					$product_id = generate_id();
 
-					$var_results = array();
-
-
-					$success = create_product($product_id, $store_id,$product_name,$product_description);
-
-					foreach ($variations as $index => $value) {
-						$variation_id = generate_id();
-						$p_success = add_product_variation($product_id,$variation_id,$value["price"],$value["currency"]);
-						$var_results = array_merge($var_results, array($variation_id => $p_success ? "Success" : "Failed"));
-					}
-
-					send_json(array("product_id" => $product_id, "variations" => $var_results));
-
-					die();
-				case "add_product_variation":
-					$currency = $_POST["currency"];
-					$price = $_POST["price"];
-					$details = $_POST["details_json"];
-					$product_id = $_POST["product_id"];
-					$variation_id = generate_id();
-
-					$success = add_product_variation($product_id,$variation_id,$price,$currency);
+					$success = create_product($product_id,$store_id,$product_name,$product_description,$quantity,$currency,$price);
 
 					if ($success){
-						send_json(array("msg" => "Variation added"));
-					}else{
-						send_json(array("msg" => "Something went wrong"),100);
+						send_json(array("product_id" => $product_id));
+					}else {
+						send_json(array("product_id" => $product_id));
 					}
+
 					die();
 				case "store_credential":
 					$api_key = $_POST["api_key"];
@@ -237,26 +220,26 @@
 					}
 
 					die();
-				case "add_store_wallet":
-					$name = $_POST["wallet_name"];
-					$number = $_POST["wallet_number"];
-					$network = $_POST["network"];
-					$store_id = $_POST["store_id"];
+				// case "add_store_wallet":
+				// 	$name = $_POST["wallet_name"];
+				// 	$number = $_POST["wallet_number"];
+				// 	$network = $_POST["network"];
+				// 	$store_id = $_POST["store_id"];
 
-					$success = add_store_wallet($store_id,$name,$number,$network);
+				// 	$success = add_store_wallet($store_id,$name,$number,$network);
 
-					if($success){
-						send_json(array("msg" => "Successfully added wallet"));
-					}else {
-						send_json(array("msg"=> "You may already have a wallet linked to your store"),100);
-					}
-					die();
-				case "get_store_wallets":
-					$store_id = $_POST["store_id"];
+				// 	if($success){
+				// 		send_json(array("msg" => "Successfully added wallet"));
+				// 	}else {
+				// 		send_json(array("msg"=> "You may already have a wallet linked to your store"),100);
+				// 	}
+				// 	die();
+				// case "get_store_wallets":
+				// 	$store_id = $_POST["store_id"];
 
-					$wallets = get_store_wallets($store_id);
+				// 	$wallets = get_store_wallets($store_id);
 
-					send_json(array("wallets" => $wallets));
+				// 	send_json(array("wallets" => $wallets));
 				case "add_order_transaction":
 					$order_id = generate_id();
 					$variation = $_POST["variation_id"];
@@ -266,6 +249,7 @@
 					$transaction_date = $_POST["transaction_date"];
 					$customer_number = $_POST["customer_number"];
 					$customer_name = $_POST["customer_name"];
+					$store_id = $_POST["store_id"];
 
 					//check if customer exists, else add them and get customer_id
 					$customer_id = get_customer_by_number($store_id,$customer_number);
@@ -360,6 +344,28 @@
 							send_json(array("msg"=> "This token is not valid. Check your phone and try again"),100);
 						}
 						die();
+				case "get_products":
+					$store_id = $_POST["store_id"];
+					$products = get_products($store_id);
+					send_json(array("products"=> $products));
+					die();
+				case "update_product":
+					$product_id = $_POST["product_id"];
+					$product_name = $_POST["product_name"];
+					$product_description = $_POST["product_description"];
+					$store_id = $_POST["store_id"];
+					$price = $_POST["price"];
+					$quantity = $_POST["quantity"];
+					$currency = strtoupper($_POST["currency"]);
+
+					$success = update_product($product_id,$product_name,$product_description, $quantity, $currency, $price);
+
+					if($success){
+						send_json(array("msg"=> "Successfully updated the product"));
+					}else {
+						send_json(array("msg"=> "Something went wrong"),100);
+					}
+
 				default:
 					// echo "No implementation for <". $_POST["action"] .">";
 					send_json(array("msg" => "No implementation for <". $_POST["action"] .">"));

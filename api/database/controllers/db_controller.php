@@ -11,15 +11,11 @@
 		return $db->create_store($store_id,$store_name,$store_country);
 	}
 
-	function create_product($product_id,$store_id,$product_name,$product_description){
+	function create_product($product_id,$store_id,$product_name,$product_description, $quantity, $currency, $price){
 		$db = new db_class();
-		return $db->create_product($product_id,$store_id,$product_name,$product_description);
+		return $db->create_product($product_id,$store_id,$product_name,$product_description, $quantity, $currency, $price);
 	}
 
-	function add_product_variation($product_id,$variation_id,$price,$currency){
-		$db = new db_class();
-		return $db->add_product_variation($product_id,$variation_id,$price,$currency);
-	}
 
 	function add_store_manager($user_id,$store_id){
 		$db = new db_class();
@@ -178,9 +174,9 @@
 	}
 
 
-	function add_order($order_id,$customer_id, $variation_id){
+	function add_order($order_id,$customer_id, $product_id){
 		$db = new db_class();
-		return $db->add_order($order_id,$customer_id,$variation_id);
+		return $db->add_order($order_id,$customer_id,$product_id);
 	}
 
 	function add_transaction($transaction_id,$currency,$amount,$date){
@@ -239,6 +235,16 @@
 		return $db->add_transaction_withdrawal($transaction_id,$withdrawal_id);
 	}
 
+
+	function get_products($store_id){
+		$db = new db_class();
+		return $db->get_products($store_id);
+	}
+
+	function update_product($product_id,$product_name,$product_description, $quantity, $currency, $price){
+		$db = new db_class();
+		return $db->update_product($product_id,$product_name,$product_description, $quantity, $currency, $price);
+	}
 
 
 ?>
