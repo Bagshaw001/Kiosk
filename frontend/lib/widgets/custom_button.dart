@@ -21,14 +21,13 @@ class CustomButton extends StatelessWidget {
     return filled ? ElevatedButton(
       onPressed: onPressed ?? (){},
 
-      child: SizedBox(
+      child: Container(
           height: 30,
-          // width: 70,
+          margin: const EdgeInsets.all(4),
           child: Center(child: Text(label))),
     )
         : OutlinedButton(
       style: ButtonStyle(
-
           shape: MaterialStateProperty.all(RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
               side: BorderSide(
@@ -38,6 +37,7 @@ class CustomButton extends StatelessWidget {
 
           ))
       ),
+      onPressed: onPressed?? (){},
       child: SizedBox(
           height: 30,
           // width: 70,
@@ -46,7 +46,6 @@ class CustomButton extends StatelessWidget {
               color: outlineTextColor
             ),
           ))),
-      onPressed: onPressed?? (){},
     );
   }
 }

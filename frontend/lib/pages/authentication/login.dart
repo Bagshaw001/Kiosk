@@ -3,6 +3,7 @@ import 'package:kiosk/utils/api_handler.dart';
 import 'package:kiosk/utils/app_state.dart';
 import 'package:kiosk/widgets/custom_button.dart';
 import 'package:kiosk/widgets/custom_textfield.dart';
+import 'package:kiosk/widgets/metrics_card.dart';
 import 'package:provider/provider.dart';
 
 
@@ -101,7 +102,6 @@ class _LoginPageState extends State<LoginPage> {
                       label: "Login",
                       onPressed: () {
                         ApiHandler.login(context: context,email: email.text, password: password.text).then((result){
-    // ApiHandler.login(context: context,email: email.text, password: password.text).then((result){
                           if (result != null){
                             Provider.of<AppState>(context,listen: false).loginUser(result);
                           }else {
@@ -127,7 +127,8 @@ class _LoginPageState extends State<LoginPage> {
                         });
                       },
 
-                    )
+                    ),
+
                   ],
                 ),
               ],

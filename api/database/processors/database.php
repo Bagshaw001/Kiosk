@@ -2,9 +2,9 @@
 
 	require_once(__DIR__."/../../utils/core.php");
 	require_once(__DIR__."/../controllers/db_controller.php");
-// 	ini_set('display_errors', 1);
-// ini_set('display_startup_errors', 1);
-// error_reporting(E_ALL);
+	ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 	function database(){
 		$request = $_SERVER["REQUEST_METHOD"];
@@ -365,6 +365,8 @@
 					}else {
 						send_json(array("msg"=> "Something went wrong"),100);
 					}
+
+					die();
 
 				default:
 					// echo "No implementation for <". $_POST["action"] .">";

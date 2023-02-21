@@ -23,9 +23,10 @@ class LargeNav extends StatelessWidget {
 
           Row(
             children: [
-              Placeholder(
-                fallbackHeight: 50,
-                  fallbackWidth: 50,
+              Image.asset(
+                "assets/images/logo.png",
+                width: 70,
+                height: 70,
               ),
 
               const Spacer(),

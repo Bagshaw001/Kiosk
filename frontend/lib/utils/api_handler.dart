@@ -101,7 +101,7 @@ class ApiHandler {
   }
   static Future<http.Response> editProduct(
       {required Product product}) async {
-
+    print("product id ${product.id}");
     return _BaseHandler.post(endpoint: "database",
         body: {
           "action": "update_product",
@@ -110,7 +110,8 @@ class ApiHandler {
           "store_id": product.storeId,
           "price" : product.price.toString(),
           "quantity" : product.quantity.toString(),
-          "currency" : product.currency.name.toUpperCase()
+          "currency" : product.currency.name.toUpperCase(),
+          "product_id" : product.id
         }
     );
   }

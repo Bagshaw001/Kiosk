@@ -103,6 +103,16 @@ class __LargeInventoryState extends State<_LargeInventory> {
                             ListTag(
                               label: "Active",
                               color: Colors.blue,
+                            ),
+
+                            IconButton(
+                              icon: const Icon(Icons.edit, color: Colors.black,),
+                              onPressed: ()async{
+                                bool? update = await showDialog(context: context, builder: (context)=> _AddProductDialog(product: prod));
+                                if(update ?? false){
+                                  (context as Element).reassemble();
+                                }
+                              },
                             )
                           ],
                         );
@@ -123,8 +133,9 @@ class __LargeInventoryState extends State<_LargeInventory> {
 
 
 class _AddProductDialog extends StatefulWidget {
+  final Product? product;
 
-   _AddProductDialog({Key? key}) : super(key: key);
+   _AddProductDialog({this.product,Key? key}) : super(key: key);
 
   @override
   State<_AddProductDialog> createState() => _AddProductDialogState();
@@ -140,6 +151,18 @@ class _AddProductDialogState extends State<_AddProductDialog> {
   TextEditingController quantity = TextEditingController();
 
   Currency currency = Currency.ghs;
+
+  @override
+  void initState() {
+    super.initState();
+    if(widget.product != null){
+      price.text = widget.product!.price.toString();
+      quantity.text = widget.product!.quantity.toString();
+      currency = widget.product!.currency;
+      productDesc.text = widget.product!.description;
+      productName.text = widget.product!.name;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -190,10 +213,11 @@ class _AddProductDialogState extends State<_AddProductDialog> {
 
 
           CustomButton(
-            label: "Submit",
+            label: widget.product == null ? "Submit" : "Edit",
             filled: true,
             onPressed: ()async{
               Product product = Product(
+                  id :widget.product?.id ?? "",
                   name: productName.text,
                   description: productDesc.text,
                   storeId: context.read<AppState>().user.storeId,
@@ -201,10 +225,9 @@ class _AddProductDialogState extends State<_AddProductDialog> {
                   price : double.parse(price.text),
                   quantity: int.parse(quantity.text)
               );
-              ApiHandler.uploadProduct(product: product).then((response){
-
+              (widget.product == null ?
+              ApiHandler.uploadProduct(product: product) :ApiHandler.editProduct(product: product) ).then((response){
                 Map<String,dynamic> json = jsonDecode(response.body);
-
                 //if product upload was successful, get product id and
                 // upload product variations
                 if(json["statusCode"] == 200){

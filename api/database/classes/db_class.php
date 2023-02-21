@@ -221,10 +221,11 @@
 		function update_product($product_id,$product_name,$product_description, $quantity, $currency, $price){
 			$sql = "UPDATE `products` SET
 			`product_name`='$product_name', `product_description` = '$product_description',
-			`quantity` = '$quantity', `currency` = '$currency'
+			`quantity` = '$quantity', `currency` = '$currency',
 			`price`='$price'
 			 WHERE `product_id` = '$product_id'";
-			 return $this->db_fetch_all($sql);
+			//  echo $sql;
+			 return $this->db_query($sql);
 		}
 
 

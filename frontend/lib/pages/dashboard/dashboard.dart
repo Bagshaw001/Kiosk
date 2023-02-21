@@ -45,14 +45,13 @@ class __DashboardLargeState extends State<_DashboardLarge> {
             headline: Text("Good morning, ${ context.read<AppState>().user.username}",
                 style: Theme.of(context)
                     .textTheme
-                    .headlineMedium!
-                    .copyWith(fontWeight: FontWeight.w400)),
+                    .headlineSmall!),
             subheadline: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   "Dashboard",
-                  style: Theme.of(context).textTheme.headlineSmall,
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
                 const Padding(
                   padding: EdgeInsets.only(bottom: 8.0),
