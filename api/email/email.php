@@ -19,7 +19,7 @@ use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 //Create instance of PHPMailer
 //Define name spaces
-function send_mail($reciever_mail, $body, $email_header)
+function send_mail($reciever_mail, $body, $image_path = null, $email_header)
 {
 
   $mail = new PHPMailer();
@@ -44,18 +44,18 @@ function send_mail($reciever_mail, $body, $email_header)
   //Enable HTML
   $mail->isHTML(true);
   //Attachment
-  $mail->addAttachment('img/attachment.png');
+  $mail->addAttachment($image_path);
   //Email body
   $mail->Body = "<h1>" . $email_header . "</h1></br><p>" . $body . "</p>";
   //Add recipient
   $mail->addAddress($reciever_mail);
   //Finally send email
   if ($mail->send()) {
-    echo "Email Sent..!";
   } else {
     echo "Message could not be sent. Mailer Error: " +
       $mail->ErrorInfo;
+    return false;
   }
   //Closing smtp connection
-  $mail->smtpClose();
+  return $mail->smtpClose();
 }
