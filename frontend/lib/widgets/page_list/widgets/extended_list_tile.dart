@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 
 class ExtendedListTile extends StatelessWidget {
-  final List<String>? content;
+  final List<Widget>? content;
    ExtendedListTile({
     Key? key,
      this.content
@@ -11,18 +11,11 @@ class ExtendedListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(4),
+      padding: const EdgeInsets.all(4),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children:
-         [
-          Checkbox(value: false, onChanged: (value){}),
-           ...List.generate(content?.length ?? 0, (index) => Text(content![index] )),
-          ListTag(
-            label: "Active",
-            color: Colors.blue,
-          )
-        ],
+        children: content ?? const [Text("Empty")]
+         ,
 
       ),
     );

@@ -3,6 +3,7 @@ import 'package:kiosk/utils/webpage.dart';
 import 'package:flutter/material.dart';
 import 'package:kiosk/widgets/action_card.dart';
 import 'package:kiosk/widgets/custom_button.dart';
+import 'package:kiosk/widgets/custom_list_view.dart';
 import 'package:kiosk/widgets/page_list/page_list.dart';
 import 'package:kiosk/widgets/page_list/widgets/extended_list_tile.dart';
 import 'package:kiosk/widgets/page_list/widgets/page_list_tab.dart';
@@ -22,6 +23,8 @@ class __LargeTransactionsState extends State<_LargeTransactions> {
   int _selectedTab = 0;
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
     return Expanded(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -50,9 +53,6 @@ class __LargeTransactionsState extends State<_LargeTransactions> {
             ),
           PageList(
             selectedTab: _selectedTab,
-            builder: (index){
-              return ExtendedListTile();
-            },
             tabs: [
               PageListTab(
                 label: "All Sales",
@@ -87,6 +87,11 @@ class __LargeTransactionsState extends State<_LargeTransactions> {
                   filled: true,
                 )
               ],
+            ),
+            child: CustomListView(
+                height: size.height * 0.6,
+                width: size.width * 0.8,
+                builder:(index)=> ExtendedListTile()
             ),
           )
         ],

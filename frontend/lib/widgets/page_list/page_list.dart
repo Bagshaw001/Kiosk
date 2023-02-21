@@ -8,15 +8,11 @@ class PageList extends StatefulWidget {
   final Widget actions;
   final int selectedTab;
   final List<PageListTab> tabs;
-  final Widget Function(int)? builder;
-  final Future? future;
-  final Widget Function (BuildContext,List, int)? futureBuilder;
+  final Widget child;
   const PageList({
     required this.actions,
     required this.tabs,
-    this.builder,
-    this.future,
-    this.futureBuilder,
+    required this.child,
     required this.selectedTab,
     Key? key}) : super(key: key);
 
@@ -73,26 +69,7 @@ class _PageListState extends State<PageList> {
               ),
 
               const Divider(),
-             widget.future == null ?
-             CustomListView(
-               height: size.height * 0.6,
-               width: size.width * 0.8,
-               builder: widget.builder!,
-             )
-                 :
-             FutureBuilder(
-               future: widget.future,
-                 builder: (context,snapshot){
-               if(snapshot.connectionState == ConnectionState.done){
-                 return  CustomListView(
-                   height: size.height * 0.6,
-                   width: size.width * 0.8,
-                   itemCount: (snapshot.data as List).length,
-                   builder: (index)=> widget.futureBuilder!(context,snapshot.data,index),
-                 );
-               }
-               return const CircularProgressIndicator();
-             })
+              widget.child
             ],
           ),
         )

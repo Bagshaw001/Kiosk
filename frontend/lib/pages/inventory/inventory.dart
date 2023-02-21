@@ -12,6 +12,7 @@ import 'package:kiosk/utils/webpage.dart';
 import 'package:flutter/material.dart';
 import 'package:kiosk/widgets/action_card.dart';
 import 'package:kiosk/widgets/custom_button.dart';
+import 'package:kiosk/widgets/custom_list_view.dart';
 import 'package:kiosk/widgets/custom_textfield.dart';
 import 'package:kiosk/widgets/page_list/page_list.dart';
 import 'package:kiosk/widgets/page_list/widgets/extended_list_tile.dart';
@@ -37,8 +38,11 @@ class _LargeInventory extends StatefulWidget {
 
 class __LargeInventoryState extends State<_LargeInventory> {
   int selectedTab = 0;
+
+
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Container(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -60,17 +64,7 @@ class __LargeInventoryState extends State<_LargeInventory> {
 
           PageList(
             selectedTab: selectedTab,
-            future: ApiHandler.getProducts(context.read<AppState>().user.storeId),
-            futureBuilder: <Product>(context,List<Product> data, index){
-              return ExtendedListTile(
-                content: [
-                  data.elementAt(index).name ,
-                  // data.elementAt(index).name
-                  // currentProd.,
-                ],
 
-              );
-            },
             tabs: [
               PageListTab(label: "All Items", count: 20, selected:  0 == selectedTab,),
               PageListTab(label: "Active", count: 15, selected:  1 == selectedTab ),
@@ -85,7 +79,39 @@ class __LargeInventoryState extends State<_LargeInventory> {
                 (context as Element).reassemble();
               }
               },
-          ),)
+          ),
+            child: FutureBuilder(
+              future: ApiHandler.getProducts(context.read<AppState>().user.storeId),
+              builder: (context,snapshot){
+                if (snapshot.connectionState == ConnectionState.done){
+                  List<Product> products = snapshot.data ?? [];
+                  return CustomListView(
+                      height: size.height * 0.6,
+                      width: size.width * 0.8,
+                      itemCount: products.length,
+                      builder: (index){
+                        Product prod= products.elementAt(index);
+                        return ExtendedListTile(
+                          content: [
+                            Checkbox(value: false, onChanged: (value){}),
+                            Text(prod.name),
+                            Text(prod.id),
+                            Text("${prod.currency.name.toUpperCase()} ${prod.price}"),
+                            Text("${prod.quantity}"),
+                            // Text(prod.),
+
+                            ListTag(
+                              label: "Active",
+                              color: Colors.blue,
+                            )
+                          ],
+                        );
+                      }
+                  );
+                }
+                return const CircularProgressIndicator();
+              },
+            ),)
         ],
       ),
     );
