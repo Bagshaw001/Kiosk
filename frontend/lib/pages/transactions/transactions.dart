@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:kiosk/widgets/action_card.dart';
 import 'package:kiosk/widgets/custom_button.dart';
 import 'package:kiosk/widgets/page_list/page_list.dart';
+import 'package:kiosk/widgets/page_list/widgets/extended_list_tile.dart';
 import 'package:kiosk/widgets/page_list/widgets/page_list_tab.dart';
 
 class Transactions extends Webpage {
@@ -43,12 +44,15 @@ class __LargeTransactionsState extends State<_LargeTransactions> {
           ),
 
           Padding(
-            padding: EdgeInsets.only(bottom: 12),
+            padding: const EdgeInsets.only(bottom: 12),
             child: Text("All transactions",
           style: Theme.of(context).textTheme.titleLarge),
             ),
           PageList(
             selectedTab: _selectedTab,
+            builder: (index){
+              return ExtendedListTile();
+            },
             tabs: [
               PageListTab(
                 label: "All Sales",

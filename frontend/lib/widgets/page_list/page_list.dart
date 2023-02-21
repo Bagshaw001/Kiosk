@@ -8,9 +8,15 @@ class PageList extends StatefulWidget {
   final Widget actions;
   final int selectedTab;
   final List<PageListTab> tabs;
+  final Widget Function(int)? builder;
+  final Future? future;
+  final Widget Function (BuildContext,List, int)? futureBuilder;
   const PageList({
     required this.actions,
     required this.tabs,
+    this.builder,
+    this.future,
+    this.futureBuilder,
     required this.selectedTab,
     Key? key}) : super(key: key);
 
@@ -20,6 +26,12 @@ class PageList extends StatefulWidget {
 
 class _PageListState extends State<PageList> {
   late List<PageListTab> tabs = [];
+
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
 
   @override
@@ -51,7 +63,7 @@ class _PageListState extends State<PageList> {
                 children: [
                   widget.actions,
                   const Spacer(),
-                  Text("Serach"),
+                  Text("Search"),
                   IconButton(
                     icon: Icon(Icons.delete),
                     onPressed: (){},
@@ -61,13 +73,26 @@ class _PageListState extends State<PageList> {
               ),
 
               const Divider(),
-              CustomListView(
-                height: size.height * 0.6,
-                width: size.width * 0.8,
-                builder: (index){
-                  return ExtendedListTile();
-                },
-              )
+             widget.future == null ?
+             CustomListView(
+               height: size.height * 0.6,
+               width: size.width * 0.8,
+               builder: widget.builder!,
+             )
+                 :
+             FutureBuilder(
+               future: widget.future,
+                 builder: (context,snapshot){
+               if(snapshot.connectionState == ConnectionState.done){
+                 return  CustomListView(
+                   height: size.height * 0.6,
+                   width: size.width * 0.8,
+                   itemCount: (snapshot.data as List).length,
+                   builder: (index)=> widget.futureBuilder!(context,snapshot.data,index),
+                 );
+               }
+               return const CircularProgressIndicator();
+             })
             ],
           ),
         )

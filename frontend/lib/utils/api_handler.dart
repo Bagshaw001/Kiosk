@@ -2,8 +2,7 @@ import "dart:convert";
 
 import "package:flutter/material.dart";
 import "package:http/http.dart" as http;
-import "package:kiosk/models/product_variation.dart";
-import "package:kiosk/utils/app_state.dart";
+import "package:kiosk/models/product.dart";
 import "package:kiosk/utils/user.dart";
 import "package:kiosk/widgets/error_dialog.dart";
 
@@ -86,24 +85,49 @@ class ApiHandler {
   }
 
   static Future<http.Response> uploadProduct(
-      {required String name,
-      required String description,
-      required String storeId,
-      required Map<dynamic, dynamic> variations}) async {
-    return _BaseHandler.post(endpoint: "database", body: {
-      "product_name": name,
-      "product_description": description,
-      "store_id": storeId,
-      "product_variations": variations
-    });
+      {required Product product}) async {
+
+    return _BaseHandler.post(endpoint: "database",
+        body: {
+          "action": "upload_product",
+          "product_name": product.name,
+          "product_description": product.description,
+          "store_id": product.storeId,
+          "price" : product.price.toString(),
+          "quantity" : product.quantity.toString(),
+          "currency" : product.currency.name.toUpperCase()
+        }
+    );
+  }
+  static Future<http.Response> editProduct(
+      {required Product product}) async {
+
+    return _BaseHandler.post(endpoint: "database",
+        body: {
+          "action": "update_product",
+          "product_name": product.name,
+          "product_description": product.description,
+          "store_id": product.storeId,
+          "price" : product.price.toString(),
+          "quantity" : product.quantity.toString(),
+          "currency" : product.currency.name.toUpperCase()
+        }
+    );
   }
 
-  static Future<http.Response> uploadVariation(
-      ProductVariation variation) async {
-    Map<String,dynamic> body = {"action": "add_product_variation"};
-    body.addAll(variation.asJson());
-
-    return _BaseHandler.post(endpoint: "database", body: body);
+  static Future<List<Product>> getProducts(String storeId) async{
+    http.Response response = await _BaseHandler.post(endpoint: "database",
+        body: {
+          "action" : "get_products",
+          "store_id" : storeId
+        }
+    );
+    var json = jsonDecode(response.body);
+    if(json["statusCode"] == 200){
+      List<dynamic> maps = json["response"]["products"];
+      return List.generate(maps.length, (index) => Product.fromJson(maps[index]));
+    }
+    return [];
   }
 
   static Future<http.Response> requestEmailVerification({
@@ -150,7 +174,6 @@ class ApiHandler {
 }
 
 class _BaseHandler {
-  // static String base = "http://127.0.0.1/.../.../";
   static String base = "http://137.184.228.209/kiosk/api/index.php";
 
   static String _genUrl(String endpoint) {
