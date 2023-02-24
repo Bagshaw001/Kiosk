@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:kiosk/utils/api_handler.dart';
+import 'package:kiosk/utils/app_state.dart';
 import 'package:kiosk/utils/constants.dart';
 import 'package:kiosk/widgets/custom_button.dart';
+import 'package:provider/provider.dart';
 
 
 class MetricsCard extends StatelessWidget {
@@ -21,75 +24,86 @@ class MetricsCard extends StatelessWidget {
       child: Container(
         width: size.width *0.5,
         height:  size.height *0.2,
-        padding: EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom:8.0),
-              child: Text("Metrics",
-                style: Theme.of(context).textTheme.titleMedium!
-                .copyWith(color: Colors.white),
+        padding: const EdgeInsets.all(12),
+        child: FutureBuilder<Map<String,dynamic>>(
+          future: ApiHandler.getMetrics(context.read<AppState>().user.storeId),
+          initialData: const {
+            "order_count": 0,
+            "customer_count" : 0,
+            "product_count" : 0,
+            "revenue" : 0
+          },
+          builder: (context, snapshot){
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom:8.0),
+                  child: Text("Metrics",
+                    style: Theme.of(context).textTheme.titleMedium!
+                        .copyWith(color: Colors.white),
 
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children:const [
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
 
-                _MetricInfo(
-                    label: "Sales",
-                    value: "320k",
-                  image: "metrics_sales",
-                  color: Colors.purpleAccent,
-                ),
-                _MetricInfo(
-                  label: "Customers",
-                  value: "500",
-                  image: "metrics_customers",
-                  color: Colors.lightBlue,
-                ),
-                _MetricInfo(
-                  label: "Products",
-                  value: "5",
-                  image: "metrics_products",
-                  color: Colors.redAccent,
-                ),
-                _MetricInfo(
-                  label: "Revenue",
-                  value: "4056",
-                  image: "metrics_revenue",
-                  color: Colors.greenAccent,
-                ),
+                    _MetricInfo(
+                      label: "Orders",
+                      value: snapshot.data!["order_count"].toString(),
+                      image: "metrics_sales",
+                      color: Colors.purpleAccent,
+                    ),
+                    _MetricInfo(
+                      label: "Customers",
+                      value: snapshot.data!["customer_count"].toString(),
+                      image: "metrics_customers",
+                      color: Colors.lightBlue,
+                    ),
+                    _MetricInfo(
+                      label: "Products",
+                      value: snapshot.data!["product_count"].toString(),
+                      image: "metrics_products",
+                      color: Colors.redAccent,
+                    ),
+                    _MetricInfo(
+                      label: "Revenue",
+                      value: snapshot.data!["revenue"].toString(),
+                      image: "metrics_revenue",
+                      color: Colors.greenAccent,
+                    ),
 
-              ],
-            ),
-            showActions ? Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                  ],
+                ),
+                showActions ? Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("Summary of your financial report",
-                      style: Theme.of(context).textTheme.bodyMedium!
-                          .copyWith(color: Colors.white),
-                      ),
-                      CustomButton(
-                          label: "Download",
-                        outlineBorderColor: Colors.white,
-                        outlineTextColor: Colors.white,
-                        onPressed: (){
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text("Summary of your financial report",
+                            style: Theme.of(context).textTheme.bodyMedium!
+                                .copyWith(color: Colors.white),
+                          ),
+                          CustomButton(
+                            label: "Download",
+                            outlineBorderColor: Colors.white,
+                            outlineTextColor: Colors.white,
+                            onPressed: (){
 
-                        },
-                      )
+                            },
+                          )
+                        ],
+                      ),
+                      Image.asset("assets/images/metrics_image.png")
                     ],
                   ),
-                  Image.asset("assets/images/metrics_image.png")
-                ],
-              ),
-            ) : Container()
-          ],
+                ) : Container()
+              ],
+            );
+          },
         ),
       ),
     );

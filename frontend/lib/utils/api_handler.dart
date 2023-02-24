@@ -101,7 +101,6 @@ class ApiHandler {
   }
   static Future<http.Response> editProduct(
       {required Product product}) async {
-    print("product id ${product.id}");
     return _BaseHandler.post(endpoint: "database",
         body: {
           "action": "update_product",
@@ -169,6 +168,18 @@ class ApiHandler {
           "action" : "verify_phone"
         }
     );
+  }
+
+  static Future<Map<String,dynamic>> getMetrics(String storeId) async {
+    http.Response response = await _BaseHandler.post(
+      endpoint: "database",
+      body: {
+        "action" : "get_metrics",
+        "store_id" : storeId
+      }
+    );
+    print(response.body);
+    return jsonDecode(response.body)["response"];
   }
 //    End of database endpoints
 //=======================================================================================
