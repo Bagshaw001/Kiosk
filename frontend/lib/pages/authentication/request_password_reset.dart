@@ -47,7 +47,6 @@ class RequestPasswordReset extends StatelessWidget {
                     label: "Request password reset",
                     onPressed: (){
                       ApiHandler.generatePasswordToken(email.text).then((response){
-                        print(response.body);
                         Map<String,dynamic> json = jsonDecode(response.body);
 
                         if (json["statusCode"] == 200){

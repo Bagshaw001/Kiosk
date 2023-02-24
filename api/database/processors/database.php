@@ -1,6 +1,6 @@
 <?php
 
-	require_once(__DIR__."/../../utils/core.php");
+require_once(__DIR__."/../../utils/core.php");
 	require_once(__DIR__."/../controllers/db_controller.php");
 	ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
@@ -39,6 +39,7 @@ error_reporting(E_ALL);
 					}
 
 					if ($success){
+						trigger_email($email,"notify_signup");
 						send_json(array(
 							"msg" => "account created successfully",
 							"data" => array("user_id"=> $user_id, "store_id"=> $store_id)
@@ -97,6 +98,7 @@ error_reporting(E_ALL);
 
 					$user_id = login($email, $password);
 
+
 					if ($user_id){
 						// TODO:: Add two factor authentication
 						// steps - add column to user table to indicate subscription to 2fa
@@ -143,8 +145,8 @@ error_reporting(E_ALL);
 						}
 
 
-						//TODO:: Send email with link to token
-						send_json(array("msg"=> "Check your email for a link to reset your password"));
+						trigger_email($email,"send_forgot_password_token",array("token"=> $token));
+						send_json(array("msg"=> "Check your email for a token to reset your password"));
 
 					}else {
 						send_json(array(
@@ -156,13 +158,17 @@ error_reporting(E_ALL);
 					$token = $_POST["token"];
 					$new_p = encrypt($_POST["password"]);
 
-					$user_id = get_user_by_password_token($token);
-					if ($user_id){
+					$user = get_user_by_password_token($token);
+					if ($user){
+						$user_id = $user['user_id'];
+						$email = $user["email"];
 
 						reset_user_password($user_id,$new_p);
 						remove_password_token($token,$user_id);
 
-						send_json(array("msg" => "Successfully change password"));
+						trigger_email($email,"notify_password_change");
+
+						send_json(array("msg" => "Successfully change password. You can now log in"));
 					}else {
 						send_json(array("msg" => "The token does not exist. Kindly request for a new one"),100);
 					}
@@ -284,7 +290,9 @@ error_reporting(E_ALL);
 								$transaction_id = generate_id();
 
 								add_transaction($transaction_id,$currency,$amount,$date);
+								$email = get_user_by_id($manager_id)["email"];
 								add_transaction_withdrawal($transaction_id,$wallet_number);
+								trigger_email($email,"notify_withdrawal",array("amount"=> $amount));
 								send_json(array("msg"=> "Request processed"));
 							}else {
 
@@ -312,6 +320,9 @@ error_reporting(E_ALL);
 						store_email_verification_token($user_id,$token);
 						//send them their token;
 					}
+					$email = get_user_by_id($user_id)["email"];
+
+					trigger_email($email,"send_email_verification_code", array("token"=> $token));
 					send_json(array("msg" => "Token has been sent to your email"));
 					die();
 				case "request_phone_verification":
@@ -367,7 +378,24 @@ error_reporting(E_ALL);
 					}
 
 					die();
+				case "get_metrics":
+					$store_id = $_POST["store_id"];
 
+					$products = get_product_count($store_id);
+					$customers = get_customer_count($store_id);
+					$revenue = get_revenue($store_id);
+					$orders = get_order_count($store_id);
+
+					send_json(
+						array(
+							"product_count" => $products,
+							"customer_count" => $customers,
+							"revenue" => $revenue,
+							"order_count" => $orders
+						)
+					);
+
+					die();
 				default:
 					// echo "No implementation for <". $_POST["action"] .">";
 					send_json(array("msg" => "No implementation for <". $_POST["action"] .">"));

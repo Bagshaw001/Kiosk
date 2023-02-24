@@ -199,6 +199,36 @@
 			return $this->db_fetch_all($sql);
 		}
 
+
+		function get_order_count($store_id){
+			$sql = "SELECT count(orders.order_id) AS order_count FROM `orders`
+			JOIN products on products.product_id = orders.product_id
+			JOIN stores on stores.store_id = products.store_id
+			WHERE stores.store_id = '$store_id'";
+			return $this->db_fetch_one($sql);
+		}
+
+		function get_revenue($store_id){
+			$sql = "SELECT sum(transactions.amount) as revenue FROM order_transactions
+			JOIN orders on orders.order_id = order_transactions.order_id
+			JOIN products on products.product_id = orders.product_id
+			JOIN transactions on transactions.transaction_id = order_transactions.transaction_id
+			WHERE products.store_id = '$store_id'";
+			return $this->db_fetch_one($sql);
+		}
+
+		function get_customer_count($store_id){
+			$sql = "SELECT count(`customer_id`) AS customer_count FROM `customers`
+			WHERE `store_id` = '$store_id'";
+			return $this->db_fetch_one($sql);
+		}
+
+		function get_product_count($store_id){
+			$sql = "SELECT count(product_id) AS product_count FROM  products
+			WHERE `store_id` = '$store_id'";
+			return $this->db_fetch_one($sql);
+		}
+
 		//================================UPDATE ===============================================
 		function reset_user_password($user_id,$new_p){
 			$sql = "UPDATE `users` SET `password`='$new_p' WHERE `user_id` = '$user_id'";

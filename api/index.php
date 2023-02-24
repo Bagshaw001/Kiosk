@@ -11,7 +11,9 @@
 		case "social_media":
 		case "payments":
 		case "media":
-
+		case "messenger":
+			require_once(__DIR__."/messenger/processors/messenger.php");
+			break;
 
 		default:
 		send_json(array("msg"=> "Component Implementation unavailable"));

@@ -105,7 +105,7 @@
 		$db = new db_class();
 		$res = $db->get_user_by_password_token($token);
 		if($res){
-			return $res["user_id"];
+			return $res;
 		} else {
 			return false;
 		}
@@ -244,6 +244,27 @@
 	function update_product($product_id,$product_name,$product_description, $quantity, $currency, $price){
 		$db = new db_class();
 		return $db->update_product($product_id,$product_name,$product_description, $quantity, $currency, $price);
+	}
+
+
+	function get_product_count($store_id){
+		$db = new db_class();
+		return $db->get_product_count($store_id)["product_count"];
+	}
+
+	function get_customer_count($store_id){
+		$db = new db_class();
+		return $db->get_customer_count($store_id)["customer_count"];
+	}
+
+	function get_revenue($store_id){
+		$db = new db_class();
+		return $db->get_revenue($store_id)["revenue"] ?? 0;
+	}
+
+	function get_order_count($store_id){
+		$db = new db_class();
+		return $db->get_order_count($store_id)["order_count"];
 	}
 
 

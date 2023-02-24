@@ -1,9 +1,9 @@
 <?php
-require_once(__DIR__."/http_handler.php");
 
+require_once(__DIR__."/core.php");
 
-	$http = new http_handler();
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-	$response = $http->post("localhost/kiosk/api/index.php/messenger",array("email"=> "kweku.acquaye@ashesi.edu.gh"));
-	var_dump($response);
 ?>

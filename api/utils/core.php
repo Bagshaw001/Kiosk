@@ -73,4 +73,21 @@ ob_start();
 			"statusCode"=> $response)
 		);
 	}
+
+	function trigger_email($address,$action,$data = null){
+		$http = new http_handler();
+		$body =array(
+			"action"=> $action,
+			"email"=> $address
+		);
+
+		if($data != null){
+			$body = array_merge($body,$data);
+		}
+
+		$http->post(
+			""."http://localhost/kiosk/api/index.php/messenger",
+			$body
+		);
+	}
 ?>

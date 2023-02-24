@@ -178,7 +178,6 @@ class ApiHandler {
         "store_id" : storeId
       }
     );
-    print(response.body);
     return jsonDecode(response.body)["response"];
   }
 //    End of database endpoints

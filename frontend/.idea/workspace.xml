@@ -5,18 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0371bc3c-ee90-4fb4-b5d8-3eaf2103b059" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/lib/pages/authentication/enter_password_token.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/pages/authentication/request_password_reset.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/pages/authentication/sign_up.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../api/database/classes/db_class.php" beforeDir="false" afterPath="$PROJECT_DIR$/../api/database/classes/db_class.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../api/database/controllers/db_controller.php" beforeDir="false" afterPath="$PROJECT_DIR$/../api/database/controllers/db_controller.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../api/database/processors/database.php" beforeDir="false" afterPath="$PROJECT_DIR$/../api/database/processors/database.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../api/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/../api/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../api/messenger/classes/mailer.php" beforeDir="false" afterPath="$PROJECT_DIR$/../api/messenger/classes/mailer.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../api/utils/.env" beforeDir="false" afterPath="$PROJECT_DIR$/../api/utils/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../api/utils/core.php" beforeDir="false" afterPath="$PROJECT_DIR$/../api/utils/core.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../api/utils/test.php" beforeDir="false" afterPath="$PROJECT_DIR$/../api/utils/test.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins-dependencies" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/c075001b96339384a97db4862b8ab8db.cache.dill.track.dill" beforeDir="false" afterPath="$PROJECT_DIR$/build/c075001b96339384a97db4862b8ab8db.cache.dill.track.dill" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pages/authentication/login.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pages/authentication/login.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/utils/api_handler.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/utils/api_handler.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/widgets/metrics_card.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/widgets/metrics_card.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
