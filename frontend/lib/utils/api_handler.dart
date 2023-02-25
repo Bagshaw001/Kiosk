@@ -18,7 +18,7 @@ class ApiHandler {
     http.Response response =  await _BaseHandler.post(
         endpoint: "database",
         body: {"action": "login", "email": email, "password": password});
-
+    print(response.body);
     Map<String,dynamic> cred = json.decode(response.body);
 
 
@@ -180,6 +180,8 @@ class ApiHandler {
     );
     return jsonDecode(response.body)["response"];
   }
+
+  // static Future<dynamic>
 //    End of database endpoints
 //=======================================================================================
 }

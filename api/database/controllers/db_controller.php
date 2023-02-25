@@ -3,6 +3,7 @@
 
 	function create_account($user_id,$user_name,$phone_number,$email,$password){
 		$db = new db_class();
+		// $user_id_c = mysql_real_escape_string($user_id);
 		return $db->create_account($user_id,$user_name,$phone_number,$email,$password);
 	}
 
@@ -216,6 +217,8 @@
 
 	function confirm_phone_verification($token){
 		$db = new db_class();
+
+
 
 		$user_id = $db->get_user_by_phone_verification_token($token)["user_id"];
 

@@ -14,16 +14,19 @@ class db_connection
 	public $db = null;
 	public $results = null;
 
+	function __construct(){
+		$this->db = mysqli_connect(db_server(),db_username(),db_pass(),db_name());
+	}
+
 	//connect
 	/**
 	*Database connection
-	*@return bolean
+	*@return boolean
 	**/
 	function db_connect(){
 
 		//connection
 		// $this->db = mysqli_connect(SERVER,USERNAME,PASSWD,DATABASE);
-		$this->db = mysqli_connect(db_server(),db_username(),db_pass(),db_name());
 
 		//test the connection
 		if (mysqli_connect_errno()) {
@@ -48,6 +51,7 @@ class db_connection
 		elseif ($this->db==null) {
 			return false;
 		}
+
 
 		//run query
 		$this->results = mysqli_query($this->db,$sqlQuery);
@@ -111,6 +115,12 @@ class db_connection
 		//return a record
 		return mysqli_num_rows($this->results);
 
+	}
+
+
+	function clean($unclean){
+		$clean = mysqli_real_escape_string($this->db,$unclean);
+		return $clean;
 	}
 }
 ?>
