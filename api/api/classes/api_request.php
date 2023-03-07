@@ -18,9 +18,7 @@ function fb_api_Request($url)
 
     return array(
         "url" => $cURLConnection,
-        "fb_response" => $jsonArrayResponse,
-        "has_errors" => isset($jsonArrayResponse["error"]) ? TRUE : FALSE,
-        "msg" => isset($jsonArrayResponse["error"])
+        "response" => $jsonArrayResponse
     );
 }
 

@@ -5,6 +5,9 @@
  */
 function convertSecToDay($seconds)
 {
+    if ($seconds == null) {
+        return false;
+    }
     $dtF = new \DateTime('@0');
     $dtT = new \DateTime("@$seconds");
     return $dtF->diff($dtT)->format('%a days');
@@ -16,6 +19,10 @@ function convertSecToDay($seconds)
 function expiryTime($days)
 {
     // echo ($days);
+
+    if ($days == false) {
+        return false;
+    }
     $exp_date = date('Y-m-d', strtotime('+' . $days));
 
     return $exp_date;

@@ -1,5 +1,5 @@
 <?php
-require("controllers/whatsapp_api.php");
+require("classes/whatsapp_api.php");
 
 /**
  * This page 
@@ -11,10 +11,16 @@ if (isset($_GET["code"])) {
     $app_Secret = $_GET["app_secret"];
     $business_id = $_GET["business_id"];
 
-    $login =  tryAndLoginWithFacbook($code, $app_Secret, $app_Id, $business_id);
+    $whatsapp = new whats_app_api();
 
-    print_r($fb_login["fb_response"]["response"]["fb_response"]["access_token"]);
-    store_credential($app_Secret, $app_Id, $login["platform"], $login["fb_response"]["response"]["fb_response"]["access_token"], $login["business_details"]['data']["id"], $login["expiry_time"]);
+    $login = $whatsapp->tryAndLoginWithFacbook($code, $app_Secret, $app_Id, $business_id);
+
+    if ($login == false) {
+        return false;
+    }
+
+    // print_r($login["response"]["response"]["response"]["access_token"]);
+    $whatsapp->store_credential($app_Secret, $app_Id, $login["platform"], $login["response"]["response"]["response"]["access_token"], $business_id, $login["expiry_time"]);
 
     //Redirrect back to the Account link screen
 
