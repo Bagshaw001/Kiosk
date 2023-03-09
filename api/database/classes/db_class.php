@@ -203,6 +203,40 @@ class db_class extends db_connection
 		return $this->db_fetch_one($sql);
 	}
 
+	function get_total_orders($store_id)
+	{
+		$sql = "SELECT COUNT(*) FROM `order_transactions`,`orders` WHERE orders.order_id = order_transactions.order_id AND orders.store_id ='$store_id'";
+
+		return $this->db_fetch_all($sql);
+	}
+
+	function get_total_sales($store_id)
+	{
+		$sql = "SELECT `total_funds` FROM `store_account` WHERE `store_id`= '$store_id'";
+		return $this->db_fetch_one($sql);
+	}
+
+	function get_total_customers($store_id)
+	{
+		$sql = "SELECT COUNT(*) FROM `customers` WHERE `store_id` = '$store_id'";
+		return $this->db_fetch_all($sql);
+	}
+
+	function get_total_products($store_id)
+	{
+		$sql = "SELECT COUNT(*)FROM `products` WHERE `store_id` = '$store_id'";
+		return $this->db_fetch_all($sql);
+	}
+
+
+	//How to know the total sales per product
+	function get_sales_per_product()
+	{
+	}
+
+	//COUNT for the monthly orders function 
+
+	//This query works tested
 	//This query is under review
 	function get_order_month($store_id)
 	{

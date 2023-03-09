@@ -212,7 +212,38 @@ function remove_schedule_post($post_id)
 	return $db->remove_schedule_post($post_id);
 }
 
-function get_schedule_post($post_id){
+function get_schedule_post($post_id)
+{
 	$db = new db_class();
 	return $db->get_schedule_post($post_id);
+}
+
+function get_total_orders($store_id)
+{
+	$db = new db_class();
+	return $db->get_total_orders($store_id);
+}
+
+function get_total_sales($store_id)
+{
+	$db = new db_class();
+	return $db->get_total_sales($store_id);
+}
+
+function get_total_customers($store_id)
+{
+	$db = new db_class();
+	return $db->get_total_customers($store_id);
+}
+
+function get_total_products($store_id)
+{
+	$db = new db_class();
+	return $db->get_total_products($store_id);
+}
+
+function get_order_month($store_id)
+{
+	$db = new db_class();
+	return $db->get_total_products($store_id);
 }
