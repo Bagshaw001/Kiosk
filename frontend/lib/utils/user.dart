@@ -27,7 +27,10 @@ class User {
   }
 
   Map<String,dynamic> toJson() => {
-    "userId" : userId,
-    "userName" : username
+    "user_id" : userId,
+    "user_name" : username,
+    "email" : email,
+    "store_name" : storeName,
+    "store_id" : storeId
   };
 }

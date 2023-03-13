@@ -87,7 +87,7 @@ class LargeNav extends StatelessWidget {
           ),
 
           _NavTile(
-            label: "Accounts",
+            label: "Social Media",
             selected: current == 3,
             onPressed: (){
               if(onNavClick!= null){

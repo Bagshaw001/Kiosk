@@ -196,18 +196,27 @@ error_reporting(E_ALL);
 					}
 
 					die();
-				case "store_credential":
+				case "add_social_media_account":
 					$api_key = $_POST["api_key"];
 					$store_id = $_POST["store_id"];
 					$platform = $_POST["platform"];
-					$bearer_token = $_POST["bearer_token"];
+					$account_name = $_POST["account_name"];
+					$account_id = $_POST["account_id"];
+					$date_added = $_POST["date_added"];
 
-					$success = store_credential($api_key,$store_id,$platform,$bearer_token);
+					$success = add_social_media_account($api_key,$store_id,$platform,$account_name,$account_id,$date_added);
 					if ($success){
 						send_json(array("msg"=> "Success"));
 					}else {
 						send_json(array("msg" => "The credential might already exist. Try again"),100);
 					}
+					die();
+				case "get_linked_accounts":
+					$store_id = $_POST["store_id"];
+
+					$data = get_store_linked_accounts($store_id);
+
+					send_json(array("accounts"=> $data));
 					die();
 				case "get_social_media_key":
 					$store = $_POST["store_id"];
@@ -394,6 +403,39 @@ error_reporting(E_ALL);
 							"order_count" => $orders
 						)
 					);
+
+					die();
+				case "purchase_id":
+					$order_id = generate_id();
+					$platform = $_POST["platform"];
+					$store_id = $_POST["store_id"];
+					$customer_name = $_POST["customer_name"];
+					$date = $_POST["purchase_time"];
+					$product_id = $_POST["product_id"];
+					$quantity = $_POST["quantity"];
+					$customer_id = $_POST["customer_id"]; //whatsapp number or instagram account id
+
+					//check if product has enough stock
+					$stock = get_product_quantity($product_id);
+
+					if($stock - $quantity > 0){//can't sell more than is available
+						send_json(array("msg" => "Only $stock units of the product are available"),100);
+						die();
+					}
+
+					//check if the customer has previously bought from seller
+					$customer = get_customer_by_number($store_id,$customer_id);
+					if (!$customer){//create a customer entry
+						add_customer($store_id,$customer_id,$customer_name);
+					}
+					//record the product they want to buy
+					add_order($order_id,$customer_id,$product_id);
+
+					update_product_stock($product_id,$stock - $quantity);
+
+					//TODO issue payment prompt
+
+					//record stock by the quantity they specify
 
 					die();
 				default:

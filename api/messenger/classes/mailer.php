@@ -26,7 +26,7 @@ class mailer_class{
 		$mail->SMTPDebug = 0;
 		$mail->SMTPAuth = true;
 		$mail->SMTPSecure =  "tls";
-		$mail->Host = "smtp.office365.com";
+		$mail->Host = "smtp.gmail.com";
 		$mail->Port = '587';
 		$mail->AddAddress($destination);
 		$mail->Username = email_username();

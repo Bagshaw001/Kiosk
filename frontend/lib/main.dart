@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kiosk/pages/account_settings/account_settings.dart';
 import 'package:kiosk/pages/accounts/accounts.dart';
 import 'package:kiosk/pages/authentication/login.dart';
 import 'package:kiosk/pages/dashboard/dashboard.dart';
@@ -29,7 +30,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: mainTheme,
-      home:
+      home:  //AccountSettings().large
           Provider.of<AppState>(context).isLoggedIn ? HomePage() : LoginPage(),
     );
   }
@@ -44,7 +45,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _current = 0;
+  int _current = 3;
   final List<Webpage> pages = [
     Dashboard(),
     Inventory(),

@@ -34,9 +34,9 @@
 		return $db->create_manager_invite($store_id,$token);
 	}
 
-	function store_credential($api_key,$store_id,$platform,$bearer_token){
+	function add_social_media_account($api_key,$store_id,$platform,$account_name,$account_id,$date_added){
 		$db = new db_class();
-		return $db->store_credential($api_key,$store_id,$platform,$bearer_token);
+		return $db->add_social_media_account($api_key,$store_id,$platform,$account_name,$account_id,$date_added);
 	}
 
 	function store_email_verification_token($user_id,$token){
@@ -169,9 +169,9 @@
 		return $db->store_forgot_password_token($user_id,$token);
 	}
 
-	function add_customer($store_id,$customer_id,$customer_name,$customer_number){
+	function add_customer($store_id,$customer_id,$customer_name){
 		$db = new db_class();
-		return $db->add_customer($store_id,$customer_id,$customer_name,$customer_number);
+		return $db->add_customer($store_id,$customer_id,$customer_name);
 	}
 
 
@@ -239,6 +239,10 @@
 	}
 
 
+
+
+
+
 	function get_products($store_id){
 		$db = new db_class();
 		return $db->get_products($store_id);
@@ -249,16 +253,27 @@
 		return $db->update_product($product_id,$product_name,$product_description, $quantity, $currency, $price);
 	}
 
+	function update_product_stock($product_id,$new_quantity){
+		$db = new db_class();
+		return $db->update_product_stock($product_id,$new_quantity);
+	}
+
 
 	function get_product_count($store_id){
 		$db = new db_class();
 		return $db->get_product_count($store_id)["product_count"];
 	}
 
+	function get_product_quantity($product_id){
+		$db = new db_class();
+		return $db->get_product_quantity($product_id)["product_quantity"];
+	}
+
 	function get_customer_count($store_id){
 		$db = new db_class();
 		return $db->get_customer_count($store_id)["customer_count"];
 	}
+
 
 	function get_revenue($store_id){
 		$db = new db_class();
@@ -269,6 +284,12 @@
 		$db = new db_class();
 		return $db->get_order_count($store_id)["order_count"];
 	}
+
+	function get_store_linked_accounts($store_id){
+		$db = new db_class();
+		return $db->get_store_linked_accounts($store_id);
+	}
+
 
 
 ?>

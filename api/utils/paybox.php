@@ -46,7 +46,7 @@
 		}
 
 
-		function withdraw($amount, $bank_account,$bank_code, $receiver_name, $receiver_email, $user_id, $currency = "GHS"){
+		function withdraw_bank($amount, $bank_account,$bank_code, $receiver_name, $receiver_email, $user_id, $currency = "GHS"){
 			return $this->http->post(
 				"https://paybox.com.co/transfer",
 				array(

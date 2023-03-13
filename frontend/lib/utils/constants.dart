@@ -2,8 +2,8 @@
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 
-const int largeScreen = 1080;
-const int smallScreen = 900;
+const int largeScreen = 850;
+const int smallScreen = 500;
 
 const  blue = Color(0xFF004D73);
 final MaterialColor blueMaterial = createMaterialColor(blue);

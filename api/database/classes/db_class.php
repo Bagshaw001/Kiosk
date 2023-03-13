@@ -87,13 +87,15 @@
 		}
 
 
-		function store_credential($api_key,$store_id,$platform,$bearer_token){
+		function add_social_media_account($api_key,$store_id,$platform,$account_name,$account_id,$date_added){
 			$api_key = $this->clean($api_key);
 			$store_id = $this->clean($store_id);
 			$platform = $this->clean($platform);
-			$bearer_token = $this->clean($bearer_token);
-			$sql = "INSERT INTO `social_media_credentials`
-			VALUE('$api_key', '$store_id','$platform','$bearer_token')";
+			$account_name = $this->clean($account_name);
+			$account_id = $this->clean($account_id);
+			$date_added = $this->clean($date_added);
+			$sql = "INSERT INTO `social_media_credentials` (`api_key`, `store_id`,`platform`,`account_name`,`account_id`,`date_added`)
+			VALUE('$api_key', '$store_id','$platform','$account_name', '$account_id','$date_added')";
 			return $this->db_query($sql);
 		}
 
@@ -111,13 +113,13 @@
 			return $this->db_query($sql);
 		}
 
-		function add_customer($store_id,$customer_id,$customer_name,$customer_number){
+		function add_customer($store_id,$customer_id,$customer_name){
 			$store_id = $this->clean($store_id);
 			$customer_id = $this->clean($customer_id);
 			$customer_name = $this->clean($customer_name);
-			$customer_number = $this->clean($customer_number);
+			// $customer_number = $this->clean($customer_number);
 			$sql = "INSERT INTO `customers`
-			VALUE('$customer_id','$store_id','$customer_name','$customer_number')";
+			VALUE('$customer_id','$store_id','$customer_name')";
 			return $this->db_query($sql);
 		}
 
@@ -216,6 +218,12 @@
 			return $this->db_fetch_all($sql);
 		}
 
+		function get_store_linked_accounts($store_id){
+			$store_id = $this->clean($store_id);
+			$sql = "SELECT * FROM `social_media_credentials` WHERE `store_id`='$store_id'";
+			return $this->db_fetch_all($sql);
+		}
+
 
 		function get_store_by_user_id($user_id){
 			$user_id = $this->clean($user_id);
@@ -309,6 +317,12 @@
 			return $this->db_fetch_one($sql);
 		}
 
+		function get_product_quantity($product_id){
+			$product_id = $this->clean($product_id);
+			$sql = "SELECT quantity FROM `products` WHERE `product_id` = '$product_id'";
+			return $this->db_fetch_one($sql);
+		}
+
 		//================================UPDATE ===============================================
 		function reset_user_password($user_id,$new_p){
 			$user_id = $this->clean($user_id);
@@ -349,6 +363,16 @@
 			 return $this->db_query($sql);
 		}
 
+		function update_product_stock($product_id,$new_quantity){
+			$product_id = $this->clean($product_id);
+			$new_quantity = $this->clean($$new_quantity);
+
+			$sql = "UPDATE `products` SET
+			`quantity` = '$new_quantity' WHERE `product_id` = '$product_id'";
+
+			return $this->db_query($sql);
+		}
+
 
 		//=============================DELETE======================
 
@@ -382,3 +406,4 @@
 
 	}
 ?>
+

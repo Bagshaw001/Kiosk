@@ -2,6 +2,7 @@ import "dart:convert";
 
 import "package:flutter/material.dart";
 import "package:http/http.dart" as http;
+import "package:kiosk/models/linked_accounts.dart";
 import "package:kiosk/models/product.dart";
 import "package:kiosk/utils/user.dart";
 import "package:kiosk/widgets/error_dialog.dart";
@@ -18,7 +19,6 @@ class ApiHandler {
     http.Response response =  await _BaseHandler.post(
         endpoint: "database",
         body: {"action": "login", "email": email, "password": password});
-    print(response.body);
     Map<String,dynamic> cred = json.decode(response.body);
 
 
@@ -179,6 +179,27 @@ class ApiHandler {
       }
     );
     return jsonDecode(response.body)["response"];
+  }
+
+  static Future<List<LinkedAccount>> getLinkedAccounts(String storeId) async {
+    List<LinkedAccount> accounts = [];
+    http.Response response = await _BaseHandler.post(
+        endpoint: "database",
+        body: {
+          "action" : "get_linked_accounts",
+          "store_id" : storeId
+        }
+    );
+    if(jsonDecode(response.body)["statusCode"] == 200){
+      List data =  jsonDecode(response.body)["response"]["accounts"];
+      if(data.isNotEmpty){
+        for (var element in data){
+
+        }
+        }
+
+    }
+    return accounts;
   }
 
   // static Future<dynamic>

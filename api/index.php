@@ -10,6 +10,7 @@
 			break;
 		case "social_media":
 		case "payments":
+			require_once(__DIR__."/payment/processors/payment.php");
 		case "media":
 		case "messenger":
 			require_once(__DIR__."/messenger/processors/messenger.php");
