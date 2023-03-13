@@ -47,6 +47,9 @@
 	function store_phone_verification_token($user_id,$token){
 		$db = new db_class();
 		return $db->store_phone_verification_token($user_id,$token);
+	// function store_credential($api_key,$store_id,$platform,$bearer_token,$expiry_time){
+	// 	$db = new db_class();
+	// 	return $db->store_credential($api_key,$store_id,$platform,$bearer_token,$expiry_time);
 	}
 
 	function get_store_by_token($token){

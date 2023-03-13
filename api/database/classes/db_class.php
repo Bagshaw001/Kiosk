@@ -96,6 +96,9 @@
 			$date_added = $this->clean($date_added);
 			$sql = "INSERT INTO `social_media_credentials` (`api_key`, `store_id`,`platform`,`account_name`,`account_id`,`date_added`)
 			VALUE('$api_key', '$store_id','$platform','$account_name', '$account_id','$date_added')";
+		// function store_credential($api_key,$store_id,$platform,$bearer_token,$expiry_time){
+		// 	$sql = "INSERT INTO `social_media_credentials`
+		// 	VALUE('$api_key', '$store_id','$platform','$bearer_token','$expiry_time')";
 			return $this->db_query($sql);
 		}
 

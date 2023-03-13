@@ -45,7 +45,7 @@
     },
     {
       "name": "flutter",
-      "rootUri": "file:///C:/Users/KWAKU/fvm/default/packages/flutter",
+      "rootUri": "file:///C:/Users/KWAKU/fvm/versions/stable/packages/flutter",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
@@ -57,13 +57,13 @@
     },
     {
       "name": "flutter_test",
-      "rootUri": "file:///C:/Users/KWAKU/fvm/default/packages/flutter_test",
+      "rootUri": "file:///C:/Users/KWAKU/fvm/versions/stable/packages/flutter_test",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
     {
       "name": "flutter_web_plugins",
-      "rootUri": "file:///C:/Users/KWAKU/fvm/default/packages/flutter_web_plugins",
+      "rootUri": "file:///C:/Users/KWAKU/fvm/versions/stable/packages/flutter_web_plugins",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
@@ -135,7 +135,7 @@
     },
     {
       "name": "sky_engine",
-      "rootUri": "file:///C:/Users/KWAKU/fvm/default/bin/cache/pkg/sky_engine",
+      "rootUri": "file:///C:/Users/KWAKU/fvm/versions/stable/bin/cache/pkg/sky_engine",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -242,7 +242,7 @@
       "languageVersion": "2.18"
     }
   ],
-  "generated": "2023-02-21T19:41:00.954286Z",
+  "generated": "2023-03-13T12:40:39.306883Z",
   "generator": "pub",
   "generatorVersion": "2.19.0"
 }

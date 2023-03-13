@@ -6,8 +6,9 @@ require_once(__DIR__."/../../utils/core.php");
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-	function database(){
-		$request = $_SERVER["REQUEST_METHOD"];
+function database()
+{
+	$request = $_SERVER["REQUEST_METHOD"];
 
 		if ($request == "POST"){
 			if(!isset($_POST["action"])){
@@ -450,9 +451,9 @@ error_reporting(E_ALL);
 			echo "unsupported method";
 			die();
 		}
-		echo "EOF";
-		die();
-	}
 
-	database();
-?>
+	echo "EOF";
+	die();
+}
+
+database();
