@@ -106,11 +106,6 @@ function redirect_url()
 	return getenv("REDIRECT_URL");
 }
 
-/**Return the Facebook state */
-function facebook_state()
-{
-	return getenv("FB_APP_STATE");
-}
 
 /**
  * Returns the Facebook graph domain
@@ -126,4 +121,13 @@ function facebook_graph_domain()
 function facebook_main_domain()
 {
 	return getenv("FB_MAIN_DOMAIN");
+}
+
+
+function fb_app_id(){
+	return getenv("FB_APP_ID");
+}
+
+function fb_app_secret(){
+	return getenv("FB_APP_SECRET");
 }

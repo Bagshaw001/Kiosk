@@ -13,10 +13,24 @@
 			require_once(__DIR__."/payment/processors/payment.php");
 		case "media":
 		case "messenger":
-			require_once(__DIR__."/messenger/processors/messenger.php");
+			require_once(__DIR__."/facebook/processors/meta_processor.php");
+			break;
+		case "callback":
+			$code = $_GET["code"];
+			$store_id = $_GET["state"];
+			// echo "<pre>";
+			// var_dump($_GET);
+			// echo "</pre>";
+			// echo "<pre>";
+			// var_dump($_POST);
+			// echo "</pre>";
+			// echo "<pre>";
+			// var_dump($_REQUEST);
+			// echo "</pre>";
+
 			break;
 
 		default:
-		send_json(array("msg"=> "Component Implementation unavailable"));
+			send_json(array("msg"=> "Component Implementation unavailable"));
 	}
 ?>
