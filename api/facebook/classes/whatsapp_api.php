@@ -13,7 +13,6 @@ require_once(__DIR__ . "/../../utils/core.php");
 
 
 
-
 class whats_app_api{
     public $http;
     function __construct()

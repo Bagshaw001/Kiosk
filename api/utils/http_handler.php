@@ -36,8 +36,8 @@ class http_handler
 
 		//execute request
 		$response = curl_exec($curl);
-		print_r("response" . $response);
 		curl_close($curl);
+		$response = json_decode($response,true);
 
 		return $response;
 	}

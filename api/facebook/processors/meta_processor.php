@@ -2,10 +2,12 @@
 
 require_once(__DIR__."/../../utils/core.php");
 require_once(__DIR__."/../classes/whatsapp_api.php");
-// 	ini_set('display_errors', 1);
-// ini_set('display_startup_errors', 1);
-// error_reporting(E_ALL);
-
+require_once(__DIR__."/../../database/controllers/db_controller.php");
+	ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+header("Access-Control-Allow-Origin: * ");
+header("Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS");
 function facebook()
 {
 	$request = $_SERVER["REQUEST_METHOD"];
@@ -46,10 +48,16 @@ function facebook()
 						echo "Something went wrong. Try again!";
 						die();
 					}
+					// var_dump($response);
 					$platform = $response["platform"];
+					$expiry = $response["expiry_date"];
 					$response = $response["data"];
 					$token = $response["access_token"];
-					$expiry = $response["expiry_date"];
+					$api_key = generate_id();
+					$date = date('Y-m-d h:i:s');
+					// echo $token;
+
+					add_social_media_account($api_key,$store_id,$platform,$date,$expiry,$token);
 
 					//store credential for store if new
 					//update credential if exits

@@ -131,3 +131,7 @@ function fb_app_id(){
 function fb_app_secret(){
 	return getenv("FB_APP_SECRET");
 }
+
+function chat_token(){
+	return getenv("CHAT_GPT_KEY");
+}

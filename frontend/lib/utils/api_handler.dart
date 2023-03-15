@@ -73,6 +73,19 @@ class ApiHandler {
         body: {"action": "generate_forgot_password_token", "email": email});
   }
 
+  static Future<http.Response> linkWhatsAppAccount(String storeId) async {
+    // return _BaseHandler.get("http://137.184.228.209/kiosk/api/facebook/processors/meta_processor.php?action=get_login_url&store_id=be53953f6d9a979d34a265547f962448",
+    // abs: true);
+    return  _BaseHandler.get(
+        "http://137.184.228.209/kiosk/api/facebook/processors/meta_processor.php",
+    body: {
+      "action" : "get_login_url",
+      "store_id" : storeId
+    },
+    abs: true);
+
+  }
+
   static Future<http.Response> resetPassword({
     required String password,
     required String token,
@@ -180,7 +193,6 @@ class ApiHandler {
     );
     return jsonDecode(response.body)["response"];
   }
-
   static Future<List<LinkedAccount>> getLinkedAccounts(String storeId) async {
     List<LinkedAccount> accounts = [];
     http.Response response = await _BaseHandler.post(
@@ -192,9 +204,10 @@ class ApiHandler {
     );
     if(jsonDecode(response.body)["statusCode"] == 200){
       List data =  jsonDecode(response.body)["response"]["accounts"];
+      // print(data);
       if(data.isNotEmpty){
         for (var element in data){
-
+          accounts.add(LinkedAccount.fromJson(element));
         }
         }
 
@@ -222,17 +235,26 @@ class _BaseHandler {
       query = query.substring(1);
     }
 
-    return query;
+    return map == null ? "" : "?$query";
   }
 
   static Future<http.Response> get(String endpoint,
-      {Map<String, dynamic>? body}) async {
-    return await http.get(Uri(path: _genUrl(endpoint) + _genArgs(body)));
+      {Map<String, dynamic>? body, bool abs = false}) async {
+    if(abs){
+      return await http.get(Uri.parse( endpoint + _genArgs(body)));
+    }
+    return await http.get(Uri.parse( _genUrl(endpoint) + _genArgs(body)));
   }
 
-  static Future<http.Response> post({required String endpoint, required Map<String, dynamic> body})
+  static Future<http.Response> post({required String endpoint, required Map<String, dynamic> body, bool abs = false})
   async {
 
+    if(abs){
+      return await http.post(
+          Uri.parse(endpoint),
+          body: body
+      );
+    }
     return await http.post(
         Uri.parse(_genUrl(endpoint)),
         body: body
