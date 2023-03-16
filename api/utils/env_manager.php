@@ -134,7 +134,7 @@ function fb_app_secret(){
 }
 
 function webhook_verify_token(){
-	return getenv("kiosk_token_verify");
+	return getenv("VERIFY_TOKEN");
 }
 function chat_token(){
 	return getenv("CHAT_GPT_KEY");
