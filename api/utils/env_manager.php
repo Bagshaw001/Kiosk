@@ -1,8 +1,9 @@
+
 <?php
 
-require_once(__DIR__ . "/../vendor/autoload.php");
+require_once (__DIR__."/../vendor/autoload.php");
 if (session_status() === PHP_SESSION_NONE) {
-	session_start();
+    session_start();
 }
 
 
@@ -124,21 +125,17 @@ function facebook_main_domain()
 }
 
 
-function fb_app_id()
-{
+function fb_app_id(){
 	return getenv("FB_APP_ID");
 }
 
-function fb_app_secret()
-{
+function fb_app_secret(){
 	return getenv("FB_APP_SECRET");
 }
 
-function webhook_verify_token()
-{
-	return getenv("VERIFY_TOKEN");
+function webhook_verify_token(){
+	return getenv("kiosk_token_verify");
 }
-function chat_token()
-{
+function chat_token(){
 	return getenv("CHAT_GPT_KEY");
 }
