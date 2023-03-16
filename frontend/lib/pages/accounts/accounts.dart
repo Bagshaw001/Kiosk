@@ -1,10 +1,13 @@
 import "package:flutter/material.dart";
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:http/src/response.dart';
 import 'package:kiosk/models/linked_accounts.dart';
 import 'package:kiosk/utils/api_handler.dart';
 import 'package:kiosk/utils/app_state.dart';
 import 'package:kiosk/utils/webpage.dart';
 import 'package:kiosk/widgets/custom_button.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 
 class Accounts extends Webpage{
@@ -59,14 +62,34 @@ class __AccountsLargeState extends State<_AccountsLarge> {
                             padding: const EdgeInsets.all(8.0),
                             child: Text("Connect Accounts", style: Theme.of(context).textTheme.titleLarge,),
                           ),
-                          CustomButton(
-                            label: "Link Account",
-                            filled: true,
-                            padding: const EdgeInsets.only(top:4, left: 8),
-                            width: size.width * 0.07,
-                            onPressed: (){
+                          Row(
+                            children: [
 
-                            },
+                              CustomButton(
+                                label: "Link WhatsApp",
+                                filled: true,
+                                padding: const EdgeInsets.only(top:4, left: 8),
+                                width: size.width * 0.07,
+                                onPressed: ()async{
+                                  Response response = await ApiHandler.linkWhatsAppAccount(context.read<AppState>().user.storeId);
+                                  // print("response ${response.body}");
+                                  await launchUrl(
+                                    Uri.parse(response.body),
+                                    mode: LaunchMode.inAppWebView,
+                                    webViewConfiguration: const WebViewConfiguration(enableJavaScript: false),
+                                  );
+                                },
+                              ),
+                              CustomButton(
+                                label: "Link Instagram",
+                                filled: true,
+                                padding: const EdgeInsets.only(top:4, left: 8),
+                                width: size.width * 0.07,
+                                onPressed: (){
+
+                                },
+                              ),
+                            ]
                           ),
                           Expanded(
                             child: Padding(
@@ -93,15 +116,18 @@ class __AccountsLargeState extends State<_AccountsLarge> {
                                   return const Center(child: Text("No accounts have been linked yet"));
                                 }
                                 return ListView.builder(
+                                  itemCount: snapshot.data!.length,
                                   itemBuilder: (context,index) => Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      Text("Business name"),
+                                      Text(snapshot.data![index].platform.name),
                                       const Spacer(),
-                                      Text("06/12/2023"),
+                                      Text(snapshot.data![index].dateAdded.toString()),
                                       const Spacer(),
                                       IconButton(
-                                        icon: Icon(Icons.whatshot,color: Colors.black),
+                                        icon: snapshot.data![index].platform == SocialMediaPlatform.instagram ?
+                                        const Icon(FontAwesomeIcons.instagram,color: Colors.black) :
+                                        const Icon(FontAwesomeIcons.whatsapp,color: Colors.black),
                                         onPressed: (){
 
                                         },

@@ -87,15 +87,15 @@
 		}
 
 
-		function add_social_media_account($api_key,$store_id,$platform,$account_name,$account_id,$date_added){
+		function add_social_media_account($api_key,$store_id,$platform,$date,$expiry,$token){
 			$api_key = $this->clean($api_key);
 			$store_id = $this->clean($store_id);
 			$platform = $this->clean($platform);
-			$account_name = $this->clean($account_name);
-			$account_id = $this->clean($account_id);
-			$date_added = $this->clean($date_added);
-			$sql = "INSERT INTO `social_media_credentials` (`api_key`, `store_id`,`platform`,`account_name`,`account_id`,`date_added`)
-			VALUE('$api_key', '$store_id','$platform','$account_name', '$account_id','$date_added')";
+			$date = $this->clean($date);
+			$expiry = $this->clean($expiry);
+			$token = $this->clean($token);
+			$sql = "INSERT INTO `social_media_credentials` (`api_key`, `store_id`,`platform`,`date_added`,`token_expiry`,`access_token`)
+			VALUE('$api_key', '$store_id','$platform','$date', '$expiry','$token')";
 		// function store_credential($api_key,$store_id,$platform,$bearer_token,$expiry_time){
 		// 	$sql = "INSERT INTO `social_media_credentials`
 		// 	VALUE('$api_key', '$store_id','$platform','$bearer_token','$expiry_time')";

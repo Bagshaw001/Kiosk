@@ -34,9 +34,9 @@
 		return $db->create_manager_invite($store_id,$token);
 	}
 
-	function add_social_media_account($api_key,$store_id,$platform,$account_name,$account_id,$date_added){
+	function add_social_media_account($api_key,$store_id,$platform,$date,$expiry,$token){
 		$db = new db_class();
-		return $db->add_social_media_account($api_key,$store_id,$platform,$account_name,$account_id,$date_added);
+		return $db->add_social_media_account($api_key,$store_id,$platform,$date,$expiry,$token);
 	}
 
 	function store_email_verification_token($user_id,$token){

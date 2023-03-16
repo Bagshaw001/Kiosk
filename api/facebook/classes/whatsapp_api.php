@@ -13,9 +13,7 @@ require_once(__DIR__ . "/../../utils/http_handler.php");
 
 
 
-
-class whats_app_api
-{
+class whats_app_api{
     public $http;
     function __construct()
     {
