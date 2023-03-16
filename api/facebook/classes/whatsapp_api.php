@@ -4,7 +4,7 @@
  * This file handles all the function that affect the
  */
 require_once(__DIR__ . "/../../utils/core.php");
-
+require_once(__DIR__ . "/../../utils/http_handler.php");
 
 /**
  * This function make api calls
@@ -14,7 +14,8 @@ require_once(__DIR__ . "/../../utils/core.php");
 
 
 
-class whats_app_api{
+class whats_app_api
+{
     public $http;
     function __construct()
     {
@@ -28,19 +29,20 @@ class whats_app_api{
     /**
      * This function generates a url for facebook's login flow
      */
-    function generateLoginUrl( $store_id){
+    function generateLoginUrl($store_id)
+    {
         $postBody =  array(
             "client_id" => fb_app_id(),
             "redirect_uri" => redirect_url(),
             // "redirect_uri" => redirect_url()."?client_id=$client_id&app_secret=$app_secret&business_id=$store_id",
             "state" => $store_id,
             // "extras"=> "{'setup':{'channel':'IG_API_ONBOARDING'}}",
-            "scope" => "email",
+            "scope" => "business_management,whatsapp_business_management,whatsapp_business_messaging",
             "auth_type" => "rerequest",
             "response_type" => "code"
         );
 
-        $endpoint = facebook_main_domain().facebook_version()."/dialog/oauth?" . http_build_query($postBody);
+        $endpoint = facebook_main_domain() . facebook_version() . "/dialog/oauth?" . http_build_query($postBody);
         return $endpoint;
     }
 
@@ -73,13 +75,14 @@ class whats_app_api{
 
         $endpoint = facebook_graph_domain() . facebook_version() . "/oauth/access_token?" . http_build_query($postBody);
         // echo "endpoint $endpoint";
-        try{
+        try {
 
-            $response =file_get_contents($endpoint);
+            $response = file_get_contents($endpoint);
             // echo "fb $response";
-            $json = json_decode($response,true);
+            $json = json_decode($response, true);
+
             return $json;
-        } catch(Exception $e){
+        } catch (Exception $e) {
             return false;
         }
     }
@@ -121,8 +124,6 @@ class whats_app_api{
     function store_credential($api_key, $store_id, $platform, $bearer_token, $business_id = null, $expiry_time = null)
     {
 
-
-
         //Send the data to the database
         $postBody = array(
             "api_key" => $api_key,
@@ -137,7 +138,34 @@ class whats_app_api{
         return  $this->http->post(server_base_url() . "api/index.php/database", $postBody);
     }
 
+    /**
+     * This function gets the user list of phone id's
+     */
+    function get_phone_id($business_id, $access_token)
+    {
+        $postBody = array(
+            "access_token" => $access_token,
+        );
 
+        $endpoint = facebook_graph_domain() . facebook_version() . "/phone_numbers?" . http_build_query($postBody);
 
+        return $this->http->get($endpoint, $postBody);
+    }
 
+    /**
+     * Comback to this function later
+     */
+    // function store_phone_id($phone_id, $business_id, $access_token)
+    // {
+    //     //Register the phone number 
+    //     $postBody = array(
+    //         "messaging_product" => "whatsapp","pin"=> "6_DIGIT_PIN"
+    //     );
+
+    //     $endpoint = facebook_graph_domain() . facebook_version() . $phone_id . http_build_query($postBody);
+    //     $response = $this->http->get($endpoint, $postBody)
+    //     //Send the values to the database
+    // }
 }
+
+//Verify token
