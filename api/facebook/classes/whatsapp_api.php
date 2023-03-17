@@ -13,7 +13,8 @@ require_once(__DIR__ . "/../../utils/http_handler.php");
 
 
 
-class whats_app_api{
+class whats_app_api
+{
     public $http;
     function __construct()
     {
@@ -141,29 +142,91 @@ class whats_app_api{
      */
     function get_phone_id($business_id, $access_token)
     {
-        $postBody = array(
+        $header = array(
             "access_token" => $access_token,
         );
-
-        $endpoint = facebook_graph_domain() . facebook_version() . "/phone_numbers?" . http_build_query($postBody);
-
-        return $this->http->get($endpoint, $postBody);
+        try {
+            $endpoint = facebook_graph_domain() . facebook_version() . $business_id . "/phone_numbers";
+            return $this->http->get($endpoint, null, $header);
+        } catch (Exception $e) {
+            return false;
+        }
     }
 
     /**
-     * Comback to this function later
+     * This function checks if the webhook configuration to the phone number is set up properly
      */
-    // function store_phone_id($phone_id, $business_id, $access_token)
-    // {
-    //     //Register the phone number 
-    //     $postBody = array(
-    //         "messaging_product" => "whatsapp","pin"=> "6_DIGIT_PIN"
-    //     );
+    function check_subscription($business_id, $access_token)
+    {
+        $header = array(
+            "access_token" => $access_token,
+        );
+        try {
+            $endpoint = facebook_graph_domain() . facebook_version() . $business_id . "/subscribed_apps";
 
-    //     $endpoint = facebook_graph_domain() . facebook_version() . $phone_id . http_build_query($postBody);
-    //     $response = $this->http->get($endpoint, $postBody)
-    //     //Send the values to the database
-    // }
+            $response = $this->http->get($endpoint, null, $header);
+
+            if ($response["success"] == true) {
+                return true;
+            }
+        } catch (Exception $e  ) {
+            return false;
+        }
+    }
+
+    /**
+     * This function  register the person phonenumber
+     */
+    function register_phone_number($phone_id, $access_token, $six_digit_pin)
+    {
+        $header = array(
+            "access_token" => $access_token,
+        );
+        $postBody = array(
+            "messaging_product" => "whatsapp",
+            "pin" => $six_digit_pin
+        );
+        try {
+            $endpoint = facebook_graph_domain() . facebook_version() . $phone_id . "/register";
+
+            $response = $this->http->get($endpoint, $postBody, $header);
+
+            if ($response["success"] == true) {
+                return true;
+            }
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    /**
+     * This function is still under review
+     */
+    function send_msg($phone_id, $access_token,$msg_body, $to){
+        $header = array(
+            "access_token" => $access_token,
+        );
+        $postBody = array(
+            "messaging_product" => "whatsapp",
+            "to" => $to,
+            "text" => array(
+                "body"=> $msg_body
+            )
+        );
+        try {
+            $endpoint = facebook_graph_domain() . facebook_version() . $phone_id . "/messages";
+
+            $response = $this->http->get($endpoint, $postBody, $header);
+
+            if ($response["success"] == true) {
+                return true;
+            }
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+  
 }
 
 //Verify token
