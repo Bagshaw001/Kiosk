@@ -5,6 +5,7 @@
  */
 require_once(__DIR__ . "/../../utils/core.php");
 require_once(__DIR__ . "/../../utils/http_handler.php");
+require(__DIR__ . "/facebook_api.php");
 
 /**
  * This function make api calls
@@ -16,11 +17,13 @@ require_once(__DIR__ . "/../../utils/http_handler.php");
 class whats_app_api
 {
     public $http;
+    public $facebook;
     function __construct()
     {
         $this->http = new http_handler();
+        $facebook = new facebook_api();
+        $this->facebook = $facebook;
     }
-
 
 
 
@@ -30,28 +33,8 @@ class whats_app_api
      */
     function generateLoginUrl($store_id)
     {
-        $postBody =  array(
-            "client_id" => fb_app_id(),
-            "redirect_uri" => redirect_url(),
-            // "redirect_uri" => redirect_url()."?client_id=$client_id&app_secret=$app_secret&business_id=$store_id",
-            "state" => $store_id,
-            // "extras"=> "{'setup':{'channel':'IG_API_ONBOARDING'}}",
-            "scope" => "business_management,whatsapp_business_management,whatsapp_business_messaging",
-            "auth_type" => "rerequest",
-            "response_type" => "code"
-        );
-
-        $endpoint = facebook_main_domain() . facebook_version() . "/dialog/oauth?" . http_build_query($postBody);
-        return $endpoint;
+        return $this->facebook->fb_generateLoginUrl($store_id, "business_management,whatsapp_business_management,whatsapp_business_messaging");
     }
-
-
-
-
-
-
-
-
 
 
     /**
@@ -61,29 +44,7 @@ class whats_app_api
 
     function accessToken($code, $store_id)
     {
-
-
-
-        $postBody = array(
-            "client_id" => fb_app_id(),
-            "client_secret" =>  fb_app_secret(),
-            "redirect_uri" => redirect_url(),
-            "state" => $store_id,
-            "code" => $code
-        );
-
-        $endpoint = facebook_graph_domain() . facebook_version() . "/oauth/access_token?" . http_build_query($postBody);
-        // echo "endpoint $endpoint";
-        try {
-
-            $response = file_get_contents($endpoint);
-            // echo "fb $response";
-            $json = json_decode($response, true);
-
-            return $json;
-        } catch (Exception $e) {
-            return false;
-        }
+        return $this->facebook->fb_accessToken($code, $store_id);
     }
 
 
@@ -94,26 +55,7 @@ class whats_app_api
     function tryAndLoginWithFacbook($code, $business_id)
     {
 
-        $login = $this->accessToken($code, $business_id);
-        //We need to get the business infomation
-        if ($login == false) {
-            return false;
-        }
-
-        //Converts the secs to days
-        $days = convertSecToDay($login["expires_in"]);
-        $date = expiryTime($days);
-
-        //save token
-
-        return array(
-            "status" => "success",
-            "data" => $login,
-            // "business_details" => $business_details,
-            "expiry_date" => $date,
-            "platform" => "whatsapp"
-
-        );
+        return $this->facebook->fb_tryAndLoginWithFacbook($code, $business_id, "whatsapp");
     }
 
 
@@ -124,17 +66,7 @@ class whats_app_api
     {
 
         //Send the data to the database
-        $postBody = array(
-            "api_key" => $api_key,
-            "store_id" => $store_id,
-            "platform" => $platform,
-            "bearer_token" => $bearer_token,
-            "expiry_time" => $expiry_time,
-            "action" => "store_credential"
-
-        );
-
-        return  $this->http->post(server_base_url() . "api/index.php/database", $postBody);
+        return $this->facebook->fb_store_credential($api_key, $store_id, $platform, $bearer_token, $business_id = null, $expiry_time = null);
     }
 
     /**
@@ -169,7 +101,7 @@ class whats_app_api
             if ($response["success"] == true) {
                 return true;
             }
-        } catch (Exception $e  ) {
+        } catch (Exception $e) {
             return false;
         }
     }
@@ -202,7 +134,8 @@ class whats_app_api
     /**
      * This function is still under review
      */
-    function send_msg($phone_id, $access_token,$msg_body, $to){
+    function send_msg($phone_id, $access_token, $msg_body, $to)
+    {
         $header = array(
             "access_token" => $access_token,
         );
@@ -210,7 +143,7 @@ class whats_app_api
             "messaging_product" => "whatsapp",
             "to" => $to,
             "text" => array(
-                "body"=> $msg_body
+                "body" => $msg_body
             )
         );
         try {
@@ -225,8 +158,6 @@ class whats_app_api
             return false;
         }
     }
-
-  
 }
 
 //Verify token
