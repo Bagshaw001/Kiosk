@@ -13,14 +13,16 @@ class facebook_api
     }
 
     //Check if the user has already facebook token from whatsapp
-    function fb_generateLoginUrl($store_id, $scope)
+    function fb_generateLoginUrl($store_id, $scope, $display=null,
+    $extras=null)
     {
         $postBody =  array(
             "client_id" => fb_app_id(),
             "redirect_uri" => redirect_url(),
             // "redirect_uri" => redirect_url()."?client_id=$client_id&app_secret=$app_secret&business_id=$store_id",
             "state" => $store_id,
-            // "extras"=> "{'setup':{'channel':'IG_API_ONBOARDING'}}",
+            "display"=> $display,
+            "extras"=> $extras,
             "scope" => $scope,
             "auth_type" => "rerequest",
             "response_type" => "code"

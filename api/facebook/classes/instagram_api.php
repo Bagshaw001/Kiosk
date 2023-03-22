@@ -28,7 +28,7 @@ class instagram_api
     //Check if the user has already facebook token from whatsapp
     function generateLoginUrl($store_id)
     {
-        return $this->facebook->fb_generateLoginUrl($store_id, "instagram_basic,instagram_content_publish,instagram_manage_comments,instagram_manage_insights,instagram_manage_messages,pages_manage_metadata,pages_read_engagement,");
+        return $this->facebook->fb_generateLoginUrl($store_id, "instagram_basic,instagram_content_publish,instagram_manage_comments,instagram_manage_insights,instagram_manage_messages,pages_manage_metadata,pages_read_engagement,", "page", "{'setup':{'channel':'IG_API_ONBOARDING' }}");
     }
 
     /**
@@ -59,5 +59,50 @@ class instagram_api
         return $this->facebook->fb_store_credential($api_key, $store_id, $platform, $bearer_token, $business_id = null, $expiry_time = null);
     }
 
+    /**
+     * This function `gets the users pages and details
+     */
+    function get_user_page($access_token)
+    {
+        try {
+            $endpoint = facebook_graph_domain() . facebook_version() . "/me/accounts";
+            $post_body = array("access_token" => $access_token);
+            return $this->http->get($endpoint, $post_body);
+        } catch (Exception $e) {
+            return false;
+        }
+    }
 
+    /**
+     * This function get the business account linked to the page id
+     */
+    function get_page_business_acct($page_id, $access_token)
+    {
+        try {
+            $endpoint = facebook_graph_domain() . facebook_version() . "/" . $page_id;
+
+            $post_body = array(
+                "access_token" => $access_token,
+                "fields" => "instagram_business_account"
+            );
+            return $this->http->get($endpoint, $post_body);
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    function get_account_media_id($page_id, $access_token)
+    {
+        try {
+            $endpoint = facebook_graph_domain() . facebook_version() . "/" . $page_id . "/media";
+
+            $post_body = array(
+                "access_token" => $access_token,
+
+            );
+            return $this->http->get($endpoint, $post_body);
+        } catch (Exception $e) {
+            return false;
+        }
+    }
 }
