@@ -91,6 +91,10 @@ class instagram_api
         }
     }
 
+    /**
+     * This function get the media id for that business
+     */
+
     function get_account_media_id($page_id, $access_token)
     {
         try {
