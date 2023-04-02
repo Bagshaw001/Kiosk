@@ -185,13 +185,29 @@ function database()
 					$price = $_POST["price"];
 					$quantity = $_POST["quantity"];
 					$currency = strtoupper($_POST["currency"]);
-					// $variations = json_encode($_POST["product_variations"],true);
 					$product_id = generate_id();
+					// $variations = json_encode($_POST["product_variations"],true);
 
 					$success = create_product($product_id,$store_id,$product_name,$product_description,$quantity,$currency,$price);
 
+					if(count($_FILES) >1){
+						foreach ($_FILES as $file){
+							$image = $file["name"];
+							$tmp_name = $file["tmp_name"];
+							$location = upload_file("uploads","products",$tmp_name,$image);
+							// echo $location;
+						}
+					}
+
+
 					if ($success){
-						send_json(array("product_id" => $product_id));
+						// var_dump($_POST);
+						// var_dump($_FILES);
+						send_json(array(
+							"product_id" => $product_id,
+							"post" => $_POST,
+							"file" => $_FILES
+						));
 					}else {
 						send_json(array("product_id" => $product_id));
 					}
@@ -369,6 +385,14 @@ function database()
 					$store_id = $_POST["store_id"];
 					$products = get_products($store_id);
 					send_json(array("products"=> $products));
+					die();
+				case "search_products":
+					$store_id = $_POST["store_id"];
+					$product_name = $_POST["product_name"];
+					$product = search_products($store_id,$product_name);
+					send_json(
+						array("products" => $product)
+					);
 					die();
 				case "update_product":
 					$product_id = $_POST["product_id"];

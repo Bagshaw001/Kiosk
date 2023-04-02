@@ -2,8 +2,14 @@
 
 
 
+import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
 
+import 'package:file_picker/_internal/file_picker_web.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:kiosk/models/product.dart';
 import 'package:kiosk/utils/api_handler.dart';
 import 'package:kiosk/utils/app_state.dart';
@@ -18,6 +24,7 @@ import 'package:kiosk/widgets/page_list/page_list.dart';
 import 'package:kiosk/widgets/page_list/widgets/extended_list_tile.dart';
 import 'package:kiosk/widgets/page_list/widgets/page_list_tab.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Inventory extends Webpage{
 
@@ -74,6 +81,17 @@ class __LargeInventoryState extends State<_LargeInventory> {
             label: "Add Item",
               filled: true,
               onPressed: ()async{
+                String code = "";
+              {
+                DateTime now = DateTime.now();
+                DateTime use = DateTime(now.year,now.month,now.month,now.hour);
+                code =  await ApiHandler.getPublicToken(use.toIso8601String());
+              }
+
+                launchUrl(Uri.parse("http://137.184.228.209/kiosk/frontend/pages/upload_product.php?user_id=${context.read<AppState>().user.userId}&code=$code"),
+                  mode: LaunchMode.inAppWebView,
+                );
+              return 1;
               bool? update = await showDialog(context: context, builder: (context)=> _AddProductDialog());
               if(update ?? false){
                 (context as Element).reassemble();
@@ -94,10 +112,22 @@ class __LargeInventoryState extends State<_LargeInventory> {
                         return ExtendedListTile(
                           content: [
                             Checkbox(value: false, onChanged: (value){}),
-                            Text(prod.name),
-                            Text(prod.id),
-                            Text("${prod.currency.name.toUpperCase()} ${prod.price}"),
-                            Text("${prod.quantity}"),
+                            Flexible(
+                                flex: 1,
+                                child: Center(child: Text(prod.name))
+                            ),
+                            Flexible(
+                                flex: 1,
+                                child: Center(child: Text(prod.description,overflow: TextOverflow.ellipsis,maxLines: 1,))
+                            ),
+                            Flexible(
+                                flex: 1,
+                                child: Center(child: Text("${prod.currency.name.toUpperCase()} ${prod.price}"))
+                            ),
+                            Flexible(
+                                flex: 1,
+                                child: Center(child: Text("${prod.quantity}"))
+                            ),
                             // Text(prod.),
 
                             ListTag(
@@ -149,6 +179,7 @@ class _AddProductDialogState extends State<_AddProductDialog> {
   TextEditingController price = TextEditingController();
 
   TextEditingController quantity = TextEditingController();
+  Uint8List? file;
 
   Currency currency = Currency.ghs;
 
@@ -166,13 +197,22 @@ class _AddProductDialogState extends State<_AddProductDialog> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
     return AlertDialog(
       contentPadding: const EdgeInsets.all(8),
       content: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
+
+
           Text("Upload Product",
             style: Theme.of(context).textTheme.headlineMedium,
+          ),
+          UploadFile(
+            onImageSelect: (s){
+              file = s;
+            },
           ),
 
           CustomTextField(
@@ -187,29 +227,39 @@ class _AddProductDialogState extends State<_AddProductDialog> {
           ),
 
 
-          DropdownButton(
-              value: currency,
-              items: List.generate(Currency.values.length, (index) =>
-                  DropdownMenuItem(
-                      value: Currency.values[index],
-                      child: Text(Currency.values.elementAt(index).name)
-                  )
+
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              DropdownButton(
+                  value: currency,
+                  items: List.generate(Currency.values.length, (index) =>
+                      DropdownMenuItem(
+                          value: Currency.values[index],
+                          child: Text(Currency.values.elementAt(index).name)
+                      )
+                  ),
+                  onChanged: (option){
+                    setState(() {
+                      currency = option!;
+                    });
+                  }),
+              CustomTextField(
+                width: size.width * 0.1,
+                label: "Price",
+                controller: price,
+
               ),
-              onChanged: (option){
-                setState(() {
-                  currency = option!;
-                });
-              }),
-          CustomTextField(
-            label: "Price",
-            controller: price,
+              CustomTextField(
+                width: size.width * 0.1,
+                label: "Quantity",
+                controller: quantity,
 
+              ),
+            ],
           ),
-          CustomTextField(
-            label: "Quantity",
-            controller: quantity,
 
-          ),
 
 
           CustomButton(
@@ -226,7 +276,10 @@ class _AddProductDialogState extends State<_AddProductDialog> {
                   quantity: int.parse(quantity.text)
               );
               (widget.product == null ?
-              ApiHandler.uploadProduct(product: product) :ApiHandler.editProduct(product: product) ).then((response){
+              ApiHandler.uploadProduct(product: product,images: file == null ? null :[file!]) :ApiHandler.editProduct(product: product) )
+              
+                  .then((response){
+                print(response.body);
                 Map<String,dynamic> json = jsonDecode(response.body);
                 //if product upload was successful, get product id and
                 // upload product variations
@@ -242,6 +295,66 @@ class _AddProductDialogState extends State<_AddProductDialog> {
 
         ],
       ),
+    );
+  }
+}
+
+
+
+class UploadFile extends StatefulWidget {
+  void Function(Uint8List) onImageSelect;
+   UploadFile({Key? key, required this.onImageSelect}) : super(key: key);
+
+  @override
+  _UploadFileState createState() => _UploadFileState();
+}
+
+
+class _UploadFileState extends State<UploadFile> {
+  Uint8List? _imageBytes;
+  bool _isLoading = false;
+
+  Future<void> _uploadImage() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    final result = await FilePicker.platform.pickFiles(
+        type: FileType.image,
+      withData: true,
+      withReadStream: false
+    );
+
+    if (result != null && result.files.isNotEmpty) {
+      final file = result.files.first;
+      widget.onImageSelect(result.files.first.bytes!);
+
+      setState(() {
+        _imageBytes = file.bytes;
+        _isLoading = false;
+      });
+    } else {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        if (_isLoading)
+          const CircularProgressIndicator()
+        else if (_imageBytes != null)
+          Image.memory(_imageBytes!,width: 75, height: 150,)
+        else
+          const Text('No image selected.'),
+        IconButton(
+          icon: const Icon(Icons.image, color: Colors.black,),
+          onPressed: _uploadImage
+        )
+      ],
     );
   }
 }

@@ -162,6 +162,39 @@
 			return $this->db_query($sql);
 		}
 
+		function add_post($post_id,$caption,$time_to_post){
+			$caption = $this->clean($caption);
+			$sql = "INSERT INTO `scheduled_posts`
+			VALUE ('$post_id','$caption','$time_to_post')";
+			return $this->db_query($sql);
+		}
+
+		function add_media($media_id,$location,$uploader_id,$uploaded_date,$type){
+			$media_id = $this->clean($media_id);
+			$location = $this->clean($location);
+			$uploader_id = $this->clean($uploader_id);
+			$sql = "INSERT INTO `media`(`media_id`,`location`,`uploader_id`,`upload_date`,`media_type`)
+			VALUE ('$media_id','$location','$uploader_id','$uploaded_date','$type')";
+			return $this->db_query($sql);
+		}
+
+		function link_product_image($product_id,$media_id){
+			$sql = "INSERT INTO `product_media` (`product_id`,`media_id`)
+			VALUE ('$product_id','$media_id')";
+			return $this->db_query($sql);
+		}
+
+		function link_post_image($post_id,$media_id){
+			$sql = "INSERT INTO `post_media` (`post_id`,`media_id`)
+			VALUE ('$post_id','$media_id')";
+			return $this->db_query($sql);
+		}
+
+		function link_post_credential($post_id,$credential_id){
+			$sql = "INSERT INTO `post_credentials` VALUE ('$post_id','$credential_id')";
+			return $this->db_query($sql);
+		}
+
 		//=============================SELECT======================
 
 		function get_store_by_token($token){
@@ -280,6 +313,14 @@
 			return $this->db_fetch_one($sql);
 		}
 
+		function search_products($query,$store_id){
+			$query =$this->clean($query);
+			$store_id =$this->clean($store_id);
+			$sql = "SELECT * FROM products WHERE store_id = '$store_id'
+			AND product_name LIKE '%$query%' AND product_description LIKE '%$query%';";
+			return $this->db_fetch_all($sql);
+		}
+
 		function get_products($store_id){
 			$store_id = $this->clean($store_id);
 			$sql = "SELECT * FROM products where `store_id` = '$store_id'";
@@ -295,6 +336,7 @@
 			WHERE stores.store_id = '$store_id'";
 			return $this->db_fetch_one($sql);
 		}
+
 
 		function get_revenue($store_id){
 			$store_id = $this->clean($store_id);
@@ -373,6 +415,14 @@
 			$sql = "UPDATE `products` SET
 			`quantity` = '$new_quantity' WHERE `product_id` = '$product_id'";
 
+			return $this->db_query($sql);
+		}
+
+		function update_post($post_id,$caption,$time_to_post){
+			$caption = $this->clean($caption);
+			$sql = "UPDATE `scheduled_posts` SET
+			`caption` = '$caption', `time_to_post`='$time_to_post'
+			WHERE `post_id` = '$post_id'";
 			return $this->db_query($sql);
 		}
 

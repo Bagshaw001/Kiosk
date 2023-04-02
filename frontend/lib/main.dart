@@ -45,7 +45,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _current = 3;
+  int _current = 0;
   final List<Webpage> pages = [
     Dashboard(),
     Inventory(),

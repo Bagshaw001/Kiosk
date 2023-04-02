@@ -1,6 +1,7 @@
 <?php
 	require_once(__DIR__. "/http_handler.php");
 	require_once(__DIR__."/env_manager.php");
+	require_once(__DIR__."/chat_bot.php");
 
 //start session
 if (session_status() === PHP_SESSION_NONE) {
@@ -25,7 +26,7 @@ ob_start();
 
 
 	function get_current_date(){
-		return date("Y-m-d HH:mm");
+		return date("Y-m-d\TH:i:s");
 	}
 
 	function format_string_as_date_fn($date_str){
@@ -40,7 +41,7 @@ ob_start();
 		return encrypt(get_current_date().time() . random_bytes((55)));
 	}
 
-	function upload_file($directory,$subdir,$tempname,$image){
+	function upload_file($tempname,$image){
 		//check if the directory exists
 		// echo "image $image";
 		//Then upload the file into the directory
@@ -48,21 +49,21 @@ ob_start();
 		$ext = explode(".",$image); //file extension
 		$ext = $ext[count($ext)-1]; //file extension
 		$form_name = $temp_id.'.'. $ext;
-		$folder = "../$directory/$subdir/".$form_name;
+		$folder = "/var/www/html/kiosk/api/database/uploads/$form_name";
 
 		//create folder if it does not exist
-		if (!file_exists("../$directory/$subdir/")){
-			mkdir("../$directory/$subdir/",0777);
+		if (!file_exists("/var/www/html/kiosk/api/database/uploads")){
+			mkdir("/var/www/html/kiosk/api/database/uploads");
 
 			// echo("Folder created");
+		// 	move_uploaded_file($tempname,$folder);
+		// 	return $folder;
+		}
+		// else{
 			move_uploaded_file($tempname,$folder);
 			return $folder;
-		}
-		else{
-			move_uploaded_file($tempname,$folder);
-			return $folder;
-		}
-		return false;
+		// }
+		// return false;
 
 	}
 

@@ -136,20 +136,22 @@ class __AccountSettingsLargeState extends State<_AccountSettingsLarge> {
 
           Expanded(
             flex: 4,
-            child:Container(
-              child: PageView(
-                controller: pageController,
-                onPageChanged: (selected){
-                  setState(() {
+            child:PageView.builder(
 
-                  });
-                },
-                children: [
-                  const WithdrawalSettings(),
-                  const StoreProfileSettings(),
-                  const ManageCollaboratorsSettings()
-                ],
-              ),
+              itemBuilder: (context,e){
+                return const [
+                  WithdrawalSettings(),
+                  StoreProfileSettings(),
+                  ManageCollaboratorsSettings()
+                ][e];
+              },
+              controller: pageController,
+              onPageChanged: (selected){
+                print(selected);
+                setState(() {
+
+                });
+              },
             ),
           )
         ],
@@ -174,15 +176,18 @@ class _SettingsTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.all(8),
-      width: double.maxFinite,
-      padding: const EdgeInsets.only(left:30,) + const EdgeInsets.symmetric(vertical: 16),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
+    return InkWell(
+      onTap: onPressed,
+      child: Container(
+        margin: const EdgeInsets.all(8),
+        width: double.maxFinite,
+        padding: const EdgeInsets.only(left:30,) + const EdgeInsets.symmetric(vertical: 16),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
             color: selected ? blue : Colors.black38
+        ),
+        child: Text(label),
       ),
-      child: Text(label),
     );
   }
 }

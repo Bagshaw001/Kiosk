@@ -7,17 +7,18 @@
 	switch($component){
 		case "database":
 			require_once(__DIR__."/database/processors/database.php");
-			break;
-		case "social_media":
+			die();
 		case "payments":
 			require_once(__DIR__."/payment/processors/payment.php");
-		case "media":
+			die();
 		case "messenger":
 			require_once(__DIR__."/facebook/processors/meta_processor.php");
-			break;
-		case "callback":
-			$code = $_GET["code"];
-			$store_id = $_GET["state"];
+			die();
+		case "token":
+			$code = $_POST["code"];
+			$encrypt = encrypt($code);
+			echo $encrypt;
+			die();
 			// echo "<pre>";
 			// var_dump($_GET);
 			// echo "</pre>";

@@ -220,9 +220,6 @@
 
 	function confirm_phone_verification($token){
 		$db = new db_class();
-
-
-
 		$user_id = $db->get_user_by_phone_verification_token($token)["user_id"];
 
 		$db->update_phone_verification($user_id);
@@ -251,9 +248,35 @@
 		return $db->get_products($store_id);
 	}
 
+	function add_product_image($media_id,$product_id, $uploader_id,$location,$uploader_date,$type='picture'){
+		$db = new db_class();
+		$db->add_media($media_id,$location,$uploader_id,$uploader_date,$type);
+		return $db->link_product_image($product_id,$media_id);
+	}
+
+
+	function add_post_image($media_id,$post_id, $uploader_id,$location,$uploader_date,$type='picture'){
+		$db = new db_class();
+		$db->add_media($media_id,$location,$uploader_id,$uploader_date,$type);
+		return $db->link_post_image($post_id,$media_id);
+	}
+
+	function add_post($post_id,$store_id,$caption,$time_to_post){
+		$db = new db_class();
+		$db->add_post($post_id,$caption,$time_to_post);
+		$credential_id = $db->get_store_credential($store_id,"instagram")["api_key"];
+		return $db->link_post_credential($post_id,$credential_id);
+	}
+
+
 	function update_product($product_id,$product_name,$product_description, $quantity, $currency, $price){
 		$db = new db_class();
 		return $db->update_product($product_id,$product_name,$product_description, $quantity, $currency, $price);
+	}
+
+	function update_post($post_id,$caption,$time_to_post){
+		$db = new db_class();
+		return $db->update_post($post_id,$caption,$time_to_post);
 	}
 
 	function update_product_stock($product_id,$new_quantity){
@@ -293,6 +316,15 @@
 		return $db->get_store_linked_accounts($store_id);
 	}
 
+	function get_store_by_user_id($user_id){
+		$db = new db_class();
+		return $db->get_store_by_user_id($user_id);
+	}
+
+	function search_products($query,$store_id){
+		$db = new db_class();
+		return $db->search_products($query,$store_id);
+	}
 
 
 ?>

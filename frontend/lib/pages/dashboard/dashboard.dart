@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kiosk/pages/dashboard/widgets/dash_order_list.dart';
 import 'package:kiosk/utils/app_state.dart';
 import 'package:kiosk/utils/user.dart';
 import 'package:kiosk/widgets/metrics_card.dart';
 import 'package:kiosk/pages/dashboard/widgets/primary_card.dart';
 import 'package:kiosk/pages/dashboard/widgets/info_card.dart';
-import 'package:kiosk/pages/dashboard/widgets/todo_card.dart';
 import 'package:kiosk/utils/webpage.dart';
 import 'package:kiosk/widgets/action_card.dart';
 import 'package:kiosk/widgets/card_list.dart';
@@ -34,6 +34,16 @@ class __DashboardLargeState extends State<_DashboardLarge> {
 
   @override
   Widget build(BuildContext context) {
+    String date;
+    int hour = DateTime.now().hour;
+    if (hour < 12){
+      date = "morning";
+    }else if (hour < 16){
+      date = "afternoon";
+    }else {
+      date = "evening";
+    }
+
 
     return Padding(
       padding: const EdgeInsets.all(16),
@@ -42,7 +52,7 @@ class __DashboardLargeState extends State<_DashboardLarge> {
         children: [
           //Left columns
           _DashColumn(
-            headline: Text("Good morning, ${ context.read<AppState>().user.username}",
+            headline: Text("Good $date, ${ context.read<AppState>().user.username}",
                 style: Theme.of(context)
                     .textTheme
                     .headlineSmall!),
@@ -74,6 +84,9 @@ class __DashboardLargeState extends State<_DashboardLarge> {
                       leftButton: CustomButton(
                         label: "Withdraw",
                         filled: true,
+                        onPressed: (){
+
+                        },
                       ),
                     ),
                     PrimaryCard(
@@ -95,47 +108,27 @@ class __DashboardLargeState extends State<_DashboardLarge> {
           //Right columns
           SizedBox(
             width: MediaQuery.of(context).size.width * 0.2,
-            child: _DashColumn(
-              rightColumn: true,
-              headline: ActionCard(
-                  icon: Icons.help_outline,
-                  label: "Help and Feedback ",
-                  filled: false),
-              subheadline: ActionCard(
-                icon: Icons.access_time_outlined,
-                label: "20 Sep 2022 - 20 Nov 2022",
+            child: Card(
+              child: Column(
+                children: [
+                  SizedBox(
+                    child: const Text("Messages"),
+                    height: MediaQuery.of(context).size.height*0.05,
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      itemBuilder: (context,index) => ListTile(
+                        leading: const Icon(FontAwesomeIcons.whatsapp),
+                        title: Text("Person name",style: const TextStyle(color: Colors.black),),
+                        subtitle: Text("Person message stuff about things",style: const TextStyle(color: Colors.black),),
+                        onTap: (){
+
+                        },
+                      ),
+                    ),
+                  )
+                ],
               ),
-              second: InfoCard(
-                label: "Taxes",
-                content: "10",
-                currency: "GHS",
-                leftButton: CustomButton(
-                  label: "Calculate",
-                  filled: true,
-                ),
-                rightButton: CustomButton(
-                  label: "Pay",
-                ),
-              ),
-              third: TodoCard(),
-              fourth: CardList(
-                  label: "Messages",
-                  listBuilder: (context, index) => Row(
-                        children: [
-                          Text("Aaron Andon"),
-                          const Spacer(),
-                          Text("12/14/22"),
-                          const Spacer(),
-                          Icon(
-                            Icons.chat,
-                            color: Colors.black,
-                          ),
-                          Icon(
-                            Icons.chat,
-                            color: Colors.black,
-                          ),
-                        ],
-                      )),
             ),
           )
         ],

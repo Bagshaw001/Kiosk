@@ -1,4 +1,6 @@
 import "dart:convert";
+import "dart:io";
+import "dart:typed_data";
 
 import "package:flutter/material.dart";
 import "package:http/http.dart" as http;
@@ -98,9 +100,10 @@ class ApiHandler {
   }
 
   static Future<http.Response> uploadProduct(
-      {required Product product}) async {
+      {required Product product,List<Uint8List>? images}) async {
 
-    return _BaseHandler.post(endpoint: "database",
+    var re =await  _BaseHandler.post(endpoint: "database",
+        files: images,
         body: {
           "action": "upload_product",
           "product_name": product.name,
@@ -111,6 +114,8 @@ class ApiHandler {
           "currency" : product.currency.name.toUpperCase()
         }
     );
+    print(re.body);
+    return re;
   }
   static Future<http.Response> editProduct(
       {required Product product}) async {
@@ -143,6 +148,15 @@ class ApiHandler {
     return [];
   }
 
+  static Future<String> getPublicToken(String word)async{
+    http.Response e = await _BaseHandler.post(
+        endpoint: "token",
+      body: {
+          "code" : word
+      }
+    );
+    return e.body;
+  }
   static Future<http.Response> requestEmailVerification({
     required String userId
   }) async {
@@ -246,18 +260,49 @@ class _BaseHandler {
     return await http.get(Uri.parse( _genUrl(endpoint) + _genArgs(body)));
   }
 
-  static Future<http.Response> post({required String endpoint, required Map<String, dynamic> body, bool abs = false})
+  static Future<http.Response> post({required String endpoint,List<Uint8List>? files, required Map<String, dynamic> body, bool abs = false})
   async {
 
-    if(abs){
+    if(files == null) {
       return await http.post(
-          Uri.parse(endpoint),
-          body: body
-      );
-    }
-    return await http.post(
-        Uri.parse(_genUrl(endpoint)),
+        abs ? Uri.parse(endpoint) : Uri.parse(_genUrl(endpoint)),
         body: body
     );
+    }
+    var request = http.MultipartRequest(
+      'POST',
+      abs ? Uri.parse(endpoint) : Uri.parse(_genUrl(endpoint)),
+
+    )..headers["Access-Control-Allow-Origin"] = "*"
+    ..headers["Content-Type"] = "application/json"
+    ..headers["Accept"] = "*/*";
+
+    for (Uint8List file in files){
+      request.files.add( http.MultipartFile.fromBytes("file", file,filename: "img.png"));
+    }
+    // print(files);
+
+    // for (File file in files) {
+    //   var multipartFile = http.MultipartFile(
+    //     'file',
+    //     file.openRead(),
+    //     await file.length(),
+    //     filename: "img.png",
+    //   );
+    //   request.files.add(multipartFile);
+    // }
+
+    body.forEach((key, value) {
+      request.fields[key] = value.toString();
+    });
+
+    print("send start");
+    var response = await request.send();
+    print("send end");
+    // return await http.StreamedResponse(response.stream,200)
+    var responseData = await response.stream.bytesToString();
+    return http.Response(responseData, response.statusCode);
+
+
   }
 }

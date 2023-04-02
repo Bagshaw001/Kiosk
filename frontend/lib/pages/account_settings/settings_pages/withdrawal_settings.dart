@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:kiosk/utils/api_handler.dart";
 import "package:kiosk/widgets/custom_button.dart";
 import "package:kiosk/widgets/custom_textfield.dart";
 
@@ -112,35 +113,88 @@ class _WithdrawalSettingsState extends State<WithdrawalSettings> {
           margin: const EdgeInsets.symmetric(vertical: 8,horizontal: 4),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Text("Transaction ID"),
-              Text("Transaction Date"),
-              Text("Amount Withdrawn"),
-              Text("Beneficiary Name"),
-              Text("Beneficiary Number"),
-              Text("Collaborator Name"),
-              Text("Status"),
+            children: const [
+              Flexible(
+                child: Text("Transaction ID"),
+              ),
+              Flexible(
+                child: Text("Transaction Date"),
+              ),
+              Flexible(
+                child: Text("Amount"),
+              ),
+              Flexible(
+                flex: 2,
+                child: Text("Beneficiary Name"),
+              ),
+              Flexible(
+                flex: 2,
+                child: Text("Beneficiary Number"),
+              ),
+              Flexible(
+                flex: 2,
+                child:  Text("Collaborator Name"),
+              ),
+              Flexible(
+                child: Text("Status"),
+              ),
             ],
           ),
         ),
         Expanded(
-          child: ListView.builder(
-              itemBuilder: (context,index) => Container(
-                padding: const EdgeInsets.all(12),
-                margin: const EdgeInsets.symmetric(vertical: 8,horizontal: 4),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Text("adjtfdsdf4564"),
-                    Text("22 Dec 2022"),
-                    Text("GHC 120"),
-                    Text("Kingsley Collins"),
-                    Text("055 455 9858"),
-                    Text("Veron Omeibi"),
-                    Text("Pending"),
-                  ],
-                ),
-              )
+          child: FutureBuilder(
+            initialData: [
+              {
+                "transaction_id" : "1442455",
+                "transaction_date" : DateTime.now().toIso8601String(),
+                "amount" : 4,
+                "beneficiary_name" : "Kingsley Collins",
+                "beneficiary_number" : "055 487 8555",
+                "collaborator_name" : "Mr Smith",
+                "status" : "pending"
+              }
+            ],
+            builder: (context,snapshot){
+              if (snapshot.data == null){
+                return const Text("No withdrawals yet");
+              }
+              return ListView.builder(
+                itemCount: snapshot.data?.length ?? 0,
+                  itemBuilder: (context,index) => Container(
+                    padding: const EdgeInsets.all(12),
+                    margin: const EdgeInsets.symmetric(vertical: 8,horizontal: 4),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Flexible(
+                          child: Text(snapshot.data![index]["transaction_id"].toString()),
+                        ),
+                        Flexible(
+                          child: Text(DateTime.parse(snapshot.data![index]["transaction_date"].toString()).toString()),
+                        ),
+                        Flexible(
+                          child: Text("GHS ${(snapshot.data![index]["amount"] as double).toStringAsFixed(2)}"),
+                        ),
+                        Flexible(
+                          flex: 2,
+                          child: Text(snapshot.data![index]["beneficiary_name"].toString()),
+                        ),
+                        Flexible(
+                          flex: 2,
+                          child: Text(snapshot.data![index]["beneficiary_number"].toString()),
+                        ),
+                        Flexible(
+                          flex: 2,
+                          child:  Text(snapshot.data![index]["collaborator_name"].toString()),
+                        ),
+                        Flexible(
+                          child: Text(snapshot.data![index]["status"].toString()),
+                        ),
+                      ],
+                    ),
+                  )
+              );
+            },
           ),
         )
       ],

@@ -15,9 +15,12 @@ require_once(__DIR__ . "/../../utils/core.php");
 
 class whats_app_api{
     public $http;
+    private $base_url;
+
     function __construct()
     {
         $this->http = new http_handler();
+        $this->base_url = facebook_graph_domain(). facebook_version();
     }
 
 
@@ -136,6 +139,100 @@ class whats_app_api{
         return  $this->http->post(server_base_url() . "api/index.php/database", $postBody);
     }
 
+    /**Retrives from facebook the id for the phone number linked with the store's account */
+    function get_phone_number_id(){
+        return "105467232450445";
+    }
+
+    function get_linked_numbers($account_id,$token){
+        return $this->http->get($this->base_url."/$account_id/phone_numbers?access_token=$token");
+    }
+
+    function get_one_linked_number($phone_id){
+        return $this->http->get($this->base_url."/$phone_id");
+    }
+
+
+
+
+
+
+    /**Sends a pre-approved message template to the [number] */
+    function send_message_template($number,$token){
+
+        $body =
+        "{ 'messaging_product': 'whatsapp', 'to': '$number', 'type': 'template', 'template': { 'name': 'hello_world', 'language': { 'code': 'en_US' } } }"       ;
+        $header = array(
+            "Authorization: Bearer $token",
+            'Content-Type: application/json'
+        );
+        $phone_id = $this->get_phone_number_id();
+        // echo facebook_graph_domain(). facebook_version(). "/$phone_id/messages";
+
+        // return $this->http->post("https://graph.facebook.com/v15.0/105467232450445/messages",$body,$header);
+        return $this->http->post($this->base_url. "/$phone_id/messages",$body,$header);
+
+    }
+
+
+    /**Sends a dynamic message to a customer within the conversation period
+     * The customer must initiate the conversation however for this to work, i.e text the
+     * linked account first, or respond to a previously sent template message to initiate the
+     * conversation period
+     */
+    function send_message_custom($message,$number,$token, $contains_url = false){
+        $preview_url = $contains_url ? "true" : "false";
+
+        $header = array(
+            "Authorization: Bearer $token",
+            'Content-Type: application/json'
+        );
+        $body = "{ 'messaging_product': 'whatsapp', 'recipient_type': 'individual', 'to': '$number', 'type': 'text', 'text': {   'preview_url': $preview_url, 'body': '$message' } }";
+        // echo $body;
+
+        $phone_id = $this->get_phone_number_id();
+        return $this->http->post($this->base_url. "/$phone_id/messages", $body,$header);
+
+    }
+
+
+    function send_message_media($number,$link,$token){
+        $header = array(
+            "Authorization: Bearer $token",
+            'Content-Type: application/json'
+        );
+        $body = "{ 'messaging_product': 'whatsapp', 'recipient_type': 'individual', 'to': '$number', 'type': 'image', 'image': { 'link' : '$link' } }";
+        $phone_id = $this->get_phone_number_id();
+
+        return $this->http->post($this->base_url. "/$phone_id/messages",$body,$header);
+    }
+
+
+    function upload_fb_media($phone_id, $media_path, $token){
+        // Set the POST data
+        $post_data = array(
+            'file' => new CURLFile($media_path),
+            'type' => 'image/jpeg',
+            'messaging_product' => 'whatsapp'
+        );
+
+        // Initialize the cURL session
+        $curl = curl_init($this->base_url."/$phone_id/media");
+
+        // Set the cURL options
+        curl_setopt($curl, CURLOPT_POST, true);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $post_data);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+            "Authorization: Bearer $token"
+        ));
+
+        // Execute the cURL session
+        $response = curl_exec($curl);
+
+        // Close the cURL session
+        curl_close($curl);
+        return $response;
+    }
 
 
 
