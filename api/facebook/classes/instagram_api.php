@@ -126,6 +126,21 @@ class instagram_api
     }
 
     /**
+     * This function gets the page access token
+     */
+    function get_page_access_token($page_id, $access_token)
+    {
+        try {
+            $endpoint = facebook_graph_domain() . facebook_version() . "/" . $page_id . "?fields=access_token,access_token=" . $access_token;
+
+            $response = $this->http->get($endpoint);
+            return $response->id;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    /**
      * This function send text message to clients
      */
 
