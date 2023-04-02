@@ -102,7 +102,7 @@ if (isset($_POST["product_name"]) && isset($_POST["product_description"])){
 		echo "<input type='hidden' name='user_id' value='$user_id'>";
 
 		?>
-		<label for="product_name">Prduct Name</label>
+		<label for="product_name">Product Name</label>
 		<input type="text" name="product_name">
 
 		<label for="product_description">Product Description</label>
