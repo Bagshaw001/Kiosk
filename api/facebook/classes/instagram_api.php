@@ -109,4 +109,88 @@ class instagram_api
             return false;
         }
     }
+
+    /**
+     * This function gets the page id 
+     */
+    function get_page_id($access_token, $user_id)
+    {
+        try {
+            $endpoint = facebook_graph_domain() . facebook_version() . "/" . $user_id . "/accounts?access_token=" . $access_token;
+
+            $response = $this->http->get($endpoint);
+            return $response->data[0]->id;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    /**
+     * This function send text message to clients
+     */
+
+    function send_msg($page_access_token, $ig_scope_Id, $msg)
+    {
+        try {
+            $endpoint = facebook_graph_domain() . facebook_version() . "/" . $ig_scope_Id . "/messages";
+
+            $post_body = array(
+                "recipient" => $ig_scope_Id,
+                "message" => $msg,
+                "access_token" => $page_access_token
+            );
+
+            return $this->http->post($endpoint, $post_body);
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    /**
+     * This function sends a reaction message to the client 
+     */
+    function reaction_msg($page_access_token, $ig_scope_Id, $msg, $msg_id)
+    {
+        try {
+            $endpoint = facebook_graph_domain() . facebook_version() . "/" . $ig_scope_Id . "/messages";
+
+            $post_body = array(
+                "recipient" => $ig_scope_Id,
+                "sender_action" => "react",
+                "payload" => array(
+                    "message_id" => $msg_id,
+                    "reaction" => $msg
+                ),
+                "access_token" => $page_access_token
+            );
+
+            return $this->http->post($endpoint, $post_body);
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    /**
+     * This function unreact to a message
+     */
+
+    function unreact_msg($page_access_token, $ig_scope_Id,  $msg_id)
+    {
+        try {
+            $endpoint = facebook_graph_domain() . facebook_version() . "/" . $ig_scope_Id . "/messages";
+
+            $post_body = array(
+                "recipient" => $ig_scope_Id,
+                "sender_action" => "unreact",
+                "payload" => array(
+                    "message_id" => $msg_id,
+                ),
+                "access_token" => $page_access_token
+            );
+
+            return $this->http->post($endpoint, $post_body);
+        } catch (Exception $e) {
+            return false;
+        }
+    }
 }
