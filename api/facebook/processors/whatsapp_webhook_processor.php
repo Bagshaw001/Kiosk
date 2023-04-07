@@ -34,11 +34,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $bus_id = $data->entry[0]->id;
     $phone_id = $data->entry[0]->changes[0]->value->metadata->phone_number_id;
     $display_number =  $data->entry[0]->changes[0]->value->metadata->phone_number_id;
-
     $contact_name = $data->entry[0]->changes[0]->value->contacts[0]->profile->name;
     $msg_from = $data->entry[0]->changes[0]->value->messages[0]->from;
     $timestamp = $data->entry[0]->changes[0]->value->messages[0]->timestamp;
     $msg_body = $data->entry[0]->changes[0]->value->messages[0]->text->body;
+    $msg_id =  $data->entry[0]->changes[0]->value->messages[0]->text->id;
+
 
 
 

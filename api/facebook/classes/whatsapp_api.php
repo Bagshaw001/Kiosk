@@ -121,7 +121,7 @@ class whats_app_api
         try {
             $endpoint = facebook_graph_domain() . facebook_version() . $phone_id . "/register";
 
-            $response = $this->http->get($endpoint, $postBody, $header);
+            $response = $this->http->post($endpoint, $postBody, $header);
 
             if ($response["success"] == true) {
                 return true;
@@ -141,7 +141,9 @@ class whats_app_api
         );
         $postBody = array(
             "messaging_product" => "whatsapp",
+            "recipient_type" => "individual",
             "to" => $to,
+            "type" => "text",
             "text" => array(
                 "body" => $msg_body
             )
@@ -149,9 +151,70 @@ class whats_app_api
         try {
             $endpoint = facebook_graph_domain() . facebook_version() . $phone_id . "/messages";
 
-            $response = $this->http->get($endpoint, $postBody, $header);
+            $response = $this->http->post($endpoint, $postBody, $header);
 
-            if ($response["success"] == true) {
+            if (!isset($response->error)) {
+                //store the response of what you sent
+                return true;
+            }
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    //Reply to text
+
+    function reply_msg($phone_id, $access_token, $msg_body, $to, $prev_msg_id, $url = null)
+    {
+        $header = array(
+            "access_token" => $access_token,
+        );
+        $postBody = array(
+            "messaging_product" => "whatsapp",
+            "recipient_type" => "individual",
+            "to" => $to,
+            "context" => array("message_id" => $prev_msg_id),
+            "type" => "text",
+            "text" => array(
+                "preview_url" => $url,
+                "body" => $msg_body
+            )
+        );
+        try {
+            $endpoint = facebook_graph_domain() . facebook_version() . $phone_id . "/messages";
+
+            $response = $this->http->post($endpoint, $postBody, $header);
+
+            if (!isset($response->error)) {
+                //store the response of what you sent
+                return true;
+            }
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    //send message with preview link
+    function send_preview_url($phone_id, $access_token, $msg_body, $to, $prev_msg_id, $url = null)
+    {
+        $header = array(
+            "access_token" => $access_token,
+        );
+        $postBody = array(
+            "messaging_product" => "whatsapp",
+            "to" => $to,
+            "text" => array(
+                "preview_url" => true,
+                "body" => $msg_body
+            )
+        );
+        try {
+            $endpoint = facebook_graph_domain() . facebook_version() . $phone_id . "/messages";
+
+            $response = $this->http->post($endpoint, $postBody, $header);
+
+            if (!isset($response->error)) {
+                //store the response of what you sent
                 return true;
             }
         } catch (Exception $e) {

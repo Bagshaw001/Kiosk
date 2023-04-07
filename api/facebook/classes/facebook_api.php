@@ -9,20 +9,22 @@ class facebook_api
     function __construct()
     {
         $this->http = new http_handler();
-        $facebook = new facebook_api();
     }
 
     //Check if the user has already facebook token from whatsapp
-    function fb_generateLoginUrl($store_id, $scope, $display=null,
-    $extras=null)
-    {
+    function fb_generateLoginUrl(
+        $store_id,
+        $scope,
+        $display = null,
+        $extras = null
+    ) {
         $postBody =  array(
             "client_id" => fb_app_id(),
             "redirect_uri" => redirect_url(),
             // "redirect_uri" => redirect_url()."?client_id=$client_id&app_secret=$app_secret&business_id=$store_id",
             "state" => $store_id,
-            "display"=> $display,
-            "extras"=> $extras,
+            "display" => $display,
+            "extras" => $extras,
             "scope" => $scope,
             "auth_type" => "rerequest",
             "response_type" => "code"
@@ -39,6 +41,8 @@ class facebook_api
      * This function makes a request to exchange the code gotten for the access token
      * @return array
      */
+
+    //This access token function is meant to make a post request not wait for post request to be sent
 
     function fb_accessToken($code, $store_id)
     {

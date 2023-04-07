@@ -5,7 +5,7 @@
  */
 require_once(__DIR__ . "/../../utils/core.php");
 require_once(__DIR__ . "/../../utils/http_handler.php");
-require(__DIR__ . "/facebook_api.php");
+require("./facebook_api.php");
 
 /**
  * This function make api calls to the instgram api
@@ -28,7 +28,7 @@ class instagram_api
     //Check if the user has already facebook token from whatsapp
     function generateLoginUrl($store_id)
     {
-        return $this->facebook->fb_generateLoginUrl($store_id, "instagram_basic,instagram_content_publish,instagram_manage_comments,instagram_manage_insights,instagram_manage_messages,pages_manage_metadata,pages_read_engagement,", "page", "{'setup':{'channel':'IG_API_ONBOARDING' }}");
+        return $this->facebook->fb_generateLoginUrl($store_id, "instagram_basic,instagram_content_publish,instagram_manage_comments,instagram_manage_insights,instagram_manage_messages,pages_manage_metadata,pages_read_engagement,pages_messaging,pages_show_list", "page", "{'setup':{'channel':'IG_API_ONBOARDING' }}");
     }
 
     /**
@@ -134,7 +134,57 @@ class instagram_api
             $endpoint = facebook_graph_domain() . facebook_version() . "/" . $page_id . "?fields=access_token,access_token=" . $access_token;
 
             $response = $this->http->get($endpoint);
-            return $response->id;
+            return $response->access_token;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    /**
+     * This function subscribe the page to the messaging
+     * 
+     */
+
+    function subscribe_message($page_id, $access_token)
+    {
+        try {
+            $endpoint = facebook_graph_domain() . facebook_version() . "/" . $page_id . "/subscribed_apps";
+            $post_body = array(
+                "subscribed_fields" => "messages",
+                "access_token" => $access_token
+            );
+
+            $response = $this->http->post($endpoint, $post_body);
+
+            if ($response->success = true) {
+                return true;
+            }
+
+            return false;
+
+            //code...
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    /**
+     * This function return the list of subscribe apps to that page
+     */
+
+    function check_subscribed_apps($page_id, $access_token)
+    {
+        try {
+            $endpoint = facebook_graph_domain() . facebook_version() . "/" . $page_id . "/subscribed_apps";
+            $post_body = array(
+                "access_token" => $access_token
+            );
+
+            $response = $this->http->post($endpoint, $post_body);
+
+            return $response;
+
+            //code...
         } catch (Exception $e) {
             return false;
         }
@@ -209,3 +259,7 @@ class instagram_api
         }
     }
 }
+
+$test = new instagram_api;
+echo ($test->generateLoginUrl("1188531992031899"));
+//echo ($test-> accessToken("AQDNykIJubv2Sk_OKAhKYZT6Vmg2hE4QyDjRtlsyamY0Sliwl4O10RPIC9xrcnbJep80xwJpJcDACgw4gJgb2S31eVdKm0qo0qmZUtHLQVStwiGXSiedeutAMWnVOu5w9c70l_kYbZ_-WVOQKTfMTLqSHBLOt278Ck1fStFkqxBQCCZa3PgaMgJvWocH-vjn5mb6Tp7j7lD1pVPVGIrEf-fZB1vJaLE-MKyG4xGjQIYtLis-CN22qED9Lbqkda9YW_4WYZwKJUoc1cNn6k4g2SOFcPn4XUNls3hVNWMB1rtmvTwh-G_xx3240uBYe9ZKVnGrU7a3QuEYQDBm5tHICYVo9Hg7Sx6bFq7dkpBk6ktHNudbGucjCjBNskfApmfeTQOnk4BdMHhTBcgA6FjO_i_1", "1188531992031899"));
