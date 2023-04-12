@@ -5,38 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0371bc3c-ee90-4fb4-b5d8-3eaf2103b059" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../api/database/classes/db_class.php" beforeDir="false" afterPath="$PROJECT_DIR$/../api/database/classes/db_class.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../api/database/controllers/db_controller.php" beforeDir="false" afterPath="$PROJECT_DIR$/../api/database/controllers/db_controller.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/api_test.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../api/database/processors/database.php" beforeDir="false" afterPath="$PROJECT_DIR$/../api/database/processors/database.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../api/facebook/classes/whatsapp_api.php" beforeDir="false" afterPath="$PROJECT_DIR$/../api/facebook/classes/whatsapp_api.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../api/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/../api/index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../api/utils/.env" beforeDir="false" afterPath="$PROJECT_DIR$/../api/utils/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../api/utils/chat_bot.php" beforeDir="false" afterPath="$PROJECT_DIR$/../api/utils/chat_bot.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../api/utils/core.php" beforeDir="false" afterPath="$PROJECT_DIR$/../api/utils/core.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../api/utils/test.php" beforeDir="false" afterPath="$PROJECT_DIR$/../api/utils/test.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.dart_tool/dartpad/web_plugin_registrant.dart" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/dartpad/web_plugin_registrant.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.dart_tool/package_config.json" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/package_config.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.dart_tool/package_config_subset" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/package_config_subset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.flutter-plugins" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins-dependencies" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/frontend.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/frontend.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.metadata" beforeDir="false" afterPath="$PROJECT_DIR$/.metadata" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/c075001b96339384a97db4862b8ab8db.cache.dill.track.dill" beforeDir="false" afterPath="$PROJECT_DIR$/build/c075001b96339384a97db4862b8ab8db.cache.dill.track.dill" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/flutter_assets/AssetManifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/build/flutter_assets/AssetManifest.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/flutter_assets/FontManifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/build/flutter_assets/FontManifest.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/flutter_assets/NOTICES" beforeDir="false" afterPath="$PROJECT_DIR$/build/flutter_assets/NOTICES" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pages/account_settings/account_settings.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pages/account_settings/account_settings.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pages/account_settings/settings_pages/withdrawal_settings.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pages/account_settings/settings_pages/withdrawal_settings.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pages/dashboard/dashboard.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pages/dashboard/dashboard.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pages/dashboard/widgets/todo_card.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pages/inventory/inventory.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pages/inventory/inventory.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/utils/api_handler.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/utils/api_handler.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/widgets/action_card.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/widgets/action_card.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/widget_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/widget_test.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -82,6 +57,7 @@
     <property name="dart.analysis.tool.window.force.activate" value="true" />
     <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/assets/images" />
+    <property name="settings.editor.selected.configurable" value="terminal" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
   <component name="RecentsManager">

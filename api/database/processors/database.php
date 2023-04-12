@@ -45,6 +45,7 @@ function database()
 							"msg" => "account created successfully",
 							"data" => array("user_id"=> $user_id, "store_id"=> $store_id)
 						));
+						die();
 					}else {
 						send_json(array(
 							"msg" => $msg

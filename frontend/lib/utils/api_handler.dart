@@ -14,7 +14,7 @@ class ApiHandler {
   //    Start of database endpoints
   static Future<User?> login(
       {
-        required BuildContext context,
+         BuildContext? context,
         required String email,
         required String password}) async {
 
@@ -29,19 +29,21 @@ class ApiHandler {
       return User.fromJson(cred["response"]["data"]);
 
     } else {
-      // ignore: use_build_context_synchronously
-      showDialog(
+      if(context != null) {
+        // ignore: use_build_context_synchronously
+        showDialog(
           context: context,
           builder: (context)=> ErrorDialog(
               text: cred["response"]["msg"]
           )
       );
+      }
     }
 
     return null;
   }
 
-  static Future<void> signup({
+  static Future<Map<String,dynamic>> signup({
     required String username,
     required String phone,
     required String email,
@@ -60,7 +62,7 @@ class ApiHandler {
     });
 
     Map<String, dynamic> response = json.decode(res.body);
-    print(response["response"]["msg"]);
+    return response;
   }
 
   static Future<http.Response> inviteManager(String storeId) async {

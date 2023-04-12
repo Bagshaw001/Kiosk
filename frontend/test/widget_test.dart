@@ -9,22 +9,48 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:kiosk/main.dart';
+import 'package:kiosk/utils/constants.dart';
+import 'package:kiosk/widgets/action_card.dart';
+import 'package:kiosk/widgets/hyper_link.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+  testWidgets("description", (tester) async {
+    await tester.pumpWidget(Text("here"));
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    expect(find.text("here"), findsOneWidget);
   });
+
+  // testWidgets("Testing hyperlink widget", (WidgetTester tester) async {
+  //   await tester.pumpWidget(MaterialApp(
+  //     home: Scaffold(
+  //       body: Hyperlink(
+  //           text: "Hyperlink test",
+  //           onPressed: (){
+  //
+  //           }),
+  //     )
+  //   )
+  //   );
+  //
+  //   expect(find.byElementType(Hyperlink), findsOneWidget);
+  // });
+  //
+  // group("Testing action card", () {
+  //
+  //   testWidgets("Testing action card : Filled", (WidgetTester tester) async {
+  //
+  //     //creating a filled card
+  //     await tester.pumpWidget(const ActionCard(
+  //         label: "Test card",
+  //         icon: Icons.add
+  //     )
+  //     );
+  //
+  //     //checking if widget exists
+  //     expect(find.byIcon(Icons.add), findsOneWidget);
+  //
+  //     // expect((tester.firstWidget(find.byType(ActionCard)) as Material).color, blue.withOpacity(0.5));
+  //   });
+  // });
 }

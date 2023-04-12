@@ -19,7 +19,7 @@ class ActionCard extends StatelessWidget {
     return InkWell(
       child: Container(
         margin: const EdgeInsets.all(8),
-        padding: EdgeInsets.all(2),
+        padding: const EdgeInsets.all(2),
         decoration: BoxDecoration(
             color: filled ? blue.withOpacity(0.5) : null,
             borderRadius: BorderRadius.circular(6),
@@ -30,9 +30,9 @@ class ActionCard extends StatelessWidget {
           mainAxisAlignment: alignRight? MainAxisAlignment.end : MainAxisAlignment.start,
           children: [
             Container(
+              margin: const EdgeInsets.symmetric(horizontal: 8),
               child: Icon(icon,
               color: filled ? null : blue,),
-              margin: EdgeInsets.symmetric(horizontal: 8),
             ),
             Text(label)
           ],
