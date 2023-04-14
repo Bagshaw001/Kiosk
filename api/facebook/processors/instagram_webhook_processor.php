@@ -5,7 +5,7 @@ require_once(__DIR__ . "/../../utils/env_manager.php");
 /**
  * This page is used to validate the webhook
  */
-
+$http = new http_handler();
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (isset($_GET["hub_challenge"])  && isset($_GET["hub_mode"])) {
@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         http_response_code(400);
     }
 } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $http = new http_handler();
+
     //Handles incomming messages
     // Takes raw data from the request
     $json = file_get_contents('php://input');
@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     // Converts it into a PHP object
     $data = json_decode($json);
 
-    // print_r($data->entry[0]);
+    // print_r($data);
 
     //add database function
 
@@ -52,7 +52,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 "timestamp" => $timestamp,
                 "msg" => $msg,
                 "mid" => $mid,
-                "type" => "quick_reply"
+                "type" => "quick_reply",
+                "action" => "instagram_msg",
+                "status" => "incoming",
             );
             $endpoint = "http://localhost/api/index.php/database";
 
@@ -78,7 +80,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 "msg" => $msg,
                 "mid" => $cur_mid,
                 "reply_mid" => $reply_mid,
-                "type" => "reply_to"
+                "type" => "reply_to",
+                "action" => "instagram_msg",
+                "status" => "incoming",
             );
 
             return $http->post("http://localhost/api/index.php/database", $post_body);
@@ -104,7 +108,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 "mid" => $mid,
                 "att_type" => $att_type,
                 "att_payload" => $att_payload,
-                "type" => "attachment_pnly"
+                "type" => "attachment_pnly",
+                "action" => "instagram_msg",
+                "status" => "incoming",
             );
 
             return $http->post("http://localhost/api/index.php/database", $post_body);
@@ -125,6 +131,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             $att_title = $data->entry[0]->messaging[0]->message->attachments[0]->payload->title;
 
             $post_body =  array(
+                "action" => "instagram_msg",
                 "sender" => $sender,
                 "recipient" => $recipient,
                 "timestamp" => $timestamp,
@@ -133,13 +140,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 "att_type" => $att_type,
                 "att_payload" => $att_payload,
                 "att_title" => $att_title,
-                "type" => "attachment_only",
-                "action" => "instagram_msg"
-            );
-            // print_r($http->post('http://localhost/api/index.php/database', $post_body));
-            $endpoint = "http://localhost/api/index.php/database";
+                "type" => "attachment_msg",
+                "status" => "incoming",
 
-            return  print_r($http->post($endpoint, $post_body));
+            );
+            // print_r($post_body);
+            $endpoint = "http://localhost/api/index.php/database";
+            $response = $http->post($endpoint, $post_body);
+
+            // print_r($post_body);
+            print_r($response);
+            return  $response;
 
         default:
             send_json(array("msg" => "Component Implementation unavailable"));

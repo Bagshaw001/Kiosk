@@ -4,8 +4,6 @@ require_once(__DIR__ . "/../../utils/db_connection.php");
 
 class db_class extends db_connection
 {
-
-
 	//=============================INSERT======================
 	function create_account($user_id, $user_name, $phone_number, $email, $password)
 	{
@@ -179,7 +177,7 @@ class db_class extends db_connection
 		return $this->db_query($sql);
 	}
 
-	function add_instagram_message($sender, $recipient, $timestamp, $msg, $type, $mid, $reply_mid=null,  $att_type=null , $att_payload=null, $att_title=null )
+	function add_instagram_message($sender, $recipient, $timestamp, $msg, $type, $mid, $reply_mid = null,  $att_type = null, $att_payload = null, $att_title = null)
 	{
 		$sender = $this->clean($sender);
 		$recipient = $this->clean($recipient);
@@ -195,28 +193,68 @@ class db_class extends db_connection
 		switch ($type) {
 			case "quick_reply":
 
-				$sql = "INSERT INTO `instagram_message`(`sender_id`, `recipient_id`, `timestamp`,`msg`, `cur_mid`) VALUES ('$sender'
-				,'$recipient','$timestamp','$msg','$mid')";
+				$sql = "INSERT INTO `instagram_message`(`sender_id`, `recipient_id`, `timestamp`,`msg`, `cur_mid`,`msg_status`) VALUES ('$sender'
+				,'$recipient','$timestamp','$msg','$mid','incoming')";
 				//check if upload works
 				return $this->db_query($sql);
 
 			case "reply_to":
-				$sql = "INSERT INTO `instagram_message`( `sender_id`, `recipient_id`, `timestamp`,`msg`, `cur_mid`,`reply_mid` ) VALUES ('$sender ',
-				'$recipient','$timestamp','$msg','$mid','$reply_mid')";
+				$sql = "INSERT INTO `instagram_message`( `sender_id`, `recipient_id`, `timestamp`,`msg`, `cur_mid`,`reply_mid`,`msg_status` ) VALUES ('$sender ',
+				'$recipient','$timestamp','$msg','$mid','$reply_mid','incoming')";
 				return $this->db_query($sql);
 
 			case "attachment_only":
 				$sql = "INSERT INTO `instagram_message`( `sender_id`, `recipient_id`, `timestamp`,`msg`,`cur_mid`, `reply_mid`, `att_type`
-				, `att_payload`) VALUES ('$sender ',
-				'$recipient','$timestamp','$msg','$mid','$reply_mid','$att_type','$att_payload')";
+				, `att_payload`,`msg_status`) VALUES ('$sender ',
+				'$recipient','$timestamp','$msg','$mid','$reply_mid','$att_type','$att_payload','incoming')";
 				return $this->db_query($sql);
 
 			case "attachment_msg":
-				$sql = "INSERT INTO `instagram_message`( `sender_id`, `recipient_id`, `timestamp`, `cur_mid`, `reply_mid`, `att_type`, `att_payload`, `att_title`) VALUES ('$sender ',
-				'$recipient','$timestamp','$msg','$mid','$reply_mid','$att_type','$att_payload','$att_title')";
+				$sql = "INSERT INTO `instagram_message`( `sender_id`, `recipient_id`, `timestamp`, `cur_mid`, `reply_mid`, `att_type`, `att_payload`, `att_title`,`msg_status`) VALUES ('$sender ',
+				'$recipient','$timestamp','$msg','$mid','$reply_mid','$att_type','$att_payload','$att_title','incoming')";
 				return $this->db_query($sql);
 		}
 		return false;
+	}
+
+	function instagram_message_response($recipient, $msg = null,  $timestamp, $type, $msg_id = null, $reply_mid = null)
+	{
+
+		$recipient = $this->clean($recipient);
+		$timestamp = $this->clean($timestamp);
+		$msg = $this->clean($msg);
+		$mid = $this->clean($msg_id);
+		$reply_mid = $this->clean($reply_mid);
+		$type = $this->clean($type);
+
+
+		switch ($type) {
+			case 'basic':
+				$sql = "INSERT INTO `instagram_message`( `recipient_id`, `msg`, `timestamp`, `cur_mid`, `msg_type`, `msg_status`) 
+				VALUES ('$recipient','$msg','$timestamp','$mid','$type','outgoing')";
+				return $this->db_query($sql);
+
+			case 'unreact':
+
+				$sql = "INSERT INTO `instagram_message`( `recipient_id`, `timestamp`,  `reply_mid`, `msg_type`, `msg_status`) 
+				VALUES ('$recipient','$timestamp','$reply_mid ','$type','outgoing')";
+
+				return $this->db_query($sql);
+
+			case 'react':
+				$sql = "INSERT INTO `instagram_message`( `recipient_id`, `msg`, `timestamp`, `reply_mid`, `msg_type`, `msg_status`) 
+				VALUES ('$recipient','$msg','$timestamp','$reply_mid ','$type','outgoing')";
+
+				return $this->db_query($sql);
+		}
+	}
+
+	function add_whatsapp_message($bus_id, $phone_id, $display_number, $contact_name, $msg_from, $timestamp, $msg_body, $msg_id)
+	{
+		$sql = "INSERT INTO `whatsapp_message`( `business_id`, `phone_id`, `display_num`, `contact_name`, `msg_from`, `timestamp`, `msg_body`, `msg_id`) VALUES ('$bus_id',
+		'$phone_id','$display_number','$contact_name','$msg_from','$timestamp','$msg_body','$msg_id'
+		))";
+		return $this->db_query($sql);
 	}
 
 	//=============================SELECT======================

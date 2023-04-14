@@ -63,15 +63,6 @@ function store_phone_verification_token($user_id, $token)
 
 function add_instagram_message($sender, $recipient, $timestamp, $msg, $type, $mid, $reply_mid = null,  $att_type = null, $att_payload = null, $att_title = null)
 {
-	// $sender = $this->clean($sender);
-	// $recipient = $this->clean($recipient);
-	// $timestamp = $this->clean($timestamp);
-	// $msg = $this->clean($msg);
-	// $mid = $this->clean($mid);
-	// $reply_mid = $this->clean($reply_mid);
-	// $att_type = $this->clean($att_type);
-	// $att_payload = $this->clean($att_payload);
-	// $att_title = $this->clean($att_title);
 	$db = new db_class();
 
 
@@ -93,6 +84,34 @@ function add_instagram_message($sender, $recipient, $timestamp, $msg, $type, $mi
 			return $db->add_instagram_message($sender, $recipient, $timestamp, $msg, $type, $mid, $att_type, $att_payload, $att_title);
 	}
 	return false;
+}
+
+function instagram_message_response($recipient, $msg,  $timestamp, $type, $msg_id = null, $reply_mid = null)
+{
+	$db = new db_class();
+
+
+	switch ($type) {
+		case 'basic':
+
+			return $db->instagram_message_response($recipient, $msg,  $timestamp, $type, $msg_id);
+
+		case 'unreact':
+
+			return $db->instagram_message_response($recipient, $timestamp, $type, $reply_mid );
+
+		case 'react':
+
+			return $db->instagram_message_response($recipient, $msg,  $timestamp, $type, $reply_mid);
+	}
+}
+
+
+
+function add_whatsapp_message($bus_id, $phone_id, $display_number, $contact_name, $msg_from, $timestamp, $msg_body, $msg_id)
+{
+	$db = new db_class();
+	$db->add_whatsapp_message($bus_id, $phone_id, $display_number, $contact_name, $msg_from, $timestamp, $msg_body, $msg_id);
 }
 
 function get_store_by_token($token)
@@ -281,7 +300,7 @@ function is_phone_token_valid($token)
 function confirm_email_verification($token)
 {
 	$db = new db_class();
-
+	$db->get_user_by_email_verification_token($token);
 	$user_id = $db->get_user_by_email_verification_token($token)["user_id"];
 
 	$db->update_email_verification($user_id);

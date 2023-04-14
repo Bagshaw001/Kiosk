@@ -40,6 +40,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $msg_body = $data->entry[0]->changes[0]->value->messages[0]->text->body;
     $msg_id =  $data->entry[0]->changes[0]->value->messages[0]->text->id;
 
+    $post_body = array(
+        "business_id" => $bus_id,
+        "phone_id" => $phone_id,
+        "display_number" => $$display_number,
+        "contact_name" => $contact_name,
+        "msg_from" => $msg_body,
+        "timestamp" => $timestamp,
+        "msg_body" => $msg_body,
+        "msg_id" => $msg_id,
+        "action" => "whatsapp"
+    );
+    $endpoint = "http://localhost/api/index.php/database";
+    return $http->post($endpoint, $post_body);
+
 
 
 

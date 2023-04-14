@@ -8,11 +8,13 @@ error_reporting(E_ALL);
 
 function database()
 {
+	print_r($_POST);
 	$request = $_SERVER["REQUEST_METHOD"];
 
 	if ($request == "POST") {
+
 		if (!isset($_POST["action"])) {
-			echo " <action> required";
+			echo "<action> required";
 			die();
 		}
 
@@ -444,80 +446,134 @@ function database()
 
 				die();
 			case "instagram_msg":
-				switch ($_POST["type"]) {
-					case "quick_reply":
-						$sender = $_POST["sender"];
-						$recipient = $_POST["recipient"];
-						$timestamp = $_POST["timestamp"];
-						$msg = $_POST["msg"];
-						$mid = $_POST["mid"];
-						$type = $_POST["type"];
+				if ($_POST["status"] == "incoming") {
+					switch ($_POST["type"]) {
+						case "quick_reply":
+							$sender = $_POST["sender"];
+							$recipient = $_POST["recipient"];
+							$timestamp = $_POST["timestamp"];
+							$msg = $_POST["msg"];
+							$mid = $_POST["mid"];
+							$type = $_POST["type"];
 
-						//check if upload works
-						$instagram_msg = add_instagram_message($sender, $recipient, $timestamp, $msg, $type, $mid, $reply_mid = null,  $att_type = null, $att_payload = null, $att_title = null);
-						if ($instagram_msg) {
-							send_json(array("msg" => "Message inserted successfully"), 200);
-						} else {
-							send_json(array("msg" => "Something went wrong"), 100);
-						}
-						die();
+							//check if upload works
+							$instagram_msg = add_instagram_message($sender, $recipient, $timestamp, $msg, $type, $mid, $reply_mid = null,  $att_type = null, $att_payload = null, $att_title = null);
+							if ($instagram_msg) {
+								send_json(array("msg" => "Message inserted successfully"), 200);
+							} else {
+								send_json(array("msg" => "Something went wrong"), 100);
+							}
+							die();
 
-					case "reply_to":
-						$sender = $_POST["sender"];
-						$recipient = $_POST["recipient"];
-						$timestamp = $_POST["timestamp"];
-						$msg = $_POST["msg"];
-						$mid = $_POST["mid"];
-						$reply_mid = $_POST["reply_mid"];
-						$type = $_POST["type"];
-						$instagram_msg = add_instagram_message($sender, $recipient, $timestamp, $msg, $type, $mid, $reply_mid);
-						if ($instagram_msg) {
-							send_json(array("msg" => "Message inserted successfully"), 200);
-						} else {
-							send_json(array("msg" => "Something went wrong"), 100);
-						}
-						die();
+						case "reply_to":
+							$sender = $_POST["sender"];
+							$recipient = $_POST["recipient"];
+							$timestamp = $_POST["timestamp"];
+							$msg = $_POST["msg"];
+							$mid = $_POST["mid"];
+							$reply_mid = $_POST["reply_mid"];
+							$type = $_POST["type"];
+							$instagram_msg = add_instagram_message($sender, $recipient, $timestamp, $msg, $type, $mid, $reply_mid);
+							if ($instagram_msg) {
+								send_json(array("msg" => "Message inserted successfully"), 200);
+							} else {
+								send_json(array("msg" => "Something went wrong"), 100);
+							}
+							die();
 
-					case "attachment_only":
-						$sender = $_POST["sender"];
-						$recipient = $_POST["recipient"];
-						$timestamp = $_POST["timestamp"];
-						$msg = $_POST["msg"];
-						$mid = $_POST["mid"];
-						$att_type = $_POST["att_type"];
-						$att_payload = $_POST["att_payload"];
-						$type = $_POST["type"];
+						case "attachment_only":
+							$sender = $_POST["sender"];
+							$recipient = $_POST["recipient"];
+							$timestamp = $_POST["timestamp"];
+							$msg = $_POST["msg"];
+							$mid = $_POST["mid"];
+							$att_type = $_POST["att_type"];
+							$att_payload = $_POST["att_payload"];
+							$type = $_POST["type"];
 
-						$instagram_msg = add_instagram_message($sender, $recipient, $timestamp, $msg, $type, $mid, $att_type, $att_payload);
-						if ($instagram_msg) {
-							send_json(array("msg" => "Message inserted successfully"), 200);
-						} else {
-							send_json(array("msg" => "Something went wrong"), 100);
-						}
-						die();
+							$instagram_msg = add_instagram_message($sender, $recipient, $timestamp, $msg, $type, $mid, $att_type, $att_payload);
+							if ($instagram_msg) {
+								send_json(array("msg" => "Message inserted successfully"), 200);
+							} else {
+								send_json(array("msg" => "Something went wrong"), 100);
+							}
+							die();
 
-					case "attachment_msg":
-						$sender = $_POST["sender"];
-						$recipient = $_POST["recipient"];
-						$timestamp = $_POST["timestamp"];
-						$msg = $_POST["msg"];
-						$mid = $_POST["mid"];
-						$att_type = $_POST["att_type"];
-						$att_payload = $_POST["att_payload"];
-						$att_title = $_POST["att_title"];
-						$type = $_POST["type"];
-						$instagram_msg = add_instagram_message($sender, $recipient, $timestamp, $msg, $type, $mid,  $att_type, $att_payload, $att_title);
-						if ($instagram_msg) {
-							send_json(array("msg" => "Message inserted successfully"), 200);
-						} else {
-							send_json(array("msg" => "Something went wrong"), 100);
-						}
-						die();
+						case "attachment_msg":
+							$sender = $_POST["sender"];
+							$recipient = $_POST["recipient"];
+							$timestamp = $_POST["timestamp"];
+							$msg = $_POST["msg"];
+							$mid = $_POST["mid"];
+							$att_type = $_POST["att_type"];
+							$att_payload = $_POST["att_payload"];
+							$att_title = $_POST["att_title"];
+							$type = $_POST["type"];
+							$instagram_msg = add_instagram_message($sender, $recipient, $timestamp, $msg, $type, $mid,  $att_type, $att_payload, $att_title);
+							if ($instagram_msg) {
+								send_json(array("msg" => "Message inserted successfully"), 200);
+							} else {
+								send_json(array("msg" => "Something went wrong"), 100);
+							}
+							die();
+
+						default:
+							send_json(array("msg" => "No implementation for <" . $_POST["type"] . ">"));
+					}
+				} elseif ($_POST["status"] == "outgoing") {
+					# code...
+					switch ($_POST["type"]) {
+						case 'basic':
+							$recipient = $_POST["recipient"];
+							$timestamp = time();
+							$msg = $_POST["message"];
+							$mid = $_POST["mid"];
+							instagram_message_response($recipient, $msg, $mid, $timestamp, $_POST["type"]);
+							//Dont forget to pass the message type
+							die();
+
+						case 'unreact':
+							$recipient = $_POST["recipient"];
+							$timestamp = time();
+							$reply_mid = $_POST["payload"][0]->message_id;
+							instagram_message_response($recipient, $timestamp, $_POST["type"], $reply_mid);
+
+
+							die();
+
+						case 'react':
+							$recipient = $_POST["recipient"];
+							$timestamp = time();
+							$msg = $_POST["payload"][0]->reaction;
+							$reply_mid = $_POST["payload"][0]->message_id;
+							instagram_message_response($recipient, $msg,  $timestamp, $_POST["type"], $reply_mid);
+							die();
+
+						default:
+							# code...
+							send_json(array("msg" => "No implementation for <" . $_POST["type"] . ">"));
+					}
 				}
+
 
 				die();
 
 			case "whatsapp_msg":
+				$bus_id = $_POST["business_id"];
+				$phone_id = $_POST["phone_id"];
+				$display_number = $_POST["display_number"];
+				$contact_name = $_POST["contact_name"];
+				$msg_from = $_POST["msg_from"];
+				$timestamp = $_POST["timestamp"];
+				$msg_body = $_POST["msg_body"];
+				$msg_id = $_POST["msg_id"];
+
+				$whatsapp_msg = add_whatsapp_message($bus_id, $phone_id, $display_number, $contact_name, $msg_from, $timestamp, $msg_body, $msg_id);
+				if ($whatsapp_msg) {
+					send_json(array("msg" => "Message inserted successfully"), 200);
+				} else {
+					send_json(array("msg" => "Something went wrong"), 100);
+				}
 				die();
 			default:
 				// echo "No implementation for <". $_POST["action"] .">";

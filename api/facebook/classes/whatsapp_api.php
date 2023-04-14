@@ -33,7 +33,7 @@ class whats_app_api
      */
     function generateLoginUrl($store_id)
     {
-        return $this->facebook->fb_generateLoginUrl($store_id, "business_management,whatsapp_business_management,whatsapp_business_messaging");
+        return $this->facebook->fb_generateLoginUrl($store_id, "business_management,whatsapp_business_management,whatsapp_business_messaging,catalog_management");
     }
 
 

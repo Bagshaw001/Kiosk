@@ -205,7 +205,21 @@ class instagram_api
                 "access_token" => $page_access_token
             );
 
-            return $this->http->post($endpoint, $post_body);
+            $response = $this->http->post($endpoint, $post_body);
+
+            if (isset($response->message_id)) {
+                $post_body = array(
+                    "recipient" => $ig_scope_Id,
+                    "message" => $msg,
+                    "status" => "outgoing",
+                    "type" => "basic",
+                    "action" => "instagram_msg",
+                    "mid"=> $response->message_id
+                );
+                $endpoint = "http://localhost/kiosk/api/index.php/database";
+                return $this->http->post($endpoint, $post_body);
+            }
+            return false;
         } catch (Exception $e) {
             return false;
         }
@@ -214,7 +228,7 @@ class instagram_api
     /**
      * This function sends a reaction message to the client 
      */
-    function reaction_msg($page_access_token, $ig_scope_Id, $msg, $msg_id)
+    function reaction_msg($page_access_token, $ig_scope_Id, $msg, $reply_id)
     {
         try {
             $endpoint = facebook_graph_domain() . facebook_version() . "/" . $ig_scope_Id . "/messages";
@@ -223,13 +237,29 @@ class instagram_api
                 "recipient" => $ig_scope_Id,
                 "sender_action" => "react",
                 "payload" => array(
-                    "message_id" => $msg_id,
+                    "message_id" => $reply_id,
                     "reaction" => $msg
                 ),
                 "access_token" => $page_access_token
             );
 
-            return $this->http->post($endpoint, $post_body);
+            $response = $this->http->post($endpoint, $post_body);
+
+            if (isset($response->recipient_id)) {
+                $post_body = array(
+                    "recipient" => $ig_scope_Id,
+                    "type" => "react",
+                    "payload" => array(
+                        "message_id" => $reply_id,
+                        "reaction" => $msg
+                    ),
+                    "status" => "outgoing",
+                    "action" => "instagram_msg"
+                );
+                $endpoint = "http://localhost/kiosk/api/index.php/database";
+                return $this->http->post($endpoint, $post_body);
+            }
+            return false;
         } catch (Exception $e) {
             return false;
         }
@@ -239,7 +269,7 @@ class instagram_api
      * This function unreact to a message
      */
 
-    function unreact_msg($page_access_token, $ig_scope_Id,  $msg_id)
+    function unreact_msg($page_access_token, $ig_scope_Id,  $reply_id)
     {
         try {
             $endpoint = facebook_graph_domain() . facebook_version() . "/" . $ig_scope_Id . "/messages";
@@ -248,12 +278,26 @@ class instagram_api
                 "recipient" => $ig_scope_Id,
                 "sender_action" => "unreact",
                 "payload" => array(
-                    "message_id" => $msg_id,
+                    "message_id" => $reply_id,
                 ),
                 "access_token" => $page_access_token
             );
+            $response = $this->http->post($endpoint, $post_body);
 
-            return $this->http->post($endpoint, $post_body);
+            if (isset($response->recipient_id)) {
+                $post_body = array(
+                    "recipient" => $ig_scope_Id,
+                    "type" => "unreact",
+                    "payload" => array(
+                        "message_id" => $reply_id,
+                    ),
+                    "status" => "outgoing",
+                    "action" => "instagram_msg"
+                );
+                $endpoint = "http://localhost/kiosk/api/index.php/database";
+                return $this->http->post($endpoint, $post_body);
+            }
+            return false;
         } catch (Exception $e) {
             return false;
         }
