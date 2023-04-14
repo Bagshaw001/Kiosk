@@ -528,16 +528,25 @@ function database()
 							$timestamp = time();
 							$msg = $_POST["message"];
 							$mid = $_POST["mid"];
-							instagram_message_response($recipient, $msg, $mid, $timestamp, $_POST["type"]);
+							$instagram_msg = instagram_message_response($recipient, $msg, $mid, $timestamp, $_POST["type"]);
 							//Dont forget to pass the message type
+							if ($instagram_msg) {
+								send_json(array("msg" => "Message inserted successfully"), 200);
+							} else {
+								send_json(array("msg" => "Something went wrong"), 100);
+							}
 							die();
 
 						case 'unreact':
 							$recipient = $_POST["recipient"];
 							$timestamp = time();
 							$reply_mid = $_POST["payload"][0]->message_id;
-							instagram_message_response($recipient, $timestamp, $_POST["type"], $reply_mid);
-
+							$instagram_msg = instagram_message_response($recipient, $timestamp, $_POST["type"], $reply_mid);
+							if ($instagram_msg) {
+								send_json(array("msg" => "Message inserted successfully"), 200);
+							} else {
+								send_json(array("msg" => "Something went wrong"), 100);
+							}
 
 							die();
 
@@ -546,34 +555,111 @@ function database()
 							$timestamp = time();
 							$msg = $_POST["payload"][0]->reaction;
 							$reply_mid = $_POST["payload"][0]->message_id;
-							instagram_message_response($recipient, $msg,  $timestamp, $_POST["type"], $reply_mid);
+							$instagram_msg = instagram_message_response($recipient, $msg,  $timestamp, $_POST["type"], $reply_mid);
+							if ($instagram_msg) {
+								send_json(array("msg" => "Message inserted successfully"), 200);
+							} else {
+								send_json(array("msg" => "Something went wrong"), 100);
+							}
 							die();
 
 						default:
 							# code...
 							send_json(array("msg" => "No implementation for <" . $_POST["type"] . ">"));
 					}
+				} else {
+					# code...
+					send_json(array("msg" => "No implementation for this "));
 				}
 
 
 				die();
 
 			case "whatsapp_msg":
-				$bus_id = $_POST["business_id"];
-				$phone_id = $_POST["phone_id"];
-				$display_number = $_POST["display_number"];
-				$contact_name = $_POST["contact_name"];
-				$msg_from = $_POST["msg_from"];
-				$timestamp = $_POST["timestamp"];
-				$msg_body = $_POST["msg_body"];
-				$msg_id = $_POST["msg_id"];
+				if ($_POST["status"] == "incoming") {
+					$bus_id = $_POST["business_id"];
+					$phone_id = $_POST["phone_id"];
+					$display_number = $_POST["display_number"];
+					$contact_name = $_POST["contact_name"];
+					$msg_from = $_POST["msg_from"];
+					$timestamp = $_POST["timestamp"];
+					$msg_body = $_POST["msg_body"];
+					$msg_id = $_POST["msg_id"];
 
-				$whatsapp_msg = add_whatsapp_message($bus_id, $phone_id, $display_number, $contact_name, $msg_from, $timestamp, $msg_body, $msg_id);
-				if ($whatsapp_msg) {
-					send_json(array("msg" => "Message inserted successfully"), 200);
-				} else {
-					send_json(array("msg" => "Something went wrong"), 100);
+					$whatsapp_msg = add_whatsapp_message($bus_id, $phone_id, $display_number, $contact_name, $msg_from, $timestamp, $msg_body, $msg_id);
+					if ($whatsapp_msg) {
+						send_json(array("msg" => "Message inserted successfully"), 200);
+					} else {
+						send_json(array("msg" => "Something went wrong"), 100);
+					}
+				} elseif ($_POST["status"] == "outgoing") {
+
+					# code...
+					switch ($_POST["type"]) {
+						case "send_msg":
+							# code...
+
+							$to = $_POST["to"];
+							$msg_body = $_POST["msg"];
+							$phone_id = $_POST["phone_id"];
+							$msg_id = $_POST["msg_id"];
+							$status = $_POST["status"];
+							$type = $_POST["type"];
+							$timestamp = date("Y-m-d h:i:s ", time());
+
+							$whatsapp_msg = whatsapp_message_response($to, $msg_body, $phone_id, $msg_id, $type, $status);
+
+							if ($whatsapp_msg) {
+								send_json(array("msg" => "Message inserted successfully"), 200);
+							} else {
+								send_json(array("msg" => "Something went wrong"), 100);
+							}
+							die();
+
+						case "reply_msg":
+
+							$to = $_POST["to"];
+							$msg_body = $_POST["msg"];
+							$phone_id = $_POST["phone_id"];
+							$url = $_POST["url"];
+							$msg_id = $_POST["msg_id"];
+							$prev_msg_id = $_POST["prev_msg_id"];
+							$status = $_POST["status"];
+							$type = $_POST["type"];
+							$timestamp = date("Y-m-d h:i:s ", time());
+
+							$whatsapp_msg = whatsapp_message_response($to, $msg_body, $phone_id, $msg_id, $type, $status, $url, $prev_msg_id);
+							if ($whatsapp_msg) {
+								send_json(array("msg" => "Message inserted successfully"), 200);
+							} else {
+								send_json(array("msg" => "Something went wrong"), 100);
+							}
+							die();
+						case "preview_url":
+
+							$to = $_POST["to"];
+							$msg_body = $_POST["msg"];
+							$phone_id = $_POST["phone_id"];
+							$msg_id = $_POST["msg_id"];
+							$status = $_POST["status"];
+							$type = $_POST["type"];
+
+							$timestamp = date("Y-m-d h:i:s ", time());
+							$whatsapp_msg = whatsapp_message_response($to, $msg_body, $phone_id, $msg_id, $type, $status);
+
+							if ($whatsapp_msg) {
+								send_json(array("msg" => "Message inserted successfully"), 200);
+							} else {
+								send_json(array("msg" => "Something went wrong"), 100);
+							}
+							die();
+
+						default:
+							send_json(array("msg" => "No implementation for <" . $_POST["type"] . ">"));
+							die();
+					}
 				}
+
 				die();
 			default:
 				// echo "No implementation for <". $_POST["action"] .">";

@@ -153,9 +153,19 @@ class whats_app_api
 
             $response = $this->http->post($endpoint, $postBody, $header);
 
-            if (!isset($response->error)) {
+            if (isset($response->messages[0]->id)) {
                 //store the response of what you sent
-                return true;
+                $postBody = array(
+                    "to" => $to,
+                    "msg" => $msg_body,
+                    "phone_id" => $phone_id,
+                    "msg_id" => $response->messages[0]->id,
+                    "status" => "outgoing",
+                    "type" => "send_msg",
+                    "action" => "whatsapp_msg"
+                );
+                $endpoint = "http://localhost/api/index.php/database";
+                return $this->http->post($endpoint, $postBody);
             }
         } catch (Exception $e) {
             return false;
@@ -185,17 +195,32 @@ class whats_app_api
 
             $response = $this->http->post($endpoint, $postBody, $header);
 
-            if (!isset($response->error)) {
+            if (isset($response->messages[0]->id)) {
                 //store the response of what you sent
-                return true;
+                $postBody = array(
+                    "to" => $to,
+                    "msg" => $msg_body,
+                    "url" => $url,
+                    "phone_id" => $phone_id,
+                    "msg_id" => $response->messages[0]->id,
+                    "prev_msg_id" => $prev_msg_id,
+                    "status" => "outgoing",
+                    "type" => "reply_msg",
+                    "action" => "whatsapp_msg"
+                );
+
+
+                $endpoint = "http://localhost/api/index.php/database";
+                return $this->http->post($endpoint, $postBody);
             }
+            return false;
         } catch (Exception $e) {
             return false;
         }
     }
 
     //send message with preview link
-    function send_preview_url($phone_id, $access_token, $msg_body, $to, $prev_msg_id, $url = null)
+    function send_preview_url($phone_id, $access_token, $msg_body, $to)
     {
         $header = array(
             "access_token" => $access_token,
@@ -213,10 +238,22 @@ class whats_app_api
 
             $response = $this->http->post($endpoint, $postBody, $header);
 
-            if (!isset($response->error)) {
+            if (isset($response->messages[0]->id)) {
                 //store the response of what you sent
-                return true;
+                //store the response of what you sent
+                $postBody = array(
+                    "to" => $to,
+                    "msg" => $msg_body,
+                    "phone_id" => $phone_id,
+                    "msg_id" => $response->messages[0]->id,
+                    "status" => "outgoing",
+                    "type" => "preview_url",
+                    "action" => "whatsapp_msg"
+                );
+                $endpoint = "http://localhost/api/index.php/database";
+                return $this->http->post($endpoint, $postBody);
             }
+            return false;
         } catch (Exception $e) {
             return false;
         }

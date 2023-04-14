@@ -49,7 +49,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         "timestamp" => $timestamp,
         "msg_body" => $msg_body,
         "msg_id" => $msg_id,
-        "action" => "whatsapp"
+        "status" => "incoming",
+        "action" => "whatsapp_msg"
     );
     $endpoint = "http://localhost/api/index.php/database";
     return $http->post($endpoint, $post_body);

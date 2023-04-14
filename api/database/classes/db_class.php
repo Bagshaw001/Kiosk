@@ -247,14 +247,55 @@ class db_class extends db_connection
 
 				return $this->db_query($sql);
 		}
+		return false;
 	}
 
 	function add_whatsapp_message($bus_id, $phone_id, $display_number, $contact_name, $msg_from, $timestamp, $msg_body, $msg_id)
 	{
-		$sql = "INSERT INTO `whatsapp_message`( `business_id`, `phone_id`, `display_num`, `contact_name`, `msg_from`, `timestamp`, `msg_body`, `msg_id`) VALUES ('$bus_id',
-		'$phone_id','$display_number','$contact_name','$msg_from','$timestamp','$msg_body','$msg_id'
+		$bus_id = $this->clean($bus_id);
+		$phone_id = $this->clean($bus_id);
+		$display_number = $this->clean($display_number);
+		$contact_name = $this->clean($contact_name);
+		$msg_from = $this->clean($msg_from);
+		$timestamp = $this->clean($timestamp);
+		$msg_body = $this->clean($msg_body);
+		$msg_id = $this->clean($msg_id);
+
+		$sql = "INSERT INTO `whatsapp_message`( `business_id`, `phone_id`, `display_num`, `contact_name`, `msg_from`, `timestamp`, `msg_body`, `msg_id`,`msg_status`) VALUES ('$bus_id',
+		'$phone_id','$display_number','$contact_name','$msg_from','$timestamp','$msg_body','$msg_id','incoming'
 		))";
 		return $this->db_query($sql);
+	}
+
+	function whatsapp_message_response($to, $msg_body, $phone_id, $msg_id, $type, $status, $url = null, $prev_msg_id = null)
+	{
+		$timestamp = date("Y-m-d h:i:s ", time());
+		# code...
+		switch ($type) {
+			case "send_msg":
+				# code...
+
+				$sql = "INSERT INTO `whatsapp_message`(`phone_id`,  `msg_to`, `timestamp`, `msg_body`, `msg_id`,
+				  `msg_type`, `msg_status`)
+				 VALUES ('$phone_id ','$to','$timestamp','$msg_body','$msg_id','$type','$status')";
+				return $this->db_query($sql);
+
+
+
+			case "reply_msg":
+				$sql = "INSERT INTO `whatsapp_message`(`phone_id`, `msg_to`, `timestamp`, `msg_body`, `msg_id`, `prev_msg_id`, `preview_url`, `msg_type`, `msg_status`)
+				 VALUES ('$phone_id ','$to','$timestamp','$msg_body','$msg_id','$prev_msg_id','$url','$type','$status')";
+
+				return $this->db_query($sql);
+
+			case "preview_url":
+
+				$sql = "INSERT INTO `whatsapp_message`(`phone_id`, `msg_to`, `timestamp`, `msg_body`, `msg_id`,
+				  `msg_type`, `msg_status`)
+				 VALUES ('$phone_id ','$to','$timestamp','$msg_body','$msg_id','$type','$status')";
+				return $this->db_query($sql);
+		}
+		return false;
 	}
 
 	//=============================SELECT======================
@@ -442,6 +483,34 @@ class db_class extends db_connection
 		$product_id = $this->clean($product_id);
 		$sql = "SELECT quantity FROM `products` WHERE `product_id` = '$product_id'";
 		return $this->db_fetch_one($sql);
+	}
+
+	function get_user_details()
+	{
+	}
+
+	function get_whatsapp_msg_list()
+	{
+		$sql = "SELECT DISTINCT `msg_from`, `contact_name` FROM whatsapp_message ORDER BY `timestamp`";
+		return $this->db_fetch_all($sql);
+	}
+
+	function get_whatsapp_msg_info($msg_from)
+	{
+		$sql = "SELECT * FROM `whatsapp_message` WHERE `msg_from`='$msg_from' OR `msg_to` = '$msg_from' ORDER BY `timestamp` ASC;";
+		return $this->db_fetch_all($sql);
+	}
+
+	function get_instagram_msg_list()
+	{
+		$sql = "SELECT DISTINCT `sender_id` FROM `instagram_message` WHERE `msg_status`= 'incoming' ORDER BY `timestamp` DESC";
+		return $this->db_fetch_all($sql);
+	}
+
+	function get_instagram_msg_info($sender_id)
+	{
+		$sql = "SELECT * FROM `instagram_message` WHERE `sender_id` = '$sender_id' OR `recipient_id` = '$sender_id'";
+		return $this->db_fetch_all($sql);
 	}
 
 	//================================UPDATE ===============================================

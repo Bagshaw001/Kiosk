@@ -98,12 +98,25 @@ function instagram_message_response($recipient, $msg,  $timestamp, $type, $msg_i
 
 		case 'unreact':
 
-			return $db->instagram_message_response($recipient, $timestamp, $type, $reply_mid );
+			return $db->instagram_message_response($recipient, $timestamp, $type, $reply_mid);
 
 		case 'react':
 
 			return $db->instagram_message_response($recipient, $msg,  $timestamp, $type, $reply_mid);
 	}
+}
+
+function get_instagram_msg_list()
+{
+	$db = new db_class();
+	$db->get_instagram_msg_list();
+}
+
+
+function get_instagram_msg_info($sender_id)
+{
+	$db = new db_class();
+	$db->get_instagram_msg_info($sender_id);
 }
 
 
@@ -113,6 +126,38 @@ function add_whatsapp_message($bus_id, $phone_id, $display_number, $contact_name
 	$db = new db_class();
 	$db->add_whatsapp_message($bus_id, $phone_id, $display_number, $contact_name, $msg_from, $timestamp, $msg_body, $msg_id);
 }
+
+function whatsapp_message_response($to, $msg_body, $phone_id, $msg_id, $type, $status, $url = null, $prev_msg_id = null)
+{
+	$db = new db_class();
+
+	switch ($type) {
+		case "send_msg":
+			# code...
+
+			return $db->whatsapp_message_response($to, $msg_body, $phone_id, $msg_id, $type, $status);
+
+		case "reply_msg":
+			return $db->whatsapp_message_response($to, $msg_body, $phone_id, $msg_id, $type, $status, $url, $prev_msg_id);
+
+		case "preview_url":
+
+			return $db->whatsapp_message_response($to, $msg_body, $phone_id, $msg_id, $type, $status);
+	}
+}
+
+function get_whatsapp_msg_list()
+{
+	$db = new db_class();
+	$db->get_whatsapp_msg_list();
+}
+
+function get_whatsapp_msg_info($msg_from)
+{
+	$db = new db_class();
+	$db->get_whatsapp_msg_info($msg_from);
+}
+
 
 function get_store_by_token($token)
 {
