@@ -4,13 +4,9 @@ require_once(__DIR__."/../../utils/core.php");
 require_once(__DIR__."/../classes/whatsapp_api.php");
 require_once(__DIR__."/../../database/controllers/db_controller.php");
 require_once(__DIR__."/../../utils/chat_bot.php");
-	ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-header("Access-Control-Allow-Origin: * ");
-header("Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS");
-function facebook()
-{
+
+
+function facebook(){
 	$request = $_SERVER["REQUEST_METHOD"];
 
 		if ($request == "POST"){
@@ -21,6 +17,40 @@ function facebook()
 
 			switch($_POST["action"]){
 				case "create_account":
+					die();
+				case "incoming_whatsapp":
+					$object = json_decode($_REQUEST["message"], true);
+					$number = $object["value"]["contacts"][0]["wa_id"];
+					$message = $object["value"]["messages"][0]["text"]["body"];
+
+					$file = 'log.txt';
+					file_put_contents($file, "number $number message $message\n", FILE_APPEND | LOCK_EX);
+	// $data =json_encode($object)."\n";
+	// file_put_contents($file, "$data", FILE_APPEND | LOCK_EX);
+					$whatsapp = new whats_app_api();
+					$res = $whatsapp->send_message_custom("Welcome to kiosk. Chat bot is waiting for open ai key",$number,"EAAQ49qswcpsBAFRU4m5PMP7TvVCKcQE5vATSfUxTGg0PZBhBDcpiFWF3v2EOL40860BvZAj1eHyL3BuWpVMN33y56iSMKVZCTYNcewaZCnhZAZAucNc9NSe35DHdZBkFE3TprJzTCwNqpsIzEKgltY6DIdAuRjRqZCzC0qIVbaED2E7ybdoWcUAgWswZAprrSWV2NdXZAoMMMZBW4KrLlrv120WBe2ORLjKGfAZD");
+					$a = json_encode($res);
+					file_put_contents($file, "$a\n", FILE_APPEND | LOCK_EX);
+
+					//send message back to sender
+
+					// $message = $_REQUEST["message"];
+					// $number= $_REQUEST["number"];
+
+					//chatbot process message
+
+
+					// $whatsapp->send_message_custom("Recied from webhook",'233559582518',"EAAQ49qswcpsBAFRU4m5PMP7TvVCKcQE5vATSfUxTGg0PZBhBDcpiFWF3v2EOL40860BvZAj1eHyL3BuWpVMN33y56iSMKVZCTYNcewaZCnhZAZAucNc9NSe35DHdZBkFE3TprJzTCwNqpsIzEKgltY6DIdAuRjRqZCzC0qIVbaED2E7ybdoWcUAgWswZAprrSWV2NdXZAoMMMZBW4KrLlrv120WBe2ORLjKGfAZD");
+					// $whatsapp->send_message_template('0559582518','EAAQ49qswcpsBAIdmQg64JWxBFzORgh84OSHrEEQ4eXOII19PWGNWUTyRoULbZCY7sgmnbsvhruLqvCNVX69XU37qS0DMqPIug4G7RnZAG6vpNpBoos6uEAdZB2WHlIbeNkgMKbZCCl4hqYIBKhuJH6wCAQnGRkUdmgfZC5gPTdLPcnFC4lDwyH6rJWAVFaHnPAzrZA2nrZCEZCSAsjiQBNdrtZAcxCAI2ghoZD');
+					// $object = $data["entry"][0]["changes"][0];
+					// $message = $object["value"]["messages"][0]["text"]["body"];
+					// $whatsapp = new whats_app_api();
+					// $whatsapp->send_message_custom("Recied from webhook",'233559582518',"EAAQ49qswcpsBAFRU4m5PMP7TvVCKcQE5vATSfUxTGg0PZBhBDcpiFWF3v2EOL40860BvZAj1eHyL3BuWpVMN33y56iSMKVZCTYNcewaZCnhZAZAucNc9NSe35DHdZBkFE3TprJzTCwNqpsIzEKgltY6DIdAuRjRqZCzC0qIVbaED2E7ybdoWcUAgWswZAprrSWV2NdXZAoMMMZBW4KrLlrv120WBe2ORLjKGfAZD");
+					$file = 'log.txt';
+					$data =json_encode($data)."\n";
+					file_put_contents($file, $data, FILE_APPEND | LOCK_EX);
+					die();
+				case "send_message":
 					die();
 				default:
 					// echo "No implementation for <". $_POST["action"] .">";

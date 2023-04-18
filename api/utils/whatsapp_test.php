@@ -1,7 +1,7 @@
 <?php
 require_once(__DIR__."/../facebook/classes/whatsapp_api.php");
 
-$token = "EAAQ49qswcpsBAFsIw55Wh84U3Mb8XcvU8h45qCXvEYJ2MlZC3JnDg3hg9ZBzZBEgAlRDZAXhZBjVTDzCTQgWkJ4EUrDFsimaYuKZBg6lF9SKyYlhVXDWb9rln8K6C9R0K4pID9QvKr1q4oy7mRkZCsGZAckWNwxQc1BhfHt2SSmB3rbfgxU3ZAdp5ifpHXMQ1ZBK5UGs2uHG8ccfbqZBfZBkPwJl9xRVo7oCZCRwZD";
+$token = "EAAQ49qswcpsBAFRU4m5PMP7TvVCKcQE5vATSfUxTGg0PZBhBDcpiFWF3v2EOL40860BvZAj1eHyL3BuWpVMN33y56iSMKVZCTYNcewaZCnhZAZAucNc9NSe35DHdZBkFE3TprJzTCwNqpsIzEKgltY6DIdAuRjRqZCzC0qIVbaED2E7ybdoWcUAgWswZAprrSWV2NdXZAoMMMZBW4KrLlrv120WBe2ORLjKGfAZD";
 $number = "233559582518";
 $meta = new whats_app_api();
 $result = $meta->get_linked_numbers($meta->get_account_id(),$token);
