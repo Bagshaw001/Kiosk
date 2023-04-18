@@ -22,15 +22,17 @@ function facebook(){
 					$object = json_decode($_REQUEST["message"], true);
 					$number = $object["value"]["contacts"][0]["wa_id"];
 					$message = $object["value"]["messages"][0]["text"]["body"];
+					$message_id = $object["value"]["messages"][0]["id"];
 
 					$file = 'log.txt';
-					file_put_contents($file, "number $number message $message\n", FILE_APPEND | LOCK_EX);
+					// file_put_contents($file, "number $number message $message_id\n", FILE_APPEND | LOCK_EX);
 	// $data =json_encode($object)."\n";
 	// file_put_contents($file, "$data", FILE_APPEND | LOCK_EX);
 					$whatsapp = new whats_app_api();
-					$res = $whatsapp->send_message_custom("Welcome to kiosk. Chat bot is waiting for open ai key",$number,"EAAQ49qswcpsBAFRU4m5PMP7TvVCKcQE5vATSfUxTGg0PZBhBDcpiFWF3v2EOL40860BvZAj1eHyL3BuWpVMN33y56iSMKVZCTYNcewaZCnhZAZAucNc9NSe35DHdZBkFE3TprJzTCwNqpsIzEKgltY6DIdAuRjRqZCzC0qIVbaED2E7ybdoWcUAgWswZAprrSWV2NdXZAoMMMZBW4KrLlrv120WBe2ORLjKGfAZD");
-					$a = json_encode($res);
-					file_put_contents($file, "$a\n", FILE_APPEND | LOCK_EX);
+					$res = $whatsapp->send_message_reply("Welcome to kiosk. Chat bot is waiting for open ai key",$number,"EAAQ49qswcpsBAFRU4m5PMP7TvVCKcQE5vATSfUxTGg0PZBhBDcpiFWF3v2EOL40860BvZAj1eHyL3BuWpVMN33y56iSMKVZCTYNcewaZCnhZAZAucNc9NSe35DHdZBkFE3TprJzTCwNqpsIzEKgltY6DIdAuRjRqZCzC0qIVbaED2E7ybdoWcUAgWswZAprrSWV2NdXZAoMMMZBW4KrLlrv120WBe2ORLjKGfAZD",$message_id);
+					// $a = json_encode($res);
+					// $whatsapp->send_message_custom($a,$number,'EAAQ49qswcpsBAFRU4m5PMP7TvVCKcQE5vATSfUxTGg0PZBhBDcpiFWF3v2EOL40860BvZAj1eHyL3BuWpVMN33y56iSMKVZCTYNcewaZCnhZAZAucNc9NSe35DHdZBkFE3TprJzTCwNqpsIzEKgltY6DIdAuRjRqZCzC0qIVbaED2E7ybdoWcUAgWswZAprrSWV2NdXZAoMMMZBW4KrLlrv120WBe2ORLjKGfAZD');
+					// file_put_contents($file, "$a\n", FILE_APPEND | LOCK_EX);
 
 					//send message back to sender
 
@@ -46,9 +48,9 @@ function facebook(){
 					// $message = $object["value"]["messages"][0]["text"]["body"];
 					// $whatsapp = new whats_app_api();
 					// $whatsapp->send_message_custom("Recied from webhook",'233559582518',"EAAQ49qswcpsBAFRU4m5PMP7TvVCKcQE5vATSfUxTGg0PZBhBDcpiFWF3v2EOL40860BvZAj1eHyL3BuWpVMN33y56iSMKVZCTYNcewaZCnhZAZAucNc9NSe35DHdZBkFE3TprJzTCwNqpsIzEKgltY6DIdAuRjRqZCzC0qIVbaED2E7ybdoWcUAgWswZAprrSWV2NdXZAoMMMZBW4KrLlrv120WBe2ORLjKGfAZD");
-					$file = 'log.txt';
-					$data =json_encode($data)."\n";
-					file_put_contents($file, $data, FILE_APPEND | LOCK_EX);
+					// $file = 'log.txt';
+					// $data =json_encode($data)."\n";
+					// file_put_contents($file, $data, FILE_APPEND | LOCK_EX);
 					die();
 				case "send_message":
 					die();

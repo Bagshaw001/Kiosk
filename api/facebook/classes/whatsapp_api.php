@@ -196,6 +196,23 @@ class whats_app_api{
     }
 
 
+
+    function send_message_reply($message,$number,$token,$message_id, $contains_url = false){
+        $preview_url = $contains_url ? "true" : "false";
+
+        $header = array(
+            "Authorization: Bearer $token",
+            'Content-Type: application/json'
+        );
+        $body = "{ 'messaging_product': 'whatsapp', 'recipient_type': 'individual', 'to': '$number', 'context': {'message_id': '$message_id'} 'type': 'text', 'text': {   'preview_url': $preview_url, 'body': '$message' } }";
+        $body = "{'messaging_product': 'whatsapp', 'recipient_type': 'individual', 'to': '$number', 'context': {'message_id': '$message_id'}, 'type': 'text', 'text': {'preview_url': $preview_url, 'body': '$message'}}";
+
+        $phone_id = $this->get_phone_number_id();
+        return $this->http->post($this->base_url. "/$phone_id/messages", $body,$header);
+
+    }
+
+
     function send_message_media($number,$link,$token){
         $header = array(
             "Authorization: Bearer $token",
