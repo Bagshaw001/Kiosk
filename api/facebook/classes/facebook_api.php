@@ -1,5 +1,8 @@
 <?php
+
+
 require_once(__DIR__ . "/../../utils/http_handler.php");
+require_once(__DIR__ . "/../../utils/env_manager.php");
 
 
 class facebook_api

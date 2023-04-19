@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     // Converts it into a PHP object
     $data = json_decode($json);
 
-    // print_r($data);
+     print_r($data);
 
     //add database function
 

@@ -445,6 +445,24 @@ function database()
 				//record stock by the quantity they specify
 
 				die();
+
+				// case "store_credential":
+				// 	$api_key = $_POST["api_key"];
+				// 	$store_id = $_POST["store_id"];
+				// 	$platform = $_POST["platform"];
+				// 	$bearer_token = $_POST["bearer_token"];
+				// 	$expiry_time = date("Y-m-d h:i:s ", $_POST["expiry_time"]);
+				// 	$date =  date("Y-m-d h:i:s ", time());
+
+				// 	$acct = add_social_media_account($api_key, $store_id, $platform, $date, $expiry_time, $bearer_token);
+
+				// 	if ($acct) {
+				// 		send_json(array("msg" => "Message inserted successfully"), 200);
+				// 	} else {
+				// 		send_json(array("msg" => "Something went wrong"), 100);
+				// 	}
+				// 	die();
+
 			case "instagram_msg":
 				if ($_POST["status"] == "incoming") {
 					switch ($_POST["type"]) {

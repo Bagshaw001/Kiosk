@@ -37,19 +37,21 @@ class http_handler
 		//execute request
 		$response = curl_exec($curl);
 		curl_close($curl);
-		$response = json_decode($response,true);
+		$response = json_decode($response, true);
 
 		return $response;
 	}
 
 	function get($url, $body = null, $header = null)
 	{
+
 		return $this->http_request($url, "GET", body: $body, header: $header);
 	}
 
 
 	function post($url, $body, $header = null)
 	{
+		// echo ($this->http_request($url, "POST", body: $body, header: $header));
 		return $this->http_request($url, "POST", body: $body, header: $header);
 	}
 }
