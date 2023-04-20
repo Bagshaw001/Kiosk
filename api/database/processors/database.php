@@ -93,13 +93,19 @@ function database()
 						),100);
 					}
 					die();
+				case "get_scheduled_posts":
+					$store_id = $_POST["store_id"];
+
+					$posts = get_scheduled_posts($store_id);
+
+					send_json(array("posts" => $posts));
+					die();
 
 				case "login":
 					$email = $_POST["email"];
 					$password = encrypt($_POST["password"]);
 
 					$user_id = login($email, $password);
-
 
 					if ($user_id){
 						// TODO:: Add two factor authentication
@@ -112,7 +118,7 @@ function database()
 						$store = get_store_by_id($store_id);
 						$user = get_user_by_id($user_id);
 
-						$store_image = "";//TODO: get store image
+						$store_image = $store["store_img"];
 						$store_name = $store["store_name"];
 						$user_name = $user["user_name"];
 
@@ -431,12 +437,12 @@ function database()
 					);
 
 					die();
-				case "purchase_id":
+				case "order_product":
 					$order_id = generate_id();
-					$platform = $_POST["platform"];
+					$platform = "whatsapp";//$_POST["platform"];
 					$store_id = $_POST["store_id"];
-					$customer_name = $_POST["customer_name"];
-					$date = $_POST["purchase_time"];
+					$customer_name = 'customer_name';//$_POST["customer_name"];
+					$date = date('m-d-y');//$_POST["purchase_time"];
 					$product_id = $_POST["product_id"];
 					$quantity = $_POST["quantity"];
 					$customer_id = $_POST["customer_id"]; //whatsapp number or instagram account id
@@ -444,7 +450,7 @@ function database()
 					//check if product has enough stock
 					$stock = get_product_quantity($product_id);
 
-					if($stock - $quantity > 0){//can't sell more than is available
+					if($stock - $quantity < 0){//can't sell more than is available
 						send_json(array("msg" => "Only $stock units of the product are available"),100);
 						die();
 					}
@@ -458,6 +464,10 @@ function database()
 					add_order($order_id,$customer_id,$product_id);
 
 					update_product_stock($product_id,$stock - $quantity);
+
+					send_json(array(
+						"order_id" => $order_id
+					));
 
 					//TODO issue payment prompt
 

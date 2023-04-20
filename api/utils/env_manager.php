@@ -62,32 +62,6 @@ function email_password()
 	return getenv("EMAIL_PASSWORD");
 }
 
-/** Returns the url for webhook of slack channel - Platform-monitoring */
-function slack_webhook_monitoring()
-{
-	return getenv("SLACK_PLATFORM_MONITORING_URL");
-}
-
-/** Returns the url for webhook of slack channel - Platform-monitoring-claims */
-function slack_webhook_claims()
-{
-	return getenv("SLACK_PLATFORM_MONITORING_CLAIMS_URL");
-}
-
-/**
- * Returns the url for webhook of slack channel - platform-monitoring-logs
- */
-function slack_webhook_logs()
-{
-	return getenv("SLACK_PLATFORM_MONITORING_LOGS_URL");
-}
-
-/** Returns the url for webhook of slack channel - Platform-monitoring-withdrawals */
-function slack_webhook_withdrawals()
-{
-	return getenv("SLACK_PLATFORM_MONITORING_WITHDRAWALS_URL");
-}
-
 /**Returns the paybox token */
 function paybox_token()
 {

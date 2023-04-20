@@ -204,7 +204,7 @@ class whats_app_api{
             "Authorization: Bearer $token",
             'Content-Type: application/json'
         );
-        $body = "{ 'messaging_product': 'whatsapp', 'recipient_type': 'individual', 'to': '$number', 'context': {'message_id': '$message_id'} 'type': 'text', 'text': {   'preview_url': $preview_url, 'body': '$message' } }";
+        // $body = "{'messaging_product': 'whatsapp', 'recipient_type': 'individual', 'to': '$number', 'context': {'message_id': '$message_id'} 'type': 'text', 'text': {   'preview_url': $preview_url, 'body': '$message' } }";
         $body = "{'messaging_product': 'whatsapp', 'recipient_type': 'individual', 'to': '$number', 'context': {'message_id': '$message_id'}, 'type': 'text', 'text': {'preview_url': $preview_url, 'body': '$message'}}";
 
         $phone_id = $this->get_phone_number_id();

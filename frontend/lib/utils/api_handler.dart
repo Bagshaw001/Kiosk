@@ -90,6 +90,22 @@ class ApiHandler {
 
   }
 
+  static Future<Map<String,dynamic>> getScheduledPosts(String storeId) async {
+    Map<String,dynamic> data = {};
+    http.Response response = await _BaseHandler.post(
+      endpoint: "database",
+      body : {
+        "action" : "get_scheduled_posts",
+        "store_id" : storeId
+      }
+    );
+
+    data = json.decode(response.body)["response"];
+
+    return data;
+  }
+
+
   static Future<http.Response> resetPassword({
     required String password,
     required String token,

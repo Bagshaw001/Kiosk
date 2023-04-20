@@ -14,9 +14,8 @@
 		}
 
 		//Add to payload, booking_id, seats_booked,$trip_id,$user_id
-		function charge_momo($order_id, $email,$amount, $network, $number, $payload = []){
+		function charge_momo($order_id,$amount, $network, $number, $payload = []){
 			$body = array (
-				"payerEmail" => $email,
 				"payload" => json_encode($payload),
 				"currency" => "GHS",
 				"amount" => $amount,

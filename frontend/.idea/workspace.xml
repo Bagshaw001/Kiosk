@@ -5,13 +5,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0371bc3c-ee90-4fb4-b5d8-3eaf2103b059" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/test/api_test.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../api/database/classes/db_class.php" beforeDir="false" afterPath="$PROJECT_DIR$/../api/database/classes/db_class.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../api/database/controllers/db_controller.php" beforeDir="false" afterPath="$PROJECT_DIR$/../api/database/controllers/db_controller.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../api/database/processors/database.php" beforeDir="false" afterPath="$PROJECT_DIR$/../api/database/processors/database.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../api/facebook/classes/whatsapp_api.php" beforeDir="false" afterPath="$PROJECT_DIR$/../api/facebook/classes/whatsapp_api.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../api/facebook/processors/meta_processor.php" beforeDir="false" afterPath="$PROJECT_DIR$/../api/facebook/processors/meta_processor.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../api/utils/.env" beforeDir="false" afterPath="$PROJECT_DIR$/../api/utils/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../api/utils/chat_bot.php" beforeDir="false" afterPath="$PROJECT_DIR$/../api/utils/chat_bot.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../api/utils/env_manager.php" beforeDir="false" afterPath="$PROJECT_DIR$/../api/utils/env_manager.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../api/utils/https/kiosk_webhook.php" beforeDir="false" afterPath="$PROJECT_DIR$/../api/utils/https/kiosk_webhook.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../api/utils/paybox.php" beforeDir="false" afterPath="$PROJECT_DIR$/../api/utils/paybox.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins-dependencies" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/pages/accounts/accounts.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pages/accounts/accounts.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/utils/api_handler.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/utils/api_handler.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/widgets/action_card.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/widgets/action_card.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/widget_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/widget_test.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/widgets/custom_scaffold/widgets/large_nav.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/widgets/custom_scaffold/widgets/large_nav.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

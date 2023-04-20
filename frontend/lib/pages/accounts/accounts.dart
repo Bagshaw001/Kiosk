@@ -238,11 +238,11 @@ class __AccountsLargeState extends State<_AccountsLarge> {
                               padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
                               child: Row(
                                 children: [
-                                  Text("Name", style: Theme.of(context).textTheme.titleSmall!.copyWith(fontWeight: FontWeight.bold),),
+                                  Text("Caption", style: Theme.of(context).textTheme.titleSmall!.copyWith(fontWeight: FontWeight.bold),),
                                   const Spacer(),
-                                  Text("Name", style: Theme.of(context).textTheme.titleSmall!.copyWith(fontWeight: FontWeight.bold),),
+                                  Text("Scheduled Date", style: Theme.of(context).textTheme.titleSmall!.copyWith(fontWeight: FontWeight.bold),),
                                   const Spacer(),
-                                  Text("Name", style: Theme.of(context).textTheme.titleSmall!.copyWith(fontWeight: FontWeight.bold),),
+                                  Text("Platform", style: Theme.of(context).textTheme.titleSmall!.copyWith(fontWeight: FontWeight.bold),),
                                 ],
                               ),
                             ),
@@ -250,28 +250,32 @@ class __AccountsLargeState extends State<_AccountsLarge> {
                           const Divider(thickness: 1,),
                           Expanded(
                             flex: 3,
-                            child: ListView.builder(
-                              itemBuilder: (context,index) => Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text("Business name"),
-                                  const Spacer(),
-                                  Text("06/12/2023"),
-                                  const Spacer(),
-                                  IconButton(
-                                    icon: Icon(Icons.whatshot,color: Colors.black),
-                                    onPressed: (){
+                            child: FutureBuilder(
+                              future: ApiHandler.getScheduledPosts(context.read<AppState>().user.storeId),
+                              builder: (context,snapshot) =>
+                                  ListView.builder(
+                                    itemBuilder: (context,index) => Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text("Business name"),
+                                        const Spacer(),
+                                        Text("06/12/2023"),
+                                        const Spacer(),
+                                        IconButton(
+                                          icon: Icon(Icons.whatshot,color: Colors.black),
+                                          onPressed: (){
 
-                                    },
-                                  ),
-                                  IconButton(
-                                    icon: const Icon(Icons.delete,color: Colors.black,),
-                                    onPressed: (){
+                                          },
+                                        ),
+                                        IconButton(
+                                          icon: const Icon(Icons.delete,color: Colors.black,),
+                                          onPressed: (){
 
-                                    },
+                                          },
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ],
-                              ),
                             ),
                           )
                         ],

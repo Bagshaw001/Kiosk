@@ -24,6 +24,16 @@
 	}
 
 
+	function get_order_info($order_id){
+		$db = new db_class();
+		return $db->get_order_info($order_id);
+	}
+
+	function get_scheduled_posts($store_id){
+		$db = new db_class();
+		return $db->get_scheduled_posts($store_id);
+	}
+
 	function add_store_wallet($store_id,$name,$number,$network){
 		$db = new db_class();
 		return $db->add_store_wallet($store_id, $name,$number, $network);
@@ -292,7 +302,7 @@
 
 	function get_product_quantity($product_id){
 		$db = new db_class();
-		return $db->get_product_quantity($product_id)["product_quantity"];
+		return $db->get_product_quantity($product_id)["quantity"];
 	}
 
 	function get_customer_count($store_id){

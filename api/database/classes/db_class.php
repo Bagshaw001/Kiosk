@@ -43,6 +43,13 @@
 		}
 
 
+		function get_scheduled_posts($store_id){
+			$sql = "SELECT * FROM scheduled_posts AS sp
+			JOIN post_credentials AS pc on pc.post_id = sp.post_id
+			JOIN social_media_credentials AS smc ON smc.
+			 WHERE";
+		}
+
 		function add_store_manager($user_id, $store_id){
 			$user_id = $this->clean($user_id);
 			$store_id = $this->clean($store_id);
@@ -122,7 +129,7 @@
 			$customer_name = $this->clean($customer_name);
 			// $customer_number = $this->clean($customer_number);
 			$sql = "INSERT INTO `customers`
-			VALUE('$customer_id','$store_id','$customer_name')";
+			VALUE('$customer_id','$store_id','$customer_name','$customer_id')";
 			return $this->db_query($sql);
 		}
 
@@ -130,7 +137,7 @@
 			$order_id = $this->clean($order_id);
 			$customer_id = $this->clean($customer_id);
 			$product_id = $this->clean($product_id);
-			$sql = "INSERT INTO `orders`
+			$sql = "INSERT INTO `orders` (`order_id`,`customer_id`,`product_id`)
 			VALUE('$order_id', '$customer_id','$product_id')";
 			return $this->db_query($sql);
 		}
@@ -254,6 +261,11 @@
 			return $this->db_fetch_all($sql);
 		}
 
+		function get_order_info($order_id){
+			$sql = "SELECT * FROM `orders` where order_id='$order_id'";
+			return $this->db_fetch_one($sql);
+		}
+
 		function get_store_linked_accounts($store_id){
 			$store_id = $this->clean($store_id);
 			$sql = "SELECT * FROM `social_media_credentials` WHERE `store_id`='$store_id'";
@@ -314,10 +326,10 @@
 		}
 
 		function search_products($query,$store_id){
-			$query =$this->clean($query);
+			// $query =$this->clean($query);
 			$store_id =$this->clean($store_id);
 			$sql = "SELECT * FROM products WHERE store_id = '$store_id'
-			AND product_name LIKE '%$query%' AND product_description LIKE '%$query%';";
+			AND (product_name LIKE '%$query%' OR product_description LIKE '%$query%');";
 			return $this->db_fetch_all($sql);
 		}
 
@@ -410,7 +422,8 @@
 
 		function update_product_stock($product_id,$new_quantity){
 			$product_id = $this->clean($product_id);
-			$new_quantity = $this->clean($$new_quantity);
+			$new_quantity = $this->clean($new_quantity);
+
 
 			$sql = "UPDATE `products` SET
 			`quantity` = '$new_quantity' WHERE `product_id` = '$product_id'";

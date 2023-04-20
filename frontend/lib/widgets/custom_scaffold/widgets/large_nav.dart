@@ -96,15 +96,6 @@ class LargeNav extends StatelessWidget {
             },
           ),
 
-          _NavTile(
-            label: "Statistics",
-            selected: current == 4,
-            onPressed: (){
-              if(onNavClick!= null){
-                onNavClick!(4);
-              }
-            },
-          )
 
         ],
       ),
